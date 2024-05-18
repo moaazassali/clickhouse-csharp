@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 namespace ClickHouse.Connector.Native.Structs;
 
 [StructLayout(LayoutKind.Sequential)]
-internal struct NativeServerInfo
+internal partial struct NativeServerInfo
 {
     internal nint Name;
     internal nint Timezone;
@@ -12,4 +12,7 @@ internal struct NativeServerInfo
     internal ulong VersionMinor;
     internal ulong VersionPatch;
     internal ulong Revision;
+    
+    [LibraryImport("clickhouse-cpp-c-bridge.dll")]
+    internal static partial void FreeServerInfo(ref NativeServerInfo serverInfo);
 }
