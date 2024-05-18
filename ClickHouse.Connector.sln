@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouse.Connector", "ClickHouse.Connector\ClickHouse.Connector.csproj", "{A06AB5D8-E1CA-4F1E-9C85-72DED62E9935}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouse.Connector.Tests", "ClickHouse.Connector.Tests\ClickHouse.Connector.Tests.csproj", "{172C2478-B9BC-4615-BD71-F1E3A8B8AFA2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{A06AB5D8-E1CA-4F1E-9C85-72DED62E9935}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A06AB5D8-E1CA-4F1E-9C85-72DED62E9935}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A06AB5D8-E1CA-4F1E-9C85-72DED62E9935}.Release|Any CPU.Build.0 = Release|Any CPU
+		{172C2478-B9BC-4615-BD71-F1E3A8B8AFA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{172C2478-B9BC-4615-BD71-F1E3A8B8AFA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{172C2478-B9BC-4615-BD71-F1E3A8B8AFA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{172C2478-B9BC-4615-BD71-F1E3A8B8AFA2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
