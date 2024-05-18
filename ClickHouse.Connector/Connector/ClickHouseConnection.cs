@@ -33,55 +33,85 @@ public class ClickHouseConnection : IDisposable
         ObjectDisposedException.ThrowIf(_disposed, this);
     }
 
-    public ClickHouseResultStatus Execute(string query)
+    public void Execute(string query)
     {
         CheckDisposed();
         using var clickHouseQuery = new ClickHouseQuery(query);
         var nativeResultStatus = Native.NativeClient.Execute(_nativeClient, clickHouseQuery.NativeQuery);
-        return new ClickHouseResultStatus(nativeResultStatus);
+
+        if (nativeResultStatus.Code != 0)
+        {
+            throw new ClickHouseException(nativeResultStatus);
+        }
     }
 
     public void Execute(ClickHouseQuery query)
     {
         CheckDisposed();
-        Native.NativeClient.Execute(_nativeClient, query.NativeQuery);
+        var nativeResultStatus = Native.NativeClient.Execute(_nativeClient, query.NativeQuery);
+
+        if (nativeResultStatus.Code != 0)
+        {
+            throw new ClickHouseException(nativeResultStatus);
+        }
     }
 
-    public ClickHouseResultStatus Insert(string tableName, ClickHouseBlock block)
+    public void Insert(string tableName, ClickHouseBlock block)
     {
         CheckDisposed();
         var nativeResultStatus = Native.NativeClient.Insert(_nativeClient, tableName, block.NativeBlock);
-        return new ClickHouseResultStatus(nativeResultStatus);
+        
+        if (nativeResultStatus.Code != 0)
+        {
+            throw new ClickHouseException(nativeResultStatus);
+        }
     }
-    
-    public ClickHouseResultStatus Insert(string tableName, ClickHouseBlock block, string queryId)
+
+    public void Insert(string tableName, ClickHouseBlock block, string queryId)
     {
         CheckDisposed();
-        var nativeResultStatus = Native.NativeClient.InsertWithQueryId(_nativeClient, tableName, queryId, block.NativeBlock);
-        return new ClickHouseResultStatus(nativeResultStatus);
+        var nativeResultStatus =
+            Native.NativeClient.InsertWithQueryId(_nativeClient, tableName, queryId, block.NativeBlock);
+        
+        if (nativeResultStatus.Code != 0)
+        {
+            throw new ClickHouseException(nativeResultStatus);
+        }
     }
-    
-    public ClickHouseResultStatus Ping()
+
+    public void Ping()
     {
         CheckDisposed();
         var nativeResultStatus = Native.NativeClient.Ping(_nativeClient);
-        return new ClickHouseResultStatus(nativeResultStatus);
+        
+        if (nativeResultStatus.Code != 0)
+        {
+            throw new ClickHouseException(nativeResultStatus);
+        }
     }
-    
-    public ClickHouseResultStatus ResetConnection()
+
+    public void ResetConnection()
     {
         CheckDisposed();
         var nativeResultStatus = Native.NativeClient.ResetConnection(_nativeClient);
-        return new ClickHouseResultStatus(nativeResultStatus);
+        
+        if (nativeResultStatus.Code != 0)
+        {
+            throw new ClickHouseException(nativeResultStatus);
+        }
     }
-    
-    public ClickHouseResultStatus ResetConnectionEndpoint()
+
+    public void ResetConnectionEndpoint()
     {
         CheckDisposed();
         var nativeResultStatus = Native.NativeClient.ResetConnectionEndpoint(_nativeClient);
-        return new ClickHouseResultStatus(nativeResultStatus);
+        
+        if (nativeResultStatus.Code != 0)
+        {
+            throw new ClickHouseException(nativeResultStatus);
+        }
     }
-    
+
     public ClickHouseServerInfo GetServerInfo()
     {
         CheckDisposed();
