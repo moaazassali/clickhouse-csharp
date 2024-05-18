@@ -8,9 +8,6 @@ internal static partial class NativeClient
     [LibraryImport("clickhouse-cpp-wrapper.dll", StringMarshalling = StringMarshalling.Utf8)]
     public static partial nint CreateClient(string host);
 
-    // [DllImport("clickhouse-cpp-wrapper.dll", CallingConvention = CallingConvention.Cdecl)]
-    // public static extern nint CreateClient([MarshalAs(UnmanagedType.LPStr)] string host);
-
     [LibraryImport("clickhouse-cpp-wrapper.dll")]
     public static partial void FreeClient(nint client);
 
