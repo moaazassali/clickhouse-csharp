@@ -6,4 +6,9 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Connector\" />
+      <Folder Include="Native\Columns\" />
+    </ItemGroup>
+
 </Project>

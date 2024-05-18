@@ -1,0 +1,13 @@
+using System.Runtime.InteropServices;
+
+namespace ClickHouse.Connector.Native.Structs;
+
+[StructLayout(LayoutKind.Sequential)]
+internal partial struct NativeClickHouseResultStatus
+{
+    internal int Code;
+    internal nint Message;
+
+    [LibraryImport("clickhouse-cpp-c-bridge.dll")]
+    internal static partial void FreeClickHouseError(ref NativeClickHouseResultStatus resultStatus);
+}
