@@ -54,6 +54,34 @@ public class ClickHouseConnection : IDisposable
         return new ClickHouseResultStatus(nativeResultStatus);
     }
     
+    public ClickHouseResultStatus Insert(string tableName, ClickHouseBlock block, string queryId)
+    {
+        CheckDisposed();
+        var nativeResultStatus = Native.NativeClient.InsertWithQueryId(_nativeClient, tableName, queryId, block.NativeBlock);
+        return new ClickHouseResultStatus(nativeResultStatus);
+    }
+    
+    public ClickHouseResultStatus Ping()
+    {
+        CheckDisposed();
+        var nativeResultStatus = Native.NativeClient.Ping(_nativeClient);
+        return new ClickHouseResultStatus(nativeResultStatus);
+    }
+    
+    public ClickHouseResultStatus ResetConnection()
+    {
+        CheckDisposed();
+        var nativeResultStatus = Native.NativeClient.ResetConnection(_nativeClient);
+        return new ClickHouseResultStatus(nativeResultStatus);
+    }
+    
+    public ClickHouseResultStatus ResetConnectionEndpoint()
+    {
+        CheckDisposed();
+        var nativeResultStatus = Native.NativeClient.ResetConnectionEndpoint(_nativeClient);
+        return new ClickHouseResultStatus(nativeResultStatus);
+    }
+    
     public ClickHouseServerInfo GetServerInfo()
     {
         CheckDisposed();
