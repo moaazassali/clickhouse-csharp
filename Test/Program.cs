@@ -16,5 +16,8 @@ class Program
         Console.WriteLine(serverInfo.VersionMajor);
         Console.WriteLine(serverInfo.VersionPatch);
         Console.WriteLine(serverInfo.Revision);
+
+        using ClickHouseBlock block = new ClickHouseBlock();
+        connection.Insert("test.devices", block);
     }
 }
