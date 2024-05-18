@@ -53,4 +53,11 @@ public class ClickHouseConnection : IDisposable
         var nativeResultStatus = Native.NativeClient.Insert(_nativeClient, tableName, block.NativeBlock);
         return new ClickHouseResultStatus(nativeResultStatus);
     }
+    
+    public ClickHouseServerInfo GetServerInfo()
+    {
+        CheckDisposed();
+        var nativeServerInfo = Native.NativeClient.GetServerInfo(_nativeClient);
+        return new ClickHouseServerInfo(nativeServerInfo);
+    }
 }
