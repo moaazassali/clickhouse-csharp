@@ -13,6 +13,6 @@ internal partial struct NativeServerInfo
     internal ulong VersionPatch;
     internal ulong Revision;
     
-    [LibraryImport("clickhouse-cpp-c-bridge.dll")]
+    [LibraryImport("clickhouse-cpp-c-bridge")]
     internal static partial void FreeServerInfo(ref NativeServerInfo serverInfo);
 }
