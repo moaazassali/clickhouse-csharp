@@ -6,7 +6,7 @@ public class ClickHouseBlock : IDisposable
 {
     internal nint NativeBlock { get; }
     private bool _disposed;
-    private bool _disposing;
+    public List<ClickHouseColumn> Columns { get; } = [];
 
     public ClickHouseBlock()
     {
@@ -16,12 +16,6 @@ public class ClickHouseBlock : IDisposable
 
     public void Dispose()
     {
-        if (_disposing || _disposed)
-        {
-            return;
-        }
-
-        _disposing = true;
         Native.NativeBlock.FreeBlock(NativeBlock);
         _disposed = true;
         GC.SuppressFinalize(this);
@@ -34,13 +28,13 @@ public class ClickHouseBlock : IDisposable
 
     private void CheckDisposed()
     {
-        Console.WriteLine($"Checking disposed: {_disposed}. Object is {this}");
         ObjectDisposedException.ThrowIf(_disposed, this);
     }
 
     public void AppendColumn(string tableName, ClickHouseColumn column)
     {
         CheckDisposed();
+        Columns.Add(column);
         Native.NativeBlock.AppendColumn(NativeBlock, tableName, column.NativeColumn);
     }
 
