@@ -62,7 +62,7 @@ public class ClickHouseConnection : IDisposable
     {
         CheckDisposed();
         var nativeResultStatus = Native.NativeClient.Insert(_nativeClient, tableName, block.NativeBlock);
-        
+
         if (nativeResultStatus.Code != 0)
         {
             throw new ClickHouseException(nativeResultStatus);
@@ -74,7 +74,7 @@ public class ClickHouseConnection : IDisposable
         CheckDisposed();
         var nativeResultStatus =
             Native.NativeClient.InsertWithQueryId(_nativeClient, tableName, queryId, block.NativeBlock);
-        
+
         if (nativeResultStatus.Code != 0)
         {
             throw new ClickHouseException(nativeResultStatus);
@@ -85,7 +85,7 @@ public class ClickHouseConnection : IDisposable
     {
         CheckDisposed();
         var nativeResultStatus = Native.NativeClient.Ping(_nativeClient);
-        
+
         if (nativeResultStatus.Code != 0)
         {
             throw new ClickHouseException(nativeResultStatus);
@@ -96,7 +96,7 @@ public class ClickHouseConnection : IDisposable
     {
         CheckDisposed();
         var nativeResultStatus = Native.NativeClient.ResetConnection(_nativeClient);
-        
+
         if (nativeResultStatus.Code != 0)
         {
             throw new ClickHouseException(nativeResultStatus);
@@ -107,7 +107,7 @@ public class ClickHouseConnection : IDisposable
     {
         CheckDisposed();
         var nativeResultStatus = Native.NativeClient.ResetConnectionEndpoint(_nativeClient);
-        
+
         if (nativeResultStatus.Code != 0)
         {
             throw new ClickHouseException(nativeResultStatus);
@@ -120,11 +120,28 @@ public class ClickHouseConnection : IDisposable
         var nativeServerInfo = Native.NativeClient.GetServerInfo(_nativeClient);
         return new ClickHouseServerInfo(nativeServerInfo);
     }
-    
+
     public ClickHouseEndpoint GetCurrentEndpoint()
     {
         CheckDisposed();
         var nativeEndpoint = Native.NativeClient.GetCurrentEndpoint(_nativeClient);
         return new ClickHouseEndpoint(nativeEndpoint);
     }
+
+    public static ClickHouseCppVersion GetVersion()
+    {
+        return new ClickHouseCppVersion();
+    }
+}
+
+public struct ClickHouseCppVersion
+{
+    public ClickHouseCppVersion()
+    {
+    }
+
+    public int Major { get; } = 2;
+    public int Minor { get; } = 5;
+    public int Patch { get; } = 1;
+    public int Build { get; } = 0;
 }

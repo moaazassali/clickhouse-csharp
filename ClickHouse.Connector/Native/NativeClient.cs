@@ -40,5 +40,6 @@ internal static partial class NativeClient
     [LibraryImport("clickhouse-cpp-c-bridge")]
     public static partial NativeClickHouseResultStatus ResetConnectionEndpoint(nint client);
 
-    // GetVersion
+    // no need to implement GetVersion() as it references static variables in the C++ library
+    // we can just implement it directly in C#
 }
