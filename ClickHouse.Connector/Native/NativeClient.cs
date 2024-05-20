@@ -34,7 +34,8 @@ internal static partial class NativeClient
     [LibraryImport("clickhouse-cpp-c-bridge")]
     public static partial NativeServerInfo GetServerInfo(nint client);
     
-    // GetCurrentEndpoint
+    [LibraryImport("clickhouse-cpp-c-bridge")]
+    public static partial NativeEndpoint GetCurrentEndpoint(nint client);
 
     [LibraryImport("clickhouse-cpp-c-bridge")]
     public static partial NativeClickHouseResultStatus ResetConnectionEndpoint(nint client);
