@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.InteropServices;
+using ClickHouse.Connector.Native.Structs;
 
 namespace ClickHouse.Connector.Connector;
 
@@ -9,11 +10,12 @@ public class ClickHouseConnection : IDisposable
     private readonly string _host;
     private bool _disposed;
 
-    public ClickHouseConnection(string host)
+    public ClickHouseConnection(ClickHouseClientOptions options)
     {
-        _host = host;
         _disposed = false;
-        _nativeClient = Native.NativeClient.CreateClient(host);
+        var nativeOptions = options.ToNativeClientOptions();
+        _nativeClient = Native.NativeClient.CreateClient(ref nativeOptions);
+        nativeOptions.Free(options.NativeEndpoints);
     }
 
     public void Dispose()
@@ -117,5 +119,12 @@ public class ClickHouseConnection : IDisposable
         CheckDisposed();
         var nativeServerInfo = Native.NativeClient.GetServerInfo(_nativeClient);
         return new ClickHouseServerInfo(nativeServerInfo);
+    }
+    
+    public ClickHouseEndpoint GetCurrentEndpoint()
+    {
+        CheckDisposed();
+        var nativeEndpoint = Native.NativeClient.GetCurrentEndpoint(_nativeClient);
+        return new ClickHouseEndpoint(nativeEndpoint);
     }
 }
