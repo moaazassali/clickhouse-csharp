@@ -11,7 +11,7 @@ public class ClickHouseResultStatus
     {
         Code = resultStatus.Code;
         var message = Marshal.PtrToStringUTF8(resultStatus.Message);
-        Native.Structs.NativeClickHouseResultStatus.FreeClickHouseStatusMessage(ref resultStatus);
+        Native.Structs.NativeClickHouseResultStatus.FreeClickHouseResultStatus(ref resultStatus);
         Message = message ?? string.Empty;
     }
 }

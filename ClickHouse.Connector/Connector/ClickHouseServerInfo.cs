@@ -22,6 +22,6 @@ public class ClickHouseServerInfo
         VersionPatch = serverInfo.VersionPatch;
         Revision = serverInfo.Revision;
         
-        Native.Structs.NativeServerInfo.FreeServerInfo(ref serverInfo);
+        Native.Structs.NativeServerInfo.FreeServerInfoWrapper(ref serverInfo);
     }
 }

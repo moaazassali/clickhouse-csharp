@@ -9,5 +9,5 @@ internal partial struct NativeClickHouseResultStatus
     internal nint Message;
 
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    internal static partial void FreeClickHouseStatusMessage(ref NativeClickHouseResultStatus resultStatus);
+    internal static partial void FreeClickHouseResultStatus(ref NativeClickHouseResultStatus resultStatus);
 }

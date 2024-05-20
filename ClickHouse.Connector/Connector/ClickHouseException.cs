@@ -12,7 +12,7 @@ public class ClickHouseException : Exception
     private static string GetMessage(Native.Structs.NativeClickHouseResultStatus resultStatus)
     {
         var message = Marshal.PtrToStringUTF8(resultStatus.Message);
-        Native.Structs.NativeClickHouseResultStatus.FreeClickHouseStatusMessage(ref resultStatus);
+        Native.Structs.NativeClickHouseResultStatus.FreeClickHouseResultStatus(ref resultStatus);
         return $"{resultStatus.Code}: {message ?? string.Empty}";
     }
 }

@@ -14,5 +14,5 @@ internal partial struct NativeServerInfo
     internal ulong Revision;
     
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    internal static partial void FreeServerInfo(ref NativeServerInfo serverInfo);
+    internal static partial void FreeServerInfoWrapper(ref NativeServerInfo serverInfo);
 }
