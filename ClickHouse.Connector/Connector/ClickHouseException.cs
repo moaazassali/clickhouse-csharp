@@ -4,9 +4,12 @@ namespace ClickHouse.Connector.Connector;
 
 public class ClickHouseException : Exception
 {
+    public int Code { get; }
+    
     internal ClickHouseException(Native.Structs.NativeClickHouseResultStatus resultStatus)
         : base(GetMessage(resultStatus))
     {
+        Code = resultStatus.Code;
     }
 
     private static string GetMessage(Native.Structs.NativeClickHouseResultStatus resultStatus)
