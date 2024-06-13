@@ -6,6 +6,11 @@ public class ClickHouseColumnInt16 : ClickHouseColumn<short>
     {
         NativeColumn = Native.Columns.NativeColumnInt16.CreateColumnInt16();
     }
+    
+    public ClickHouseColumnInt16(nint nativeColumn)
+    {
+        NativeColumn = nativeColumn;
+    }
 
     public override void Append(short value)
     {

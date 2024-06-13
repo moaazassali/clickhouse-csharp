@@ -6,6 +6,11 @@ public class ClickHouseColumnInt64 : ClickHouseColumn<long>
     {
         NativeColumn = Native.Columns.NativeColumnInt64.CreateColumnInt64();
     }
+    
+    public ClickHouseColumnInt64(nint nativeColumn)
+    {
+        NativeColumn = nativeColumn;
+    }
 
     public override void Append(long value)
     {

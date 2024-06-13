@@ -6,6 +6,11 @@ public class ClickHouseColumnFloat64 : ClickHouseColumn<double>
     {
         NativeColumn = Native.Columns.NativeColumnFloat64.CreateColumnFloat64();
     }
+    
+    public ClickHouseColumnFloat64(nint nativeColumn)
+    {
+        NativeColumn = nativeColumn;
+    }
 
     public override void Append(double value)
     {

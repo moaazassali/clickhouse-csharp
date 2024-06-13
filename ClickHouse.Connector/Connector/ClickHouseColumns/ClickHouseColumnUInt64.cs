@@ -6,6 +6,11 @@ public class ClickHouseColumnUInt64 : ClickHouseColumn<ulong>
     {
         NativeColumn = Native.Columns.NativeColumnUInt64.CreateColumnUInt64();
     }
+    
+    public ClickHouseColumnUInt64(nint nativeColumn)
+    {
+        NativeColumn = nativeColumn;
+    }
 
     public override void Append(ulong value)
     {

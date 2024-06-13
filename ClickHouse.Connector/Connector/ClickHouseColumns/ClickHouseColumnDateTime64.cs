@@ -6,6 +6,11 @@ public class ClickHouseColumnDateTime64 : ClickHouseColumn<long>
     {
         NativeColumn = Native.Columns.NativeColumnDateTime64.CreateColumnDateTime64(precision);
     }
+    
+    public ClickHouseColumnDateTime64(nint nativeColumn)
+    {
+        NativeColumn = nativeColumn;
+    }
 
     public override void Append(long value)
     {

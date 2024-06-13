@@ -6,6 +6,11 @@ public class ClickHouseColumnUInt8 : ClickHouseColumn<byte>
     {
         NativeColumn = Native.Columns.NativeColumnUInt8.CreateColumnUInt8();
     }
+    
+    public ClickHouseColumnUInt8(nint nativeColumn)
+    {
+        NativeColumn = nativeColumn;
+    }
 
     public override void Append(byte value)
     {

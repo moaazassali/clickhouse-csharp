@@ -6,6 +6,11 @@ public class ClickHouseColumnString : ClickHouseColumn<string>
     {
         NativeColumn = Native.Columns.NativeColumnString.CreateColumnString();
     }
+    
+    public ClickHouseColumnString(nint nativeColumn)
+    {
+        NativeColumn = nativeColumn;
+    }
 
     public override void Append(string value)
     {

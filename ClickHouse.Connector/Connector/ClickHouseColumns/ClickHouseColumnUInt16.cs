@@ -6,6 +6,11 @@ public class ClickHouseColumnUInt16 : ClickHouseColumn<ushort>
     {
         NativeColumn = Native.Columns.NativeColumnUInt16.CreateColumnUInt16();
     }
+    
+    public ClickHouseColumnUInt16(nint nativeColumn)
+    {
+        NativeColumn = nativeColumn;
+    }
 
     public override void Append(ushort value)
     {

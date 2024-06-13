@@ -6,6 +6,11 @@ public class ClickHouseColumnInt32 : ClickHouseColumn<int>
     {
         NativeColumn = Native.Columns.NativeColumnInt32.CreateColumnInt32();
     }
+    
+    public ClickHouseColumnInt32(nint nativeColumn)
+    {
+        NativeColumn = nativeColumn;
+    }
 
     public override void Append(int value)
     {

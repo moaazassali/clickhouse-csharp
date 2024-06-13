@@ -6,6 +6,11 @@ public class ClickHouseColumnFloat32 : ClickHouseColumn<float>
     {
         NativeColumn = Native.Columns.NativeColumnFloat32.CreateColumnFloat32();
     }
+    
+    public ClickHouseColumnFloat32(nint nativeColumn)
+    {
+        NativeColumn = nativeColumn;
+    }
 
     public override void Append(float value)
     {
