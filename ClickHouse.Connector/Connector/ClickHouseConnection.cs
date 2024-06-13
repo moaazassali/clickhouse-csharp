@@ -1,26 +1,23 @@
-﻿using System.ComponentModel;
-using System.Runtime.InteropServices;
-using ClickHouse.Connector.Native.Structs;
+﻿using ClickHouse.Connector.Native;
 
 namespace ClickHouse.Connector.Connector;
 
 public class ClickHouseConnection : IDisposable
 {
     private readonly nint _nativeClient;
-    private readonly string _host;
     private bool _disposed;
 
     public ClickHouseConnection(ClickHouseClientOptions options)
     {
         _disposed = false;
         var nativeOptions = options.ToNativeClientOptions();
-        _nativeClient = Native.NativeClient.CreateClient(ref nativeOptions);
+        _nativeClient = NativeClient.CreateClient(ref nativeOptions);
         nativeOptions.Free(options.NativeEndpoints);
     }
 
     public void Dispose()
     {
-        Native.NativeClient.FreeClient(_nativeClient);
+        NativeClient.FreeClient(_nativeClient);
         _disposed = true;
         GC.SuppressFinalize(this);
     }
@@ -39,7 +36,7 @@ public class ClickHouseConnection : IDisposable
     {
         CheckDisposed();
         using var clickHouseQuery = new ClickHouseQuery(query);
-        var nativeResultStatus = Native.NativeClient.Execute(_nativeClient, clickHouseQuery.NativeQuery);
+        var nativeResultStatus = NativeClient.Execute(_nativeClient, clickHouseQuery.NativeQuery);
 
         if (nativeResultStatus.Code != 0)
         {
@@ -50,7 +47,25 @@ public class ClickHouseConnection : IDisposable
     public void Execute(ClickHouseQuery query)
     {
         CheckDisposed();
-        var nativeResultStatus = Native.NativeClient.Execute(_nativeClient, query.NativeQuery);
+        var nativeResultStatus = NativeClient.Execute(_nativeClient, query.NativeQuery);
+
+        if (nativeResultStatus.Code != 0)
+        {
+            throw new ClickHouseException(nativeResultStatus);
+        }
+    }
+
+    public delegate void SelectCallback(ClickHouseBlock block);
+
+    public void Select(string query, SelectCallback selectCallback)
+    {
+        CheckDisposed();
+        using var clickHouseQuery = new ClickHouseQuery(query);
+        var nativeResultStatus = NativeClient.Select(_nativeClient, clickHouseQuery.NativeQuery, (nativeBlock) =>
+        {
+            var block = new ClickHouseBlock(nativeBlock);
+            selectCallback(block);
+        });
 
         if (nativeResultStatus.Code != 0)
         {
@@ -61,7 +76,7 @@ public class ClickHouseConnection : IDisposable
     public void Insert(string tableName, ClickHouseBlock block)
     {
         CheckDisposed();
-        var nativeResultStatus = Native.NativeClient.Insert(_nativeClient, tableName, block.NativeBlock);
+        var nativeResultStatus = NativeClient.Insert(_nativeClient, tableName, block.NativeBlock);
 
         if (nativeResultStatus.Code != 0)
         {
@@ -73,7 +88,7 @@ public class ClickHouseConnection : IDisposable
     {
         CheckDisposed();
         var nativeResultStatus =
-            Native.NativeClient.InsertWithQueryId(_nativeClient, tableName, queryId, block.NativeBlock);
+            NativeClient.InsertWithQueryId(_nativeClient, tableName, queryId, block.NativeBlock);
 
         if (nativeResultStatus.Code != 0)
         {
@@ -84,7 +99,7 @@ public class ClickHouseConnection : IDisposable
     public void Ping()
     {
         CheckDisposed();
-        var nativeResultStatus = Native.NativeClient.Ping(_nativeClient);
+        var nativeResultStatus = NativeClient.Ping(_nativeClient);
 
         if (nativeResultStatus.Code != 0)
         {
@@ -95,7 +110,7 @@ public class ClickHouseConnection : IDisposable
     public void ResetConnection()
     {
         CheckDisposed();
-        var nativeResultStatus = Native.NativeClient.ResetConnection(_nativeClient);
+        var nativeResultStatus = NativeClient.ResetConnection(_nativeClient);
 
         if (nativeResultStatus.Code != 0)
         {
@@ -106,7 +121,7 @@ public class ClickHouseConnection : IDisposable
     public void ResetConnectionEndpoint()
     {
         CheckDisposed();
-        var nativeResultStatus = Native.NativeClient.ResetConnectionEndpoint(_nativeClient);
+        var nativeResultStatus = NativeClient.ResetConnectionEndpoint(_nativeClient);
 
         if (nativeResultStatus.Code != 0)
         {
@@ -117,14 +132,14 @@ public class ClickHouseConnection : IDisposable
     public ClickHouseServerInfo GetServerInfo()
     {
         CheckDisposed();
-        var nativeServerInfo = Native.NativeClient.GetServerInfo(_nativeClient);
+        var nativeServerInfo = NativeClient.GetServerInfo(_nativeClient);
         return new ClickHouseServerInfo(nativeServerInfo);
     }
 
     public ClickHouseEndpoint GetCurrentEndpoint()
     {
         CheckDisposed();
-        var nativeEndpoint = Native.NativeClient.GetCurrentEndpoint(_nativeClient);
+        var nativeEndpoint = NativeClient.GetCurrentEndpoint(_nativeClient);
         return new ClickHouseEndpoint(nativeEndpoint);
     }
 
