@@ -23,6 +23,7 @@ public class ClickHouseBlock : IDisposable
     public void Dispose()
     {
         Native.NativeBlock.FreeBlock(NativeBlock);
+        // should columns be disposed here as well?
         _disposed = true;
         GC.SuppressFinalize(this);
     }
