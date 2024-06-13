@@ -8,5 +8,8 @@ internal static partial class NativeColumnDateTime
     public static partial nint CreateColumnDateTime();
 
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    public static partial void ColumnDateTimeAppend(nint column, long value);
+    public static partial void ColumnDateTimeAppend(nint column, int value);
+    
+    [LibraryImport("clickhouse-cpp-c-bridge")]
+    public static partial int ColumnDateTimeAt(nint column, nint index);
 }

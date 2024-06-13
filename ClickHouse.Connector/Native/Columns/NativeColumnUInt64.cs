@@ -9,4 +9,7 @@ internal static partial class NativeColumnUInt64
 
     [LibraryImport("clickhouse-cpp-c-bridge")]
     public static partial void ColumnUInt64Append(nint column, ulong value);
+    
+    [LibraryImport("clickhouse-cpp-c-bridge")]
+    public static partial ulong ColumnUInt64At(nint column, nint index);
 }
