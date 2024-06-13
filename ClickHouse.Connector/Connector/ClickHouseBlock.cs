@@ -13,6 +13,12 @@ public class ClickHouseBlock : IDisposable
         NativeBlock = Native.NativeBlock.CreateBlock();
         _disposed = false;
     }
+    
+    public ClickHouseBlock(nint nativeBlock)
+    {
+        NativeBlock = nativeBlock;
+        _disposed = false;
+    }
 
     public void Dispose()
     {
