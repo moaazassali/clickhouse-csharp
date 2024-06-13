@@ -6,6 +6,15 @@ public abstract class ClickHouseColumn : IDisposable
 
     private bool _disposed;
 
+    public ClickHouseColumnType Type
+    {
+        get
+        {
+            CheckDisposed();
+            return Native.Columns.NativeColumn.GetColumnType(NativeColumn);
+        }
+    }
+
     public void Dispose()
     {
         Native.Columns.NativeColumn.FreeColumn(NativeColumn);
