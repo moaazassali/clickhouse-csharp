@@ -13,7 +13,7 @@ internal static partial class NativeBlock
     [LibraryImport("clickhouse-cpp-c-bridge", StringMarshalling = StringMarshalling.Utf8)]
     public static partial void AppendColumn(nint block, string name, nint column);
 
-    [LibraryImport("clickhouse-cpp-wrapper.dll")]
+    [LibraryImport("clickhouse-cpp-c-bridge")]
     public static partial nuint GetColumnCount(nint block);
 
     // info
