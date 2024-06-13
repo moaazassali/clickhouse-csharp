@@ -14,16 +14,26 @@ internal static partial class NativeClient
     [LibraryImport("clickhouse-cpp-c-bridge", StringMarshalling = StringMarshalling.Utf8)]
     public static partial NativeClickHouseResultStatus Execute(nint client, nint query);
 
-    // Select
-    // SelectWithQueryId
-    // SelectCancelable
-    // SelectCancelableWithQueryId
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void NativeSelectCallback(nint block);
+
+    [LibraryImport("clickhouse-cpp-c-bridge")]
+    public static partial NativeClickHouseResultStatus Select(nint client, nint query,
+        [MarshalAs(UnmanagedType.FunctionPtr)] NativeSelectCallback selectCallback);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool NativeSelectCancelableCallback(nint block);
+
+    [LibraryImport("clickhouse-cpp-c-bridge")]
+    public static partial NativeClickHouseResultStatus Select(nint client, nint query,
+        [MarshalAs(UnmanagedType.FunctionPtr)] NativeSelectCancelableCallback selectCallback);
 
     [LibraryImport("clickhouse-cpp-c-bridge", StringMarshalling = StringMarshalling.Utf8)]
     public static partial NativeClickHouseResultStatus Insert(nint client, string tableName, nint block);
 
     [LibraryImport("clickhouse-cpp-c-bridge", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial NativeClickHouseResultStatus InsertWithQueryId(nint client, string tableName, string queryId, nint block);
+    public static partial NativeClickHouseResultStatus InsertWithQueryId(nint client, string tableName, string queryId,
+        nint block);
 
     [LibraryImport("clickhouse-cpp-c-bridge")]
     public static partial NativeClickHouseResultStatus Ping(nint client);
@@ -33,7 +43,7 @@ internal static partial class NativeClient
 
     [LibraryImport("clickhouse-cpp-c-bridge")]
     public static partial NativeServerInfo GetServerInfo(nint client);
-    
+
     [LibraryImport("clickhouse-cpp-c-bridge")]
     public static partial NativeEndpoint GetCurrentEndpoint(nint client);
 
