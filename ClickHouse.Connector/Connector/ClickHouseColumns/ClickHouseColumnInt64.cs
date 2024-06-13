@@ -12,4 +12,13 @@ public class ClickHouseColumnInt64 : ClickHouseColumn<long>
         CheckDisposed();
         Native.Columns.NativeColumnInt64.ColumnInt64Append(NativeColumn, value);
     }
+
+    public long this[int index]
+    {
+        get
+        {
+            CheckDisposed();
+            return Native.Columns.NativeColumnInt64.ColumnInt64At(NativeColumn, index);
+        }
+    }
 }

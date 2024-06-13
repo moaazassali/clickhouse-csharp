@@ -12,4 +12,12 @@ public class ClickHouseColumnInt32 : ClickHouseColumn<int>
         CheckDisposed();
         Native.Columns.NativeColumnInt32.ColumnInt32Append(NativeColumn, value);
     }
+    
+    public int this[int index] {
+        get
+        {
+            CheckDisposed();
+            return Native.Columns.NativeColumnInt32.ColumnInt32At(NativeColumn, index);
+        }
+    }
 }

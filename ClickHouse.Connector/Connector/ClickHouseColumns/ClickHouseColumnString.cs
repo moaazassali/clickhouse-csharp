@@ -12,4 +12,14 @@ public class ClickHouseColumnString : ClickHouseColumn<string>
         CheckDisposed();
         Native.Columns.NativeColumnString.ColumnStringAppend(NativeColumn, value);
     }
+
+    public string this[int index]
+    {
+        get
+        {
+            CheckDisposed();
+            var x = Native.Columns.NativeColumnString.ColumnStringAt(NativeColumn, index);
+            return x.ToString();
+        }
+    }
 }
