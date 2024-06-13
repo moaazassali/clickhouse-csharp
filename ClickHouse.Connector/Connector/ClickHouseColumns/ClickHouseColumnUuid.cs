@@ -31,6 +31,7 @@ public class ClickHouseColumnUuid : ClickHouseColumn<Guid>
     }
 
     // Taken from https://stackoverflow.com/a/49380620/14003273
+    // Should take another look at this because of endianness issues
     private static unsafe Guid GuidFromInt64(ulong x, ulong y)
     {
         var ptr = stackalloc ulong[2];
