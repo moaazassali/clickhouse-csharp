@@ -30,6 +30,7 @@ internal struct NativeClientOptions
     internal byte BackwardCompatibilityLowcardinalityAsWrappedColumn;
     internal uint MaxCompressionChunkSize;
 
+    // Used to free the memory allocated by this project
     internal void Free(NativeEndpoint[] nativeEndpoints)
     {
         Marshal.FreeHGlobal(Host);
