@@ -6,7 +6,7 @@ namespace ClickHouse.Connector.Native;
 internal static partial class NativeClient
 {
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    public static partial nint CreateClient(ref NativeClientOptions options);
+    public static partial NativeClickHouseResultStatus CreateClient(ref NativeClientOptions options, out nint client);
 
     [LibraryImport("clickhouse-cpp-c-bridge")]
     public static partial void FreeClient(nint client);

@@ -1,4 +1,5 @@
-﻿using ClickHouse.Connector.Native;
+﻿using System.Runtime.InteropServices;
+using ClickHouse.Connector.Native;
 
 namespace ClickHouse.Connector.Connector;
 
@@ -7,12 +8,21 @@ public class ClickHouseConnection : IDisposable
     private readonly nint _nativeClient;
     private bool _disposed;
 
-    public ClickHouseConnection(ClickHouseClientOptions options)
+    public unsafe ClickHouseConnection(ClickHouseClientOptions options)
     {
         _disposed = false;
         var nativeOptions = options.ToNativeClientOptions();
-        _nativeClient = NativeClient.CreateClient(ref nativeOptions);
+        var nativeResultStatus = NativeClient.CreateClient(ref nativeOptions, out var nativeClient);
         nativeOptions.Free(options.NativeEndpoints);
+        
+        if (nativeResultStatus.Code != 0)
+        {
+            throw new ClickHouseException(nativeResultStatus);
+        }
+
+        // nativeClient is a double pointer, the usage of "out nint" is equivalent to dereferencing the pointer
+        // based on experimentation, so nativeClient becomes a single pointer to the client
+        _nativeClient = nativeClient;
     }
 
     public void Dispose()
