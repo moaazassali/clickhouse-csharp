@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace ClickHouse.Connector.Native.Structs;
 
@@ -18,6 +19,6 @@ internal struct NativeStringView
     */
     public override unsafe string ToString()
     {
-        return new string((sbyte*)Data, 0, (int)Length);
+        return new string((sbyte*)Data, 0, (int)Length, Encoding.UTF8);
     }
 }
