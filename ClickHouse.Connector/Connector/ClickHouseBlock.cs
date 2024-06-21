@@ -55,11 +55,11 @@ public class ClickHouseBlock : IDisposable
         ObjectDisposedException.ThrowIf(_disposed, this);
     }
 
-    public void AppendColumn(string tableName, ClickHouseColumn column)
+    public void AppendColumn(string columnName, ClickHouseColumn column)
     {
         CheckDisposed();
         Columns.Add(column);
-        Native.NativeBlock.AppendColumn(NativeBlock, tableName, column.NativeColumn);
+        Native.NativeBlock.AppendColumn(NativeBlock, columnName, column.NativeColumn);
     }
 
     public nuint RefreshRowCount()
