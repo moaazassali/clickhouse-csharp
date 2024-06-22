@@ -18,7 +18,7 @@ public class ClickHouseColumnFixedString : ClickHouseColumn<string>
     public override void Append(string value)
     {
         CheckDisposed();
-        // we could throw if string has more bytes than size, but that would require UTF-8 encoding
+        // we could throw here if string has more bytes than size, but that would require UTF-8 encoding
         // which will again be done when passing value to native method with marshalling
         // in the future, we could do the UTF-8 encoding here and pass nint to native method instead of string
         var nativeResultStatus = Native.Columns.NativeColumnFixedString.ColumnFixedStringAppend(NativeColumn, value);
