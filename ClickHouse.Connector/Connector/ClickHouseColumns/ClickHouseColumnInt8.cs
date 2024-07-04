@@ -4,9 +4,9 @@ public class ClickHouseColumnInt8 : ClickHouseColumn<sbyte>
 {
     public ClickHouseColumnInt8()
     {
-        NativeColumn = Native.Columns.NativeColumnInt8.CreateColumnInt8();
+        NativeColumn = Native.Columns.NativeColumnInt8.chc_column_int8_create();
     }
-    
+
     public ClickHouseColumnInt8(nint nativeColumn)
     {
         NativeColumn = nativeColumn;
@@ -15,14 +15,15 @@ public class ClickHouseColumnInt8 : ClickHouseColumn<sbyte>
     public override void Append(sbyte value)
     {
         CheckDisposed();
-        Native.Columns.NativeColumnInt8.ColumnInt8Append(NativeColumn, value);
+        Native.Columns.NativeColumnInt8.chc_column_int8_append(NativeColumn, value);
     }
-    
-    public sbyte this[int index] {
+
+    public sbyte this[int index]
+    {
         get
         {
             CheckDisposed();
-            return Native.Columns.NativeColumnInt8.ColumnInt8At(NativeColumn, index);
+            return Native.Columns.NativeColumnInt8.chc_column_int8_at(NativeColumn, (nuint)index);
         }
     }
 }

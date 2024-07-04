@@ -5,11 +5,11 @@ namespace ClickHouse.Connector.Native.Columns;
 internal static partial class NativeColumnDateTime64
 {
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    public static partial nint CreateColumnDateTime64(nint precision);
+    public static partial nint chc_column_datetime64_create(nuint precision);
 
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    public static partial void ColumnDateTime64Append(nint column, long value);
-    
+    public static partial void chc_column_datetime64_append(nint column, long value);
+
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    public static partial long ColumnDateTime64At(nint column, nint index);
+    public static partial long chc_column_datetime64_at(nint column, nuint index);
 }

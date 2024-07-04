@@ -15,13 +15,13 @@ public class ClickHouseBlock : IDisposable
         get
         {
             CheckDisposed();
-            return (int)Native.NativeBlock.GetRowCount(NativeBlock);
+            return (int)Native.NativeBlock.chc_block_row_count(NativeBlock);
         }
     }
 
     public ClickHouseBlock()
     {
-        NativeBlock = Native.NativeBlock.CreateBlock();
+        NativeBlock = Native.NativeBlock.chc_block_create();
         _disposed = false;
     }
 
@@ -30,16 +30,16 @@ public class ClickHouseBlock : IDisposable
         NativeBlock = nativeBlock;
         _disposed = false;
 
-        for (nuint i = 0; i < Native.NativeBlock.GetColumnCount(nativeBlock); i++)
+        for (nuint i = 0; i < Native.NativeBlock.chc_block_column_count(nativeBlock); i++)
         {
-            var nativeColumn = Native.NativeBlock.GetColumnAt(nativeBlock, i);
-            Columns.Add(CreateColumn(Native.Columns.NativeColumn.GetColumnType(nativeColumn), nativeColumn));
+            var nativeColumn = Native.NativeBlock.chc_block_column_at(nativeBlock, i);
+            Columns.Add(CreateColumn(Native.Columns.NativeColumn.chc_column_type(nativeColumn), nativeColumn));
         }
     }
 
     public void Dispose()
     {
-        Native.NativeBlock.FreeBlock(NativeBlock);
+        Native.NativeBlock.chc_block_free(NativeBlock);
         // should columns be disposed here as well?
         _disposed = true;
         GC.SuppressFinalize(this);
@@ -59,19 +59,19 @@ public class ClickHouseBlock : IDisposable
     {
         CheckDisposed();
         Columns.Add(column);
-        Native.NativeBlock.AppendColumn(NativeBlock, columnName, column.NativeColumn);
+        Native.NativeBlock.chc_block_append_column(NativeBlock, columnName, column.NativeColumn);
     }
 
     public nuint RefreshRowCount()
     {
         CheckDisposed();
-        return Native.NativeBlock.RefreshRowCount(NativeBlock);
+        return Native.NativeBlock.chc_block_refresh_row_count(NativeBlock);
     }
 
     public string GetColumnName(nuint index)
     {
         CheckDisposed();
-        return Native.NativeBlock.GetColumnName(NativeBlock, index);
+        return Native.NativeBlock.chc_block_column_name(NativeBlock, index);
     }
 
     private static ClickHouseColumn CreateColumn(ClickHouseColumnType type, nint nativeColumn)

@@ -5,11 +5,11 @@ namespace ClickHouse.Connector.Native.Columns;
 internal static partial class NativeColumnInt32
 {
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    public static partial nint CreateColumnInt32();
+    public static partial nint chc_column_int32_create();
 
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    public static partial void ColumnInt32Append(nint column, int value);
-    
+    public static partial void chc_column_int32_append(nint column, int value);
+
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    public static partial int ColumnInt32At(nint column, nint index);
+    public static partial int chc_column_int32_at(nint column, nuint index);
 }

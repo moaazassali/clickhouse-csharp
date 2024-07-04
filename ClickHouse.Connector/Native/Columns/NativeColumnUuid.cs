@@ -6,11 +6,11 @@ namespace ClickHouse.Connector.Native.Columns;
 internal static partial class NativeColumnUuid
 {
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    public static partial nint CreateColumnUuid();
+    public static partial nint chc_column_uuid_create();
 
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    public static partial void ColumnUuidAppend(nint column, NativeUuid value);
-    
+    public static partial void chc_column_uuid_append(nint column, NativeUuid value);
+
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    public static partial NativeUuid ColumnUuidAt(nint column, nint index);
+    public static partial NativeUuid chc_column_uuid_at(nint column, nuint index);
 }

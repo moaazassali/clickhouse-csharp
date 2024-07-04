@@ -4,9 +4,9 @@ public class ClickHouseColumnDateTime : ClickHouseColumn<uint>
 {
     public ClickHouseColumnDateTime()
     {
-        NativeColumn = Native.Columns.NativeColumnDateTime.CreateColumnDateTime();
+        NativeColumn = Native.Columns.NativeColumnDateTime.chc_column_datetime_create();
     }
-    
+
     public ClickHouseColumnDateTime(nint nativeColumn)
     {
         NativeColumn = nativeColumn;
@@ -15,7 +15,7 @@ public class ClickHouseColumnDateTime : ClickHouseColumn<uint>
     public override void Append(uint value)
     {
         CheckDisposed();
-        Native.Columns.NativeColumnDateTime.ColumnDateTimeAppend(NativeColumn, value);
+        Native.Columns.NativeColumnDateTime.chc_column_datetime_append(NativeColumn, value);
     }
 
     public uint this[int index]
@@ -23,7 +23,7 @@ public class ClickHouseColumnDateTime : ClickHouseColumn<uint>
         get
         {
             CheckDisposed();
-            return (uint)Native.Columns.NativeColumnDateTime.ColumnDateTimeAt(NativeColumn, index);
+            return (uint)Native.Columns.NativeColumnDateTime.chc_column_datetime_at(NativeColumn, (nuint)index);
         }
     }
 }

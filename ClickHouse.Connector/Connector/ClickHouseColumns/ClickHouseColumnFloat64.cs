@@ -4,7 +4,7 @@ public class ClickHouseColumnFloat64 : ClickHouseColumn<double>
 {
     public ClickHouseColumnFloat64()
     {
-        NativeColumn = Native.Columns.NativeColumnFloat64.CreateColumnFloat64();
+        NativeColumn = Native.Columns.NativeColumnFloat64.chc_column_float64_create();
     }
     
     public ClickHouseColumnFloat64(nint nativeColumn)
@@ -15,7 +15,7 @@ public class ClickHouseColumnFloat64 : ClickHouseColumn<double>
     public override void Append(double value)
     {
         CheckDisposed();
-        Native.Columns.NativeColumnFloat64.ColumnFloat64Append(NativeColumn, value);
+        Native.Columns.NativeColumnFloat64.chc_column_float64_append(NativeColumn, value);
     }
 
     public double this[int index]
@@ -23,7 +23,7 @@ public class ClickHouseColumnFloat64 : ClickHouseColumn<double>
         get
         {
             CheckDisposed();
-            return Native.Columns.NativeColumnFloat64.ColumnFloat64At(NativeColumn, index);
+            return Native.Columns.NativeColumnFloat64.chc_column_float64_at(NativeColumn, (nuint)index);
         }
     }
 }

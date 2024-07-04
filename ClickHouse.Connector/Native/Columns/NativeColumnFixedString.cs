@@ -6,11 +6,12 @@ namespace ClickHouse.Connector.Native.Columns;
 internal static partial class NativeColumnFixedString
 {
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    internal static partial nint CreateColumnFixedString(nint size);
+    internal static partial nint chc_column_fixed_string_create(nuint size);
 
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    internal static partial NativeClickHouseResultStatus ColumnFixedStringAppend(nint column, [MarshalAs(UnmanagedType.LPUTF8Str)] string value);
+    internal static partial NativeClickHouseResultStatus chc_column_fixed_string_append(nint column,
+        [MarshalAs(UnmanagedType.LPUTF8Str)] string value);
 
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    internal static partial NativeStringView ColumnFixedStringAt(nint column, nint index);
+    internal static partial NativeStringView chc_column_fixed_string_at(nint column, nuint index);
 }

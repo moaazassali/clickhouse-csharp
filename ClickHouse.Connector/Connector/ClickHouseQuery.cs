@@ -4,19 +4,14 @@ public class ClickHouseQuery : IDisposable
 {
     internal nint NativeQuery { get; }
 
-    public ClickHouseQuery(string query)
+    public ClickHouseQuery(string query, string? queryId = null)
     {
-        NativeQuery = Native.NativeQuery.CreateQuery(query);
-    }
-
-    public ClickHouseQuery(string query, string queryId)
-    {
-        NativeQuery = Native.NativeQuery.CreateQuery(query, queryId);
+        NativeQuery = Native.NativeQuery.chc_query_create(query, queryId);
     }
 
     public void Dispose()
     {
-        Native.NativeQuery.FreeQuery(NativeQuery);
+        Native.NativeQuery.chc_query_free(NativeQuery);
         GC.SuppressFinalize(this);
     }
 

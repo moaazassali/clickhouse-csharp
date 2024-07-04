@@ -4,7 +4,7 @@ public class ClickHouseColumnUuid : ClickHouseColumn<Guid>
 {
     public ClickHouseColumnUuid()
     {
-        NativeColumn = Native.Columns.NativeColumnUuid.CreateColumnUuid();
+        NativeColumn = Native.Columns.NativeColumnUuid.chc_column_uuid_create();
     }
 
     public ClickHouseColumnUuid(nint nativeColumn)
@@ -16,7 +16,7 @@ public class ClickHouseColumnUuid : ClickHouseColumn<Guid>
     {
         CheckDisposed();
         GuidToInt64(guid, out var first, out var second);
-        Native.Columns.NativeColumnUuid.ColumnUuidAppend(NativeColumn,
+        Native.Columns.NativeColumnUuid.chc_column_uuid_append(NativeColumn,
             new Native.Structs.NativeUuid { First = first, Second = second });
     }
 
@@ -25,7 +25,7 @@ public class ClickHouseColumnUuid : ClickHouseColumn<Guid>
         get
         {
             CheckDisposed();
-            var nativeUuid = Native.Columns.NativeColumnUuid.ColumnUuidAt(NativeColumn, index);
+            var nativeUuid = Native.Columns.NativeColumnUuid.chc_column_uuid_at(NativeColumn, (nuint)index);
             return GuidFromInt64(nativeUuid.First, nativeUuid.Second);
         }
     }

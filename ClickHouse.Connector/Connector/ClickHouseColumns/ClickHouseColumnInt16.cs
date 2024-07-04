@@ -4,9 +4,9 @@ public class ClickHouseColumnInt16 : ClickHouseColumn<short>
 {
     public ClickHouseColumnInt16()
     {
-        NativeColumn = Native.Columns.NativeColumnInt16.CreateColumnInt16();
+        NativeColumn = Native.Columns.NativeColumnInt16.chc_column_int16_create();
     }
-    
+
     public ClickHouseColumnInt16(nint nativeColumn)
     {
         NativeColumn = nativeColumn;
@@ -15,7 +15,7 @@ public class ClickHouseColumnInt16 : ClickHouseColumn<short>
     public override void Append(short value)
     {
         CheckDisposed();
-        Native.Columns.NativeColumnInt16.ColumnInt16Append(NativeColumn, value);
+        Native.Columns.NativeColumnInt16.chc_column_int16_append(NativeColumn, value);
     }
 
     public short this[int index]
@@ -23,7 +23,7 @@ public class ClickHouseColumnInt16 : ClickHouseColumn<short>
         get
         {
             CheckDisposed();
-            return Native.Columns.NativeColumnInt16.ColumnInt16At(NativeColumn, index);
+            return Native.Columns.NativeColumnInt16.chc_column_int16_at(NativeColumn, (nuint)index);
         }
     }
 }

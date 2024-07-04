@@ -5,11 +5,11 @@ namespace ClickHouse.Connector.Native.Columns;
 internal static partial class NativeColumnDate
 {
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    public static partial nint CreateColumnDate();
+    public static partial nint chc_column_date_create();
 
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    public static partial void ColumnDateAppend(nint column, ushort value);
-    
+    public static partial void chc_column_date_append(nint column, ushort value);
+
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    public static partial ushort ColumnDateAt(nint column, nint index);
+    public static partial ushort chc_column_date_at(nint column, nuint index);
 }

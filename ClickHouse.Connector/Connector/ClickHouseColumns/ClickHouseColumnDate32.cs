@@ -4,9 +4,9 @@ public class ClickHouseColumnDate32 : ClickHouseColumn<int>
 {
     public ClickHouseColumnDate32()
     {
-        NativeColumn = Native.Columns.NativeColumnDate32.CreateColumnDate32();
+        NativeColumn = Native.Columns.NativeColumnDate32.chc_column_date32_create();
     }
-    
+
     public ClickHouseColumnDate32(nint nativeColumn)
     {
         NativeColumn = nativeColumn;
@@ -15,7 +15,7 @@ public class ClickHouseColumnDate32 : ClickHouseColumn<int>
     public override void Append(int value)
     {
         CheckDisposed();
-        Native.Columns.NativeColumnDate32.ColumnDate32Append(NativeColumn, value);
+        Native.Columns.NativeColumnDate32.chc_column_date32_append(NativeColumn, value);
     }
 
     public int this[int index]
@@ -23,7 +23,7 @@ public class ClickHouseColumnDate32 : ClickHouseColumn<int>
         get
         {
             CheckDisposed();
-            return Native.Columns.NativeColumnDate32.ColumnDate32At(NativeColumn, index);
+            return Native.Columns.NativeColumnDate32.chc_column_date32_at(NativeColumn, (nuint)index);
         }
     }
 }

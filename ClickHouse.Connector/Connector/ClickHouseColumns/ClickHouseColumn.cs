@@ -11,13 +11,13 @@ public abstract class ClickHouseColumn : IDisposable
         get
         {
             CheckDisposed();
-            return Native.Columns.NativeColumn.GetColumnType(NativeColumn);
+            return Native.Columns.NativeColumn.chc_column_type(NativeColumn);
         }
     }
 
     public void Dispose()
     {
-        Native.Columns.NativeColumn.FreeColumn(NativeColumn);
+        Native.Columns.NativeColumn.chc_column_free(NativeColumn);
         _disposed = true;
         GC.SuppressFinalize(this);
     }

@@ -7,7 +7,7 @@ public class ClickHouseColumnIPv4 : ClickHouseColumn<IPAddress>
 {
     public ClickHouseColumnIPv4()
     {
-        NativeColumn = Native.Columns.NativeColumnIPv4.CreateColumnIPv4();
+        NativeColumn = Native.Columns.NativeColumnIPv4.chc_column_ipv4_create();
     }
 
     public ClickHouseColumnIPv4(nint nativeColumn)
@@ -30,13 +30,13 @@ public class ClickHouseColumnIPv4 : ClickHouseColumn<IPAddress>
             Array.Reverse(bytes);
         }
 
-        Native.Columns.NativeColumnIPv4.ColumnIPv4Append(NativeColumn, BitConverter.ToUInt32(bytes, 0));
+        Native.Columns.NativeColumnIPv4.chc_column_ipv4_append(NativeColumn, BitConverter.ToUInt32(bytes, 0));
     }
 
     public void Append(uint value)
     {
         CheckDisposed();
-        Native.Columns.NativeColumnIPv4.ColumnIPv4Append(NativeColumn, value);
+        Native.Columns.NativeColumnIPv4.chc_column_ipv4_append(NativeColumn, value);
     }
 
     public IPAddress this[int index]
@@ -44,7 +44,7 @@ public class ClickHouseColumnIPv4 : ClickHouseColumn<IPAddress>
         get
         {
             CheckDisposed();
-            var value = Native.Columns.NativeColumnIPv4.ColumnIPv4At(NativeColumn, index);
+            var value = Native.Columns.NativeColumnIPv4.chc_column_ipv4_at(NativeColumn, (nuint)index);
             return new IPAddress(value);
         }
     }

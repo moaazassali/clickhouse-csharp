@@ -4,9 +4,9 @@ public class ClickHouseColumnUInt8 : ClickHouseColumn<byte>
 {
     public ClickHouseColumnUInt8()
     {
-        NativeColumn = Native.Columns.NativeColumnUInt8.CreateColumnUInt8();
+        NativeColumn = Native.Columns.NativeColumnUInt8.chc_column_uint8_create();
     }
-    
+
     public ClickHouseColumnUInt8(nint nativeColumn)
     {
         NativeColumn = nativeColumn;
@@ -15,7 +15,7 @@ public class ClickHouseColumnUInt8 : ClickHouseColumn<byte>
     public override void Append(byte value)
     {
         CheckDisposed();
-        Native.Columns.NativeColumnUInt8.ColumnUInt8Append(NativeColumn, value);
+        Native.Columns.NativeColumnUInt8.chc_column_uint8_append(NativeColumn, value);
     }
 
     public byte this[int index]
@@ -23,7 +23,7 @@ public class ClickHouseColumnUInt8 : ClickHouseColumn<byte>
         get
         {
             CheckDisposed();
-            return Native.Columns.NativeColumnUInt8.ColumnUInt8At(NativeColumn, index);
+            return Native.Columns.NativeColumnUInt8.chc_column_uint8_at(NativeColumn, (nuint)index);
         }
     }
 }

@@ -4,9 +4,9 @@ public class ClickHouseColumnString : ClickHouseColumn<string>
 {
     public ClickHouseColumnString()
     {
-        NativeColumn = Native.Columns.NativeColumnString.CreateColumnString();
+        NativeColumn = Native.Columns.NativeColumnString.chc_column_string_create();
     }
-    
+
     public ClickHouseColumnString(nint nativeColumn)
     {
         NativeColumn = nativeColumn;
@@ -15,7 +15,7 @@ public class ClickHouseColumnString : ClickHouseColumn<string>
     public override void Append(string value)
     {
         CheckDisposed();
-        Native.Columns.NativeColumnString.ColumnStringAppend(NativeColumn, value);
+        Native.Columns.NativeColumnString.chc_column_string_append(NativeColumn, value);
     }
 
     public string this[int index]
@@ -23,7 +23,7 @@ public class ClickHouseColumnString : ClickHouseColumn<string>
         get
         {
             CheckDisposed();
-            var x = Native.Columns.NativeColumnString.ColumnStringAt(NativeColumn, index);
+            var x = Native.Columns.NativeColumnString.chc_column_string_at(NativeColumn, (nuint)index);
             return x.ToString();
         }
     }
