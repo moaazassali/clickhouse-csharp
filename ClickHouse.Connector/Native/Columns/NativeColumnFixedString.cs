@@ -9,7 +9,7 @@ internal static partial class NativeColumnFixedString
     internal static partial nint chc_column_fixed_string_create(nuint size);
 
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    internal static partial NativeClickHouseResultStatus chc_column_fixed_string_append(nint column,
+    internal static partial NativeResultStatus chc_column_fixed_string_append(nint column,
         [MarshalAs(UnmanagedType.LPUTF8Str)] string value);
 
     [LibraryImport("clickhouse-cpp-c-bridge")]

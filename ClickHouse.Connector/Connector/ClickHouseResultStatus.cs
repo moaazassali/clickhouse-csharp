@@ -7,11 +7,11 @@ public class ClickHouseResultStatus
     public int Code { get; }
     public string Message { get; }
 
-    internal ClickHouseResultStatus(Native.Structs.NativeClickHouseResultStatus resultStatus)
+    internal ClickHouseResultStatus(Native.Structs.NativeResultStatus resultStatus)
     {
         Code = resultStatus.Code;
         var message = Marshal.PtrToStringUTF8(resultStatus.Message);
-        Native.Structs.NativeClickHouseResultStatus.FreeClickHouseResultStatus(ref resultStatus);
+        Native.Structs.NativeResultStatus.chc_result_status_free(ref resultStatus);
         Message = message ?? string.Empty;
     }
 }

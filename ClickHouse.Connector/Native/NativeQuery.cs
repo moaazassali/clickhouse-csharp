@@ -15,13 +15,13 @@ internal static partial class NativeQuery
     public delegate void NativeSelectCallback(nint block);
 
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    public static partial NativeClickHouseResultStatus chc_query_on_data(nint query,
+    public static partial NativeResultStatus chc_query_on_data(nint query,
         [MarshalAs(UnmanagedType.FunctionPtr)] NativeSelectCallback selectCallback);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate bool NativeSelectCancelableCallback(nint block);
 
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    public static partial NativeClickHouseResultStatus chc_query_on_data_cancelable(nint query,
+    public static partial NativeResultStatus chc_query_on_data_cancelable(nint query,
         [MarshalAs(UnmanagedType.FunctionPtr)] NativeSelectCancelableCallback selectCallback);
 }

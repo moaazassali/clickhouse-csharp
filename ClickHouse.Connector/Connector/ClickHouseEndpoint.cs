@@ -19,7 +19,7 @@ public class ClickHouseEndpoint
         Host = Marshal.PtrToStringUTF8(endpoint.Host) ?? string.Empty;
         Port = endpoint.Port;
         
-        NativeEndpoint.FreeEndpointWrapper(ref endpoint);
+        NativeEndpoint.chc_endpoint_free(ref endpoint);
     }
     
     internal NativeEndpoint ToNativeEndpoint()

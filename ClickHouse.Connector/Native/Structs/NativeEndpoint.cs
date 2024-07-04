@@ -10,7 +10,7 @@ internal partial struct NativeEndpoint
     
     // Used to free the memory allocated by the C++ library
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    internal static partial void FreeEndpointWrapper(ref NativeEndpoint nativeEndpoint);
+    internal static partial void chc_endpoint_free(ref NativeEndpoint nativeEndpoint);
     
     // Used to free the memory allocated by this project
     internal void Free()
