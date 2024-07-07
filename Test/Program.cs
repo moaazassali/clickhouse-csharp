@@ -7,7 +7,7 @@ class Program
 {
     static void Main(string[] args)
     {
-        using var connection = new ClickHouseConnection("192.168.70.176");
+        // using var connection = new ClickHouseConnection("192.168.70.176");
 
         var blocks = new ClickHouseBlock[1000];
 
@@ -37,12 +37,12 @@ class Program
         }
 
 
-        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-        foreach (var block in blocks)
-            connection.Insert("test.devices", block);
-        stopwatch.Stop();
-        
-        System.Console.WriteLine($"Took {stopwatch.ElapsedMilliseconds} ms.");
+        // var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+        // foreach (var block in blocks)
+        //     connection.Insert("test.devices", block);
+        // stopwatch.Stop();
+        //
+        // System.Console.WriteLine($"Took {stopwatch.ElapsedMilliseconds} ms.");
 
 
         // Parallel.For(0, connections.Length, i =>
