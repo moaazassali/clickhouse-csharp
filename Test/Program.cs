@@ -1,5 +1,5 @@
-﻿using ClickHouse.Connector.Connector;
-using ClickHouse.Connector.Connector.ClickHouseColumns;
+﻿using ClickHouse.Driver.Driver;
+using ClickHouse.Driver.Driver.ClickHouseColumns;
 
 namespace Test;
 
