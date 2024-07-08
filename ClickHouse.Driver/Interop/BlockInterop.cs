@@ -1,8 +1,8 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace ClickHouse.Driver.Native;
+namespace ClickHouse.Driver.Interop;
 
-internal static partial class NativeBlock
+internal static partial class BlockInterop
 {
     [LibraryImport("clickhouse-cpp-c-bridge")]
     public static partial nint chc_block_create();

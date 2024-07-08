@@ -1,8 +1,8 @@
 using System.Runtime.InteropServices;
 
-namespace ClickHouse.Driver.Native.Columns;
+namespace ClickHouse.Driver.Interop.Columns;
 
-internal static partial class NativeColumnDate32
+internal static partial class ColumnDate32Interop
 {
     [LibraryImport("clickhouse-cpp-c-bridge")]
     public static partial nint chc_column_date32_create();

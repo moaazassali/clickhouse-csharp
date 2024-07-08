@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Driver;
 
@@ -12,16 +13,16 @@ public class ClickHouseServerInfo
     public ulong VersionPatch { get; }
     public ulong Revision { get; }
     
-    internal ClickHouseServerInfo(Native.Structs.NativeServerInfo serverInfo)
+    internal ClickHouseServerInfo(ServerInfoInterop serverInfoInterop)
     {
-        Name = Marshal.PtrToStringUTF8(serverInfo.Name) ?? string.Empty;
-        Timezone = Marshal.PtrToStringUTF8(serverInfo.Timezone) ?? string.Empty;
-        DisplayName = Marshal.PtrToStringUTF8(serverInfo.DisplayName) ?? string.Empty;
-        VersionMajor = serverInfo.VersionMajor;
-        VersionMinor = serverInfo.VersionMinor;
-        VersionPatch = serverInfo.VersionPatch;
-        Revision = serverInfo.Revision;
+        Name = Marshal.PtrToStringUTF8(serverInfoInterop.Name) ?? string.Empty;
+        Timezone = Marshal.PtrToStringUTF8(serverInfoInterop.Timezone) ?? string.Empty;
+        DisplayName = Marshal.PtrToStringUTF8(serverInfoInterop.DisplayName) ?? string.Empty;
+        VersionMajor = serverInfoInterop.VersionMajor;
+        VersionMinor = serverInfoInterop.VersionMinor;
+        VersionPatch = serverInfoInterop.VersionPatch;
+        Revision = serverInfoInterop.Revision;
         
-        Native.Structs.NativeServerInfo.chc_server_info_free(ref serverInfo);
+        ServerInfoInterop.chc_server_info_free(ref serverInfoInterop);
     }
 }

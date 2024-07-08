@@ -1,9 +1,9 @@
 using System.Runtime.InteropServices;
 
-namespace ClickHouse.Driver.Native.Structs;
+namespace ClickHouse.Driver.Interop.Structs;
 
 [StructLayout(LayoutKind.Sequential)]
-internal partial struct NativeServerInfo
+internal partial struct ServerInfoInterop
 {
     internal nint Name;
     internal nint Timezone;
@@ -14,5 +14,5 @@ internal partial struct NativeServerInfo
     internal ulong Revision;
     
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    internal static partial void chc_server_info_free(ref NativeServerInfo serverInfo);
+    internal static partial void chc_server_info_free(ref ServerInfoInterop serverInfoInterop);
 }

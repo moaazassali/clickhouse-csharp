@@ -1,10 +1,12 @@
+using ClickHouse.Driver.Interop.Columns;
+
 namespace ClickHouse.Driver.Driver.ClickHouseColumns;
 
 public class ClickHouseColumnFloat64 : ClickHouseColumn<double>
 {
     public ClickHouseColumnFloat64()
     {
-        NativeColumn = Native.Columns.NativeColumnFloat64.chc_column_float64_create();
+        NativeColumn = ColumnFloat64Interop.chc_column_float64_create();
     }
     
     public ClickHouseColumnFloat64(nint nativeColumn)
@@ -15,7 +17,7 @@ public class ClickHouseColumnFloat64 : ClickHouseColumn<double>
     public override void Append(double value)
     {
         CheckDisposed();
-        Native.Columns.NativeColumnFloat64.chc_column_float64_append(NativeColumn, value);
+        ColumnFloat64Interop.chc_column_float64_append(NativeColumn, value);
     }
 
     public double this[int index]
@@ -23,7 +25,7 @@ public class ClickHouseColumnFloat64 : ClickHouseColumn<double>
         get
         {
             CheckDisposed();
-            return Native.Columns.NativeColumnFloat64.chc_column_float64_at(NativeColumn, (nuint)index);
+            return ColumnFloat64Interop.chc_column_float64_at(NativeColumn, (nuint)index);
         }
     }
 }

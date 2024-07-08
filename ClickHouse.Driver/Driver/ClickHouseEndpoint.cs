@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using ClickHouse.Driver.Native.Structs;
+using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Driver;
 
@@ -14,17 +14,17 @@ public class ClickHouseEndpoint
         Port = port;
     }
     
-    internal ClickHouseEndpoint(NativeEndpoint endpoint)
+    internal ClickHouseEndpoint(EndpointInterop endpointInterop)
     {
-        Host = Marshal.PtrToStringUTF8(endpoint.Host) ?? string.Empty;
-        Port = endpoint.Port;
+        Host = Marshal.PtrToStringUTF8(endpointInterop.Host) ?? string.Empty;
+        Port = endpointInterop.Port;
         
-        NativeEndpoint.chc_endpoint_free(ref endpoint);
+        EndpointInterop.chc_endpoint_free(ref endpointInterop);
     }
     
-    internal NativeEndpoint ToNativeEndpoint()
+    internal EndpointInterop ToNativeEndpoint()
     {
-        return new NativeEndpoint
+        return new EndpointInterop
         {
             Host = Marshal.StringToHGlobalAnsi(Host),
             Port = Port,

@@ -6,12 +6,12 @@ public class ClickHouseQuery : IDisposable
 
     public ClickHouseQuery(string query, string? queryId = null)
     {
-        NativeQuery = Native.NativeQuery.chc_query_create(query, queryId);
+        NativeQuery = Interop.QueryInterop.chc_query_create(query, queryId);
     }
 
     public void Dispose()
     {
-        Native.NativeQuery.chc_query_free(NativeQuery);
+        Interop.QueryInterop.chc_query_free(NativeQuery);
         GC.SuppressFinalize(this);
     }
 

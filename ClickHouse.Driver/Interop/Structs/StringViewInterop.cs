@@ -1,10 +1,10 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace ClickHouse.Driver.Native.Structs;
+namespace ClickHouse.Driver.Interop.Structs;
 
 [StructLayout(LayoutKind.Sequential)]
-internal struct NativeStringView
+internal struct StringViewInterop
 {
     internal nint Data;
     internal nint Length;

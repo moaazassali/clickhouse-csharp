@@ -1,10 +1,12 @@
+using ClickHouse.Driver.Interop.Columns;
+
 namespace ClickHouse.Driver.Driver.ClickHouseColumns;
 
 public class ClickHouseColumnInt64 : ClickHouseColumn<long>
 {
     public ClickHouseColumnInt64()
     {
-        NativeColumn = Native.Columns.NativeColumnInt64.chc_column_int64_create();
+        NativeColumn = ColumnInt64Interop.chc_column_int64_create();
     }
 
     public ClickHouseColumnInt64(nint nativeColumn)
@@ -15,7 +17,7 @@ public class ClickHouseColumnInt64 : ClickHouseColumn<long>
     public override void Append(long value)
     {
         CheckDisposed();
-        Native.Columns.NativeColumnInt64.chc_column_int64_append(NativeColumn, value);
+        ColumnInt64Interop.chc_column_int64_append(NativeColumn, value);
     }
 
     public long this[int index]
@@ -23,7 +25,7 @@ public class ClickHouseColumnInt64 : ClickHouseColumn<long>
         get
         {
             CheckDisposed();
-            return Native.Columns.NativeColumnInt64.chc_column_int64_at(NativeColumn, (nuint)index);
+            return ColumnInt64Interop.chc_column_int64_at(NativeColumn, (nuint)index);
         }
     }
 }

@@ -1,9 +1,9 @@
 using System.Runtime.InteropServices;
 
-namespace ClickHouse.Driver.Native.Structs;
+namespace ClickHouse.Driver.Interop.Structs;
 
 [StructLayout(LayoutKind.Sequential)]
-internal struct NativeUuid
+internal struct UuidInterop
 {
     internal ulong First;
     internal ulong Second;

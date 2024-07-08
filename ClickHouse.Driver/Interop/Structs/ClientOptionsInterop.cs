@@ -1,11 +1,9 @@
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.Marshalling;
 
-namespace ClickHouse.Driver.Native.Structs;
+namespace ClickHouse.Driver.Interop.Structs;
 
 [StructLayout(LayoutKind.Sequential)]
-internal struct NativeClientOptions
+internal struct ClientOptionsInterop
 {
     internal nint Host;
     internal ushort Port;
@@ -31,7 +29,7 @@ internal struct NativeClientOptions
     internal uint MaxCompressionChunkSize;
 
     // Used to free the memory allocated by this project
-    internal void Free(NativeEndpoint[] nativeEndpoints)
+    internal void Free(EndpointInterop[] nativeEndpoints)
     {
         Marshal.FreeHGlobal(Host);
 

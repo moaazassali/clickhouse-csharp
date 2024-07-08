@@ -1,3 +1,5 @@
+using ClickHouse.Driver.Interop.Columns;
+
 namespace ClickHouse.Driver.Driver.ClickHouseColumns;
 
 public class ClickHouseColumnFixedString : ClickHouseColumn<string>
@@ -7,7 +9,7 @@ public class ClickHouseColumnFixedString : ClickHouseColumn<string>
     public ClickHouseColumnFixedString(int size)
     {
         _size = size;
-        NativeColumn = Native.Columns.NativeColumnFixedString.chc_column_fixed_string_create((nuint)size);
+        NativeColumn = ColumnFixedStringInterop.chc_column_fixed_string_create((nuint)size);
     }
 
     public ClickHouseColumnFixedString(nint nativeColumn)
@@ -22,7 +24,7 @@ public class ClickHouseColumnFixedString : ClickHouseColumn<string>
         // which will again be done when passing value to native method with marshalling
         // in the future, we could do the UTF-8 encoding here and pass nint to native method instead of string
         var nativeResultStatus =
-            Native.Columns.NativeColumnFixedString.chc_column_fixed_string_append(NativeColumn, value);
+            ColumnFixedStringInterop.chc_column_fixed_string_append(NativeColumn, value);
 
         if (nativeResultStatus.Code != 0)
         {
@@ -35,7 +37,7 @@ public class ClickHouseColumnFixedString : ClickHouseColumn<string>
         get
         {
             CheckDisposed();
-            var x = Native.Columns.NativeColumnFixedString.chc_column_fixed_string_at(NativeColumn, (nuint)index);
+            var x = ColumnFixedStringInterop.chc_column_fixed_string_at(NativeColumn, (nuint)index);
             return x.ToString();
         }
     }

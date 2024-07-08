@@ -1,8 +1,8 @@
 using System.Runtime.InteropServices;
 
-namespace ClickHouse.Driver.Native.Columns;
+namespace ClickHouse.Driver.Interop.Columns;
 
-internal static partial class NativeColumnIPv4
+internal static partial class ColumnIPv4Interop
 {
     [LibraryImport("clickhouse-cpp-c-bridge")]
     public static partial nint chc_column_ipv4_create();

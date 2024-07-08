@@ -1,9 +1,9 @@
 ﻿using System.Runtime.InteropServices;
 using ClickHouse.Driver.Driver.ClickHouseColumns;
 
-namespace ClickHouse.Driver.Native.Columns;
+namespace ClickHouse.Driver.Interop.Columns;
 
-internal static partial class NativeColumn
+internal static partial class ColumnInterop
 {
     [LibraryImport("clickhouse-cpp-c-bridge")]
     public static partial void chc_column_free(nint column);

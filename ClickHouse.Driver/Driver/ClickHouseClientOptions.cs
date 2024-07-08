@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using ClickHouse.Driver.Native.Structs;
+using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Driver;
 
@@ -8,7 +8,7 @@ public class ClickHouseClientOptions
     public string Host { get; init; } = "";
     public ushort Port { get; init; } = 9000;
     public ClickHouseEndpoint[] Endpoints { get; init; } = [];
-    internal NativeEndpoint[] NativeEndpoints { get; private set; } = [];
+    internal EndpointInterop[] NativeEndpoints { get; private set; } = [];
     public string DefaultDatabase { get; init; } = "default";
     public string User { get; init; } = "default";
     public string Password { get; init; } = string.Empty;
@@ -28,13 +28,13 @@ public class ClickHouseClientOptions
     public bool BackwardCompatibilityLowCardinalityAsWrappedColumn { get; init; } = false;
     public uint MaxCompressionChunkSize { get; init; } = 65535;
 
-    internal NativeClientOptions ToNativeClientOptions()
+    internal ClientOptionsInterop ToNativeClientOptions()
     {
-        var nativeClientOptions = new NativeClientOptions
+        var nativeClientOptions = new ClientOptionsInterop
         {
             Host = Marshal.StringToHGlobalAnsi(Host),
             Port = Port,
-            Endpoints = Marshal.AllocHGlobal(Marshal.SizeOf<NativeEndpoint>() * Endpoints.Length),
+            Endpoints = Marshal.AllocHGlobal(Marshal.SizeOf<EndpointInterop>() * Endpoints.Length),
             EndpointsCount = (nuint)Endpoints.Length,
             DefaultDatabase = Marshal.StringToHGlobalAnsi(DefaultDatabase),
             User = Marshal.StringToHGlobalAnsi(User),
@@ -57,14 +57,14 @@ public class ClickHouseClientOptions
             MaxCompressionChunkSize = MaxCompressionChunkSize,
         };
 
-        NativeEndpoints = new NativeEndpoint[Endpoints.Length];
+        NativeEndpoints = new EndpointInterop[Endpoints.Length];
         
 
         for (var i = 0; i < Endpoints.Length; i++)
         {
             NativeEndpoints[i] = Endpoints[i].ToNativeEndpoint();
             Marshal.StructureToPtr(NativeEndpoints[i],
-                nativeClientOptions.Endpoints + Marshal.SizeOf<NativeEndpoint>() * i, false);
+                nativeClientOptions.Endpoints + Marshal.SizeOf<EndpointInterop>() * i, false);
         }
 
         return nativeClientOptions;

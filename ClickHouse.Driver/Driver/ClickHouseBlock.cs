@@ -1,4 +1,5 @@
 ﻿using ClickHouse.Driver.Driver.ClickHouseColumns;
+using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver.Driver;
 
@@ -15,13 +16,13 @@ public class ClickHouseBlock : IDisposable
         get
         {
             CheckDisposed();
-            return (int)Native.NativeBlock.chc_block_row_count(NativeBlock);
+            return (int)Interop.BlockInterop.chc_block_row_count(NativeBlock);
         }
     }
 
     public ClickHouseBlock()
     {
-        NativeBlock = Native.NativeBlock.chc_block_create();
+        NativeBlock = Interop.BlockInterop.chc_block_create();
         _disposed = false;
     }
 
@@ -30,16 +31,16 @@ public class ClickHouseBlock : IDisposable
         NativeBlock = nativeBlock;
         _disposed = false;
 
-        for (nuint i = 0; i < Native.NativeBlock.chc_block_column_count(nativeBlock); i++)
+        for (nuint i = 0; i < Interop.BlockInterop.chc_block_column_count(nativeBlock); i++)
         {
-            var nativeColumn = Native.NativeBlock.chc_block_column_at(nativeBlock, i);
-            Columns.Add(CreateColumn(Native.Columns.NativeColumn.chc_column_type(nativeColumn), nativeColumn));
+            var nativeColumn = Interop.BlockInterop.chc_block_column_at(nativeBlock, i);
+            Columns.Add(CreateColumn(ColumnInterop.chc_column_type(nativeColumn), nativeColumn));
         }
     }
 
     public void Dispose()
     {
-        Native.NativeBlock.chc_block_free(NativeBlock);
+        Interop.BlockInterop.chc_block_free(NativeBlock);
         // should columns be disposed here as well?
         _disposed = true;
         GC.SuppressFinalize(this);
@@ -59,19 +60,19 @@ public class ClickHouseBlock : IDisposable
     {
         CheckDisposed();
         Columns.Add(column);
-        Native.NativeBlock.chc_block_append_column(NativeBlock, columnName, column.NativeColumn);
+        Interop.BlockInterop.chc_block_append_column(NativeBlock, columnName, column.NativeColumn);
     }
 
     public nuint RefreshRowCount()
     {
         CheckDisposed();
-        return Native.NativeBlock.chc_block_refresh_row_count(NativeBlock);
+        return Interop.BlockInterop.chc_block_refresh_row_count(NativeBlock);
     }
 
     public string GetColumnName(nuint index)
     {
         CheckDisposed();
-        return Native.NativeBlock.chc_block_column_name(NativeBlock, index);
+        return Interop.BlockInterop.chc_block_column_name(NativeBlock, index);
     }
 
     private static ClickHouseColumn CreateColumn(ClickHouseColumnType type, nint nativeColumn)

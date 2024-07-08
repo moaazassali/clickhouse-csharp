@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Driver;
 
@@ -6,16 +7,16 @@ public class ClickHouseException : Exception
 {
     public int Code { get; }
     
-    internal ClickHouseException(Native.Structs.NativeResultStatus resultStatus)
-        : base(GetMessage(resultStatus))
+    internal ClickHouseException(ResultStatusInterop resultStatusInterop)
+        : base(GetMessage(resultStatusInterop))
     {
-        Code = resultStatus.Code;
+        Code = resultStatusInterop.Code;
     }
 
-    private static string GetMessage(Native.Structs.NativeResultStatus resultStatus)
+    private static string GetMessage(ResultStatusInterop resultStatusInterop)
     {
-        var message = Marshal.PtrToStringUTF8(resultStatus.Message);
-        Native.Structs.NativeResultStatus.chc_result_status_free(ref resultStatus);
-        return $"{resultStatus.Code}: {message ?? string.Empty}";
+        var message = Marshal.PtrToStringUTF8(resultStatusInterop.Message);
+        ResultStatusInterop.chc_result_status_free(ref resultStatusInterop);
+        return $"{resultStatusInterop.Code}: {message ?? string.Empty}";
     }
 }
