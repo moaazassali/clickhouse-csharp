@@ -2,7 +2,7 @@ using System.Net;
 using System.Net.Sockets;
 using ClickHouse.Driver.Interop.Columns;
 
-namespace ClickHouse.Driver.ClickHouseColumns;
+namespace ClickHouse.Driver.Columns;
 
 public class ClickHouseColumnIPv4 : ClickHouseColumn<IPAddress>
 {

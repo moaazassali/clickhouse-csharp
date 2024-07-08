@@ -1,4 +1,4 @@
-namespace ClickHouse.Driver.ClickHouseColumns;
+namespace ClickHouse.Driver.Columns;
 
 public enum ClickHouseColumnType
 {

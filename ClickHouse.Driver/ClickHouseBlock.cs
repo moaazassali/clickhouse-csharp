@@ -1,4 +1,4 @@
-﻿using ClickHouse.Driver.ClickHouseColumns;
+﻿using ClickHouse.Driver.Columns;
 using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver;
