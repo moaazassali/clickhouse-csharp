@@ -10,9 +10,9 @@ public class ClickHouseConnection : IDisposable
     public ClickHouseConnection(ClickHouseClientOptions options)
     {
         _disposed = false;
-        var nativeOptions = options.ToClientOptionsInterop();
-        var nativeResultStatus = ClientInterop.chc_client_create(ref nativeOptions, out var nativeClient);
-        nativeOptions.Free(options.NativeEndpoints);
+        var optionsInterop = options.ToClientOptionsInterop();
+        var nativeResultStatus = ClientInterop.chc_client_create(ref optionsInterop, out var nativeClient);
+        optionsInterop.Free(options.NativeEndpoints);
 
         if (nativeResultStatus.Code != 0)
         {
