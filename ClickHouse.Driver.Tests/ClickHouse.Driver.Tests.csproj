@@ -26,4 +26,9 @@
       <ProjectReference Include="..\ClickHouse.Driver\ClickHouse.Driver.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Integration\" />
+      <Folder Include="Unit\" />
+    </ItemGroup>
+
 </Project>
