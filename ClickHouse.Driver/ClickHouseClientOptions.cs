@@ -17,7 +17,7 @@ public class ClickHouseClientOptions
     public uint SendRetries { get; init; } = 1;
     public TimeSpan RetryTimeout { get; init; } = TimeSpan.FromSeconds(5);
     public CompressionMethod CompressionMethod { get; init; } = CompressionMethod.None;
-    public bool TcpKeepalive { get; init; } = false;
+    public bool TcpKeepAlive { get; init; } = false;
     public TimeSpan TcpKeepAliveIdle { get; init; } = TimeSpan.FromSeconds(60);
     public TimeSpan TcpKeepAliveInterval { get; init; } = TimeSpan.FromSeconds(5);
     public uint TcpKeepAliveCount { get; init; } = 3;
@@ -44,7 +44,7 @@ public class ClickHouseClientOptions
             SendRetries = SendRetries,
             RetryTimeout = RetryTimeout.Ticks,
             CompressionMethod = (int)CompressionMethod,
-            TcpKeepalive = TcpKeepalive ? (byte)1 : (byte)0,
+            TcpKeepalive = TcpKeepAlive ? (byte)1 : (byte)0,
             TcpKeepaliveIdle = TcpKeepAliveIdle.Ticks,
             TcpKeepaliveIntvl = TcpKeepAliveInterval.Ticks,
             TcpKeepaliveCnt = TcpKeepAliveCount,
