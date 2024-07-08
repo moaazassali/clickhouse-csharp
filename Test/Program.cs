@@ -7,7 +7,11 @@ class Program
 {
     static void Main(string[] args)
     {
-        // using var connection = new ClickHouseConnection("192.168.70.176");
+        var options = new ClickHouseClientOptions()
+        {
+            Host = "192.168.70.176"
+        };
+        using var connection = new ClickHouseConnection(options);
 
         var blocks = new ClickHouseBlock[1000];
 
@@ -36,13 +40,8 @@ class Program
             blocks[i].AppendColumn("humidity", col5);
         }
 
-
-        // var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-        // foreach (var block in blocks)
-        //     connection.Insert("test.devices", block);
-        // stopwatch.Stop();
-        //
-        // System.Console.WriteLine($"Took {stopwatch.ElapsedMilliseconds} ms.");
+        foreach (var block in blocks)
+            connection.Insert("test.devices", block);
 
 
         // Parallel.For(0, connections.Length, i =>
