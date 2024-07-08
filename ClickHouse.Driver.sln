@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouse.Driver.Tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{5425D4BA-182B-479C-B1B5-B6CD1A7969EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouse.Driver.Benchmarks", "ClickHouse.Driver.Benchmarks\ClickHouse.Driver.Benchmarks.csproj", "{1A403680-BE06-42A2-B117-12B6892F467F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{5425D4BA-182B-479C-B1B5-B6CD1A7969EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5425D4BA-182B-479C-B1B5-B6CD1A7969EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5425D4BA-182B-479C-B1B5-B6CD1A7969EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A403680-BE06-42A2-B117-12B6892F467F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A403680-BE06-42A2-B117-12B6892F467F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A403680-BE06-42A2-B117-12B6892F467F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A403680-BE06-42A2-B117-12B6892F467F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
