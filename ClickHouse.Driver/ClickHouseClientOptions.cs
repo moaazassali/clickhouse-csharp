@@ -30,7 +30,7 @@ public class ClickHouseClientOptions
 
     internal ClientOptionsInterop ToClientOptionsInterop()
     {
-        var nativeClientOptions = new ClientOptionsInterop
+        var clientOptionsInterop = new ClientOptionsInterop
         {
             Host = Marshal.StringToHGlobalAnsi(Host),
             Port = Port,
@@ -58,15 +58,15 @@ public class ClickHouseClientOptions
         };
 
         NativeEndpoints = new EndpointInterop[Endpoints.Length];
-        
+
 
         for (var i = 0; i < Endpoints.Length; i++)
         {
             NativeEndpoints[i] = Endpoints[i].ToNativeEndpoint();
             Marshal.StructureToPtr(NativeEndpoints[i],
-                nativeClientOptions.Endpoints + Marshal.SizeOf<EndpointInterop>() * i, false);
+                clientOptionsInterop.Endpoints + Marshal.SizeOf<EndpointInterop>() * i, false);
         }
 
-        return nativeClientOptions;
+        return clientOptionsInterop;
     }
 }
