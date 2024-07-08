@@ -10,20 +10,22 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>
-      <None Update="Interop\External\clickhouse-cpp-c-bridge.dll">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Interop\External\libclickhouse-cpp-c-bridge.so">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
+        <None Update="Interop\External\clickhouse-cpp-c-bridge.dll">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <TargetPath>clickhouse-cpp-c-bridge.dll</TargetPath>
+        </None>
+        <None Update="Interop\External\libclickhouse-cpp-c-bridge.so">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <TargetPath>libclickhouse-cpp-c-bridge.so</TargetPath>
+        </None>
     </ItemGroup>
 
 </Project>
