@@ -18,10 +18,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Update="Interop\clickhouse-cpp-c-bridge.dll">
+      <None Update="Interop\External\clickhouse-cpp-c-bridge.dll">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Interop\libclickhouse-cpp-c-bridge.so">
+      <None Update="Interop\External\libclickhouse-cpp-c-bridge.so">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
