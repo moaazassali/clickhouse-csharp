@@ -7,7 +7,7 @@ public class ClickHouseConnection : IDisposable
     private readonly nint _nativeClient;
     private bool _disposed;
 
-    public unsafe ClickHouseConnection(ClickHouseClientOptions options)
+    public ClickHouseConnection(ClickHouseClientOptions options)
     {
         _disposed = false;
         var nativeOptions = options.ToNativeClientOptions();
