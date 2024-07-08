@@ -28,7 +28,7 @@ public class ClickHouseClientOptions
     public bool BackwardCompatibilityLowCardinalityAsWrappedColumn { get; init; } = false;
     public uint MaxCompressionChunkSize { get; init; } = 65535;
 
-    internal ClientOptionsInterop ToNativeClientOptions()
+    internal ClientOptionsInterop ToClientOptionsInterop()
     {
         var nativeClientOptions = new ClientOptionsInterop
         {
