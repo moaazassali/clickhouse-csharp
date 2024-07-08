@@ -1,4 +1,4 @@
-﻿namespace ClickHouse.Driver.Driver.ClickHouseColumns;
+﻿namespace ClickHouse.Driver.ClickHouseColumns;
 
 public abstract class ClickHouseColumn : IDisposable
 {

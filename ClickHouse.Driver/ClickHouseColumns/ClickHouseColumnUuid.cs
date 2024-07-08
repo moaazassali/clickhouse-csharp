@@ -1,7 +1,7 @@
 using ClickHouse.Driver.Interop.Columns;
 using ClickHouse.Driver.Interop.Structs;
 
-namespace ClickHouse.Driver.Driver.ClickHouseColumns;
+namespace ClickHouse.Driver.ClickHouseColumns;
 
 public class ClickHouseColumnUuid : ClickHouseColumn<Guid>
 {

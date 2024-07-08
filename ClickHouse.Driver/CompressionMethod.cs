@@ -1,4 +1,4 @@
-namespace ClickHouse.Driver.Driver;
+namespace ClickHouse.Driver;
 
 public enum CompressionMethod
 {

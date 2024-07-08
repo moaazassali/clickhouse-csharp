@@ -1,5 +1,5 @@
 ﻿using System.Runtime.InteropServices;
-using ClickHouse.Driver.Driver.ClickHouseColumns;
+using ClickHouse.Driver.ClickHouseColumns;
 
 namespace ClickHouse.Driver.Interop.Columns;
 

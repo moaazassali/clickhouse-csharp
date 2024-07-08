@@ -1,7 +1,7 @@
-﻿using ClickHouse.Driver.Driver.ClickHouseColumns;
+﻿using ClickHouse.Driver.ClickHouseColumns;
 using ClickHouse.Driver.Interop.Columns;
 
-namespace ClickHouse.Driver.Driver;
+namespace ClickHouse.Driver;
 
 public class ClickHouseBlock : IDisposable
 {

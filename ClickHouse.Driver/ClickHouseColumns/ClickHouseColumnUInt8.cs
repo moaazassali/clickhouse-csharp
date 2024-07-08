@@ -1,6 +1,6 @@
 using ClickHouse.Driver.Interop.Columns;
 
-namespace ClickHouse.Driver.Driver.ClickHouseColumns;
+namespace ClickHouse.Driver.ClickHouseColumns;
 
 public class ClickHouseColumnUInt8 : ClickHouseColumn<byte>
 {

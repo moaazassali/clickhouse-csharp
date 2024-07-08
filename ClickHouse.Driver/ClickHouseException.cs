@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
 using ClickHouse.Driver.Interop.Structs;
 
-namespace ClickHouse.Driver.Driver;
+namespace ClickHouse.Driver;
 
 public class ClickHouseException : Exception
 {

@@ -1,6 +1,6 @@
 ﻿using ClickHouse.Driver.Interop;
 
-namespace ClickHouse.Driver.Driver;
+namespace ClickHouse.Driver;
 
 public class ClickHouseConnection : IDisposable
 {
