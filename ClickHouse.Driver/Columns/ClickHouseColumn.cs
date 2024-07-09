@@ -27,7 +27,7 @@ public abstract class ClickHouseColumn : IDisposable
         Interop.Columns.ColumnInterop.chc_column_clear(NativeColumn);
     }
 
-    public int Size
+    public int Count
     {
         get
         {
@@ -58,5 +58,4 @@ public abstract class ClickHouseColumn<T> : ClickHouseColumn
 {
     public abstract void Add(T value);
     public abstract T this[int index] { get; }
-    public int Count => Size;
 }
