@@ -3,14 +3,14 @@ using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ClickHouseColumnUuid : ClickHouseColumn<Guid>
+public class ColumnUuid : Column<Guid>
 {
-    public ClickHouseColumnUuid()
+    public ColumnUuid()
     {
         NativeColumn = ColumnUuidInterop.chc_column_uuid_create();
     }
 
-    public ClickHouseColumnUuid(nint nativeColumn)
+    public ColumnUuid(nint nativeColumn)
     {
         NativeColumn = nativeColumn;
     }

@@ -2,17 +2,17 @@ using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ClickHouseColumnFixedString : ClickHouseColumn<string>
+public class ColumnFixedString : Column<string>
 {
     private int _size;
 
-    public ClickHouseColumnFixedString(int size)
+    public ColumnFixedString(int size)
     {
         _size = size;
         NativeColumn = ColumnFixedStringInterop.chc_column_fixed_string_create((nuint)size);
     }
 
-    public ClickHouseColumnFixedString(nint nativeColumn)
+    public ColumnFixedString(nint nativeColumn)
     {
         NativeColumn = nativeColumn;
     }

@@ -2,14 +2,14 @@ using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ClickHouseColumnString : ClickHouseColumn<string>
+public class ColumnString : Column<string>
 {
-    public ClickHouseColumnString()
+    public ColumnString()
     {
         NativeColumn = ColumnStringInterop.chc_column_string_create();
     }
 
-    public ClickHouseColumnString(nint nativeColumn)
+    public ColumnString(nint nativeColumn)
     {
         NativeColumn = nativeColumn;
     }

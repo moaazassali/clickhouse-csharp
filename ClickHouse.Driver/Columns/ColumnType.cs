@@ -1,6 +1,6 @@
 namespace ClickHouse.Driver.Columns;
 
-public enum ClickHouseColumnType
+public enum ColumnType
 {
     Void,
     Int8,

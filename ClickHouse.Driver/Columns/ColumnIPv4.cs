@@ -4,14 +4,14 @@ using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ClickHouseColumnIPv4 : ClickHouseColumn<IPAddress>
+public class ColumnIPv4 : Column<IPAddress>
 {
-    public ClickHouseColumnIPv4()
+    public ColumnIPv4()
     {
         NativeColumn = ColumnIPv4Interop.chc_column_ipv4_create();
     }
 
-    public ClickHouseColumnIPv4(nint nativeColumn)
+    public ColumnIPv4(nint nativeColumn)
     {
         NativeColumn = nativeColumn;
     }

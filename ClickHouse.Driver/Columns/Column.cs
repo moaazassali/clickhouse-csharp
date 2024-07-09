@@ -1,12 +1,12 @@
 ﻿namespace ClickHouse.Driver.Columns;
 
-public abstract class ClickHouseColumn : IDisposable
+public abstract class Column : IDisposable
 {
     protected internal nint NativeColumn { get; protected init; }
 
     private bool _disposed;
 
-    public ClickHouseColumnType Type
+    public ColumnType Type
     {
         get
         {
@@ -43,7 +43,7 @@ public abstract class ClickHouseColumn : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    ~ClickHouseColumn()
+    ~Column()
     {
         Dispose();
     }
@@ -54,7 +54,7 @@ public abstract class ClickHouseColumn : IDisposable
     }
 }
 
-public abstract class ClickHouseColumn<T> : ClickHouseColumn
+public abstract class Column<T> : Column
 {
     public abstract void Add(T value);
     public abstract T this[int index] { get; }

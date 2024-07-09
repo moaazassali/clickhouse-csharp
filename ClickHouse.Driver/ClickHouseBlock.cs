@@ -7,7 +7,7 @@ public class ClickHouseBlock : IDisposable
 {
     internal nint NativeBlock { get; }
     private bool _disposed;
-    public List<ClickHouseColumn> Columns { get; } = [];
+    public List<Column> Columns { get; } = [];
 
     // again, possible conversion loss from nuint to int
     // will anyone have more than 2B rows in one block?
@@ -56,7 +56,7 @@ public class ClickHouseBlock : IDisposable
         ObjectDisposedException.ThrowIf(_disposed, this);
     }
 
-    public void AppendColumn(string columnName, ClickHouseColumn column)
+    public void AppendColumn(string columnName, Column column)
     {
         CheckDisposed();
         Columns.Add(column);
@@ -75,31 +75,31 @@ public class ClickHouseBlock : IDisposable
         return Interop.BlockInterop.chc_block_column_name(NativeBlock, index);
     }
 
-    private static ClickHouseColumn CreateColumn(ClickHouseColumnType type, nint nativeColumn)
+    private static Column CreateColumn(ColumnType type, nint nativeColumn)
     {
         return type switch
         {
-            ClickHouseColumnType.Int8 => new ClickHouseColumnInt8(nativeColumn),
-            ClickHouseColumnType.Int16 => new ClickHouseColumnInt16(nativeColumn),
-            ClickHouseColumnType.Int32 => new ClickHouseColumnInt32(nativeColumn),
-            ClickHouseColumnType.Int64 => new ClickHouseColumnInt64(nativeColumn),
-            ClickHouseColumnType.UInt8 => new ClickHouseColumnUInt8(nativeColumn),
-            ClickHouseColumnType.UInt16 => new ClickHouseColumnUInt16(nativeColumn),
-            ClickHouseColumnType.UInt32 => new ClickHouseColumnUInt32(nativeColumn),
-            ClickHouseColumnType.UInt64 => new ClickHouseColumnUInt64(nativeColumn),
-            ClickHouseColumnType.Float32 => new ClickHouseColumnFloat32(nativeColumn),
-            ClickHouseColumnType.Float64 => new ClickHouseColumnFloat64(nativeColumn),
-            ClickHouseColumnType.String => new ClickHouseColumnString(nativeColumn),
-            ClickHouseColumnType.FixedString => new ClickHouseColumnFixedString(nativeColumn),
-            ClickHouseColumnType.DateTime => new ClickHouseColumnDateTime(nativeColumn),
-            ClickHouseColumnType.Date => new ClickHouseColumnDate(nativeColumn),
+            ColumnType.Int8 => new ColumnInt8(nativeColumn),
+            ColumnType.Int16 => new ColumnInt16(nativeColumn),
+            ColumnType.Int32 => new ColumnInt32(nativeColumn),
+            ColumnType.Int64 => new ColumnInt64(nativeColumn),
+            ColumnType.UInt8 => new ColumnUInt8(nativeColumn),
+            ColumnType.UInt16 => new ColumnUInt16(nativeColumn),
+            ColumnType.UInt32 => new ColumnUInt32(nativeColumn),
+            ColumnType.UInt64 => new ColumnUInt64(nativeColumn),
+            ColumnType.Float32 => new ColumnFloat32(nativeColumn),
+            ColumnType.Float64 => new ColumnFloat64(nativeColumn),
+            ColumnType.String => new ColumnString(nativeColumn),
+            ColumnType.FixedString => new ColumnFixedString(nativeColumn),
+            ColumnType.DateTime => new ColumnDateTime(nativeColumn),
+            ColumnType.Date => new ColumnDate(nativeColumn),
             // ClickHouseColumnType.Array => new ClickHouseColumnArray(),
             // ClickHouseColumnType.Nullable => new ClickHouseColumnNullable(),
             // ClickHouseColumnType.Tuple => new ClickHouseColumnTuple(),
             // ClickHouseColumnType.Enum8 => new ClickHouseColumnEnum8(),
             // ClickHouseColumnType.Enum16 => new ClickHouseColumnEnum16(),
-            ClickHouseColumnType.Uuid => new ClickHouseColumnUuid(nativeColumn),
-            ClickHouseColumnType.IPv4 => new ClickHouseColumnIPv4(nativeColumn),
+            ColumnType.Uuid => new ColumnUuid(nativeColumn),
+            ColumnType.IPv4 => new ColumnIPv4(nativeColumn),
             // ClickHouseColumnType.IPv6 => new ClickHouseColumnIPv6(),
             // ClickHouseColumnType.Int128 => new ClickHouseColumnInt128(),
             // ClickHouseColumnType.Decimal => new ClickHouseColumnDecimal(),
@@ -107,8 +107,8 @@ public class ClickHouseBlock : IDisposable
             // ClickHouseColumnType.Decimal64 => new ClickHouseColumnDecimal64(),
             // ClickHouseColumnType.Decimal128 => new ClickHouseColumnDecimal128(),
             // ClickHouseColumnType.LowCardinality => new ClickHouseColumnLowCardinality(),
-            ClickHouseColumnType.DateTime64 => new ClickHouseColumnDateTime64(nativeColumn),
-            ClickHouseColumnType.Date32 => new ClickHouseColumnDate32(nativeColumn),
+            ColumnType.DateTime64 => new ColumnDateTime64(nativeColumn),
+            ColumnType.Date32 => new ColumnDate32(nativeColumn),
             // ClickHouseColumnType.Map => new ClickHouseColumnMap(),
             // ClickHouseColumnType.Point => new ClickHouseColumnPoint(),
             // ClickHouseColumnType.Ring => new ClickHouseColumnRing(),

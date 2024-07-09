@@ -18,11 +18,11 @@ class Program
         for (var i = 0; i < 1000; i++)
         {
             blocks[i] = new ClickHouseBlock();
-            var col1 = new ClickHouseColumnInt32();
-            var col2 = new ClickHouseColumnDateTime64(3);
-            var col3 = new ClickHouseColumnInt32();
-            var col4 = new ClickHouseColumnFloat64();
-            var col5 = new ClickHouseColumnInt64();
+            var col1 = new ColumnInt32();
+            var col2 = new ColumnDateTime64(3);
+            var col3 = new ColumnInt32();
+            var col4 = new ColumnFloat64();
+            var col5 = new ColumnInt64();
 
             for (var j = 0; j < 1000; j++)
             {
