@@ -26,11 +26,11 @@ class Program
 
             for (var j = 0; j < 1000; j++)
             {
-                col1.Append(i);
-                col2.Append(j);
-                col3.Append(30);
-                col4.Append(9.4);
-                col5.Append(40);
+                col1.Add(i);
+                col2.Add(j);
+                col3.Add(30);
+                col4.Add(9.4);
+                col5.Add(40);
             }
 
             blocks[i].AppendColumn("device_id", col1);

@@ -14,13 +14,13 @@ public class ClickHouseColumnUInt64 : ClickHouseColumn<ulong>
         NativeColumn = nativeColumn;
     }
 
-    public override void Append(ulong value)
+    public override void Add(ulong value)
     {
         CheckDisposed();
         ColumnUInt64Interop.chc_column_uint64_append(NativeColumn, value);
     }
 
-    public ulong this[int index]
+    public override ulong this[int index]
     {
         get
         {

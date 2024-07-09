@@ -14,13 +14,13 @@ public class ClickHouseColumnDateTime : ClickHouseColumn<uint>
         NativeColumn = nativeColumn;
     }
 
-    public override void Append(uint value)
+    public override void Add(uint value)
     {
         CheckDisposed();
         ColumnDateTimeInterop.chc_column_datetime_append(NativeColumn, value);
     }
 
-    public uint this[int index]
+    public override uint this[int index]
     {
         get
         {

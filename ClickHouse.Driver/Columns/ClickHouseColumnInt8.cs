@@ -14,13 +14,13 @@ public class ClickHouseColumnInt8 : ClickHouseColumn<sbyte>
         NativeColumn = nativeColumn;
     }
 
-    public override void Append(sbyte value)
+    public override void Add(sbyte value)
     {
         CheckDisposed();
         ColumnInt8Interop.chc_column_int8_append(NativeColumn, value);
     }
 
-    public sbyte this[int index]
+    public override sbyte this[int index]
     {
         get
         {

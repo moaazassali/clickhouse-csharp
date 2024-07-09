@@ -16,7 +16,7 @@ public class ClickHouseColumnIPv4 : ClickHouseColumn<IPAddress>
         NativeColumn = nativeColumn;
     }
 
-    public override void Append(IPAddress value)
+    public override void Add(IPAddress value)
     {
         CheckDisposed();
 
@@ -40,7 +40,7 @@ public class ClickHouseColumnIPv4 : ClickHouseColumn<IPAddress>
         ColumnIPv4Interop.chc_column_ipv4_append(NativeColumn, value);
     }
 
-    public IPAddress this[int index]
+    public override IPAddress this[int index]
     {
         get
         {

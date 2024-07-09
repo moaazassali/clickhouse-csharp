@@ -14,13 +14,13 @@ public class ClickHouseColumnUInt32 : ClickHouseColumn<uint>
         NativeColumn = nativeColumn;
     }
 
-    public override void Append(uint value)
+    public override void Add(uint value)
     {
         CheckDisposed();
         ColumnUInt32Interop.chc_column_uint32_append(NativeColumn, value);
     }
 
-    public uint this[int index]
+    public override uint this[int index]
     {
         get
         {

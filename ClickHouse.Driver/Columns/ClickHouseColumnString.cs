@@ -14,13 +14,13 @@ public class ClickHouseColumnString : ClickHouseColumn<string>
         NativeColumn = nativeColumn;
     }
 
-    public override void Append(string value)
+    public override void Add(string value)
     {
         CheckDisposed();
         ColumnStringInterop.chc_column_string_append(NativeColumn, value);
     }
 
-    public string this[int index]
+    public override string this[int index]
     {
         get
         {

@@ -56,5 +56,7 @@ public abstract class ClickHouseColumn : IDisposable
 
 public abstract class ClickHouseColumn<T> : ClickHouseColumn
 {
-    public abstract void Append(T value);
+    public abstract void Add(T value);
+    public abstract T this[int index] { get; }
+    public int Count => Size;
 }

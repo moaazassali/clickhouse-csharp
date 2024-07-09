@@ -15,7 +15,7 @@ public class ClickHouseColumnUuid : ClickHouseColumn<Guid>
         NativeColumn = nativeColumn;
     }
 
-    public override void Append(Guid guid)
+    public override void Add(Guid guid)
     {
         CheckDisposed();
         GuidToInt64(guid, out var first, out var second);
@@ -23,7 +23,7 @@ public class ClickHouseColumnUuid : ClickHouseColumn<Guid>
             new UuidInterop { First = first, Second = second });
     }
 
-    public Guid this[int index]
+    public override Guid this[int index]
     {
         get
         {

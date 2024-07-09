@@ -14,13 +14,13 @@ public class ClickHouseColumnInt64 : ClickHouseColumn<long>
         NativeColumn = nativeColumn;
     }
 
-    public override void Append(long value)
+    public override void Add(long value)
     {
         CheckDisposed();
         ColumnInt64Interop.chc_column_int64_append(NativeColumn, value);
     }
 
-    public long this[int index]
+    public override long this[int index]
     {
         get
         {

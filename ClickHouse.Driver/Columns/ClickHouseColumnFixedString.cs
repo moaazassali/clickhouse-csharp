@@ -17,7 +17,7 @@ public class ClickHouseColumnFixedString : ClickHouseColumn<string>
         NativeColumn = nativeColumn;
     }
 
-    public override void Append(string value)
+    public override void Add(string value)
     {
         CheckDisposed();
         // we could throw here if string has more bytes than size, but that would require UTF-8 encoding
@@ -32,7 +32,7 @@ public class ClickHouseColumnFixedString : ClickHouseColumn<string>
         }
     }
 
-    public string this[int index]
+    public override string this[int index]
     {
         get
         {

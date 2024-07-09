@@ -14,13 +14,13 @@ public class ClickHouseColumnFloat32 : ClickHouseColumn<float>
         NativeColumn = nativeColumn;
     }
 
-    public override void Append(float value)
+    public override void Add(float value)
     {
         CheckDisposed();
         ColumnFloat32Interop.chc_column_float32_append(NativeColumn, value);
     }
 
-    public float this[int index]
+    public override float this[int index]
     {
         get
         {
