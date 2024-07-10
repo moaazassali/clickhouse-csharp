@@ -2,10 +2,16 @@ using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnEnum8 : Column<sbyte>
+public class ColumnEnum8<T> : Column<T> where T : Enum
 {
     public ColumnEnum8()
     {
+        if (Enum.GetUnderlyingType(typeof(T)) != typeof(short))
+        {
+            throw new InvalidOperationException(
+                $"The enum type {typeof(T).Name} must have sbyte as its underlying type.");
+        }
+
         NativeColumn = ColumnEnum8Interop.chc_column_enum8_create();
     }
 
@@ -14,13 +20,13 @@ public class ColumnEnum8 : Column<sbyte>
         NativeColumn = nativeColumn;
     }
 
-    public override void Add(sbyte value)
+    public override void Add(T value)
     {
         CheckDisposed();
-        ColumnEnum8Interop.chc_column_enum8_append(NativeColumn, value);
+        ColumnEnum8Interop.chc_column_enum8_append(NativeColumn, (sbyte)value.GetTypeCode());
     }
 
-    public override sbyte this[int index]
+    public override T this[int index]
     {
         get
         {
@@ -30,7 +36,7 @@ public class ColumnEnum8 : Column<sbyte>
                 throw new IndexOutOfRangeException();
             }
 
-            return ColumnEnum8Interop.chc_column_enum8_at(NativeColumn, (nuint)index);
+            return (T)Enum.ToObject(typeof(T), ColumnEnum8Interop.chc_column_enum8_at(NativeColumn, (nuint)index));
         }
     }
 }
