@@ -25,6 +25,11 @@ public class ColumnFloat64 : Column<double>
         get
         {
             CheckDisposed();
+            if ((uint)index >= (uint)Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             return ColumnFloat64Interop.chc_column_float64_at(NativeColumn, (nuint)index);
         }
     }

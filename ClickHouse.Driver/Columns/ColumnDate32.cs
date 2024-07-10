@@ -25,6 +25,11 @@ public class ColumnDate32 : Column<int>
         get
         {
             CheckDisposed();
+            if ((uint)index >= (uint)Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             return ColumnDate32Interop.chc_column_date32_at(NativeColumn, (nuint)index);
         }
     }

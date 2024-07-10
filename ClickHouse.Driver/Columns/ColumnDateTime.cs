@@ -25,6 +25,11 @@ public class ColumnDateTime : Column<uint>
         get
         {
             CheckDisposed();
+            if ((uint)index >= (uint)Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             return (uint)ColumnDateTimeInterop.chc_column_datetime_at(NativeColumn, (nuint)index);
         }
     }

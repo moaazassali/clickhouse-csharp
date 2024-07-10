@@ -25,6 +25,11 @@ public class ColumnFloat32 : Column<float>
         get
         {
             CheckDisposed();
+            if ((uint)index >= (uint)Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             return ColumnFloat32Interop.chc_column_float32_at(NativeColumn, (nuint)index);
         }
     }

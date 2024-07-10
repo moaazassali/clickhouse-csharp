@@ -25,6 +25,11 @@ public class ColumnInt16 : Column<short>
         get
         {
             CheckDisposed();
+            if ((uint)index >= (uint)Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             return ColumnInt16Interop.chc_column_int16_at(NativeColumn, (nuint)index);
         }
     }

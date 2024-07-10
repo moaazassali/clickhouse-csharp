@@ -28,6 +28,11 @@ public class ColumnUuid : Column<Guid>
         get
         {
             CheckDisposed();
+            if ((uint)index >= (uint)Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             var nativeUuid = ColumnUuidInterop.chc_column_uuid_at(NativeColumn, (nuint)index);
             return GuidFromInt64(nativeUuid.First, nativeUuid.Second);
         }

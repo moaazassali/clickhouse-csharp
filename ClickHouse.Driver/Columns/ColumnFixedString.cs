@@ -37,6 +37,11 @@ public class ColumnFixedString : Column<string>
         get
         {
             CheckDisposed();
+            if ((uint)index >= (uint)Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             var x = ColumnFixedStringInterop.chc_column_fixed_string_at(NativeColumn, (nuint)index);
             return x.ToString();
         }

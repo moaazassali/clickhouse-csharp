@@ -25,6 +25,11 @@ public class ColumnDate : Column<ushort>
         get
         {
             CheckDisposed();
+            if ((uint)index >= (uint)Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             return ColumnDateInterop.chc_column_date_at(NativeColumn, (nuint)index);
         }
     }

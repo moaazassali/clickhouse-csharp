@@ -25,6 +25,11 @@ public class ColumnDateTime64 : Column<long>
         get
         {
             CheckDisposed();
+            if ((uint)index >= (uint)Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             return ColumnDateTime64Interop.chc_column_datetime64_at(NativeColumn, (nuint)index);
         }
     }

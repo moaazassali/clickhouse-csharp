@@ -45,6 +45,11 @@ public class ColumnIPv4 : Column<IPAddress>
         get
         {
             CheckDisposed();
+            if ((uint)index >= (uint)Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             var value = ColumnIPv4Interop.chc_column_ipv4_at(NativeColumn, (nuint)index);
             return new IPAddress(value);
         }

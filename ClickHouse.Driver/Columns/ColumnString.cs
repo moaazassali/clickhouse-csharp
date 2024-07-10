@@ -25,6 +25,11 @@ public class ColumnString : Column<string>
         get
         {
             CheckDisposed();
+            if ((uint)index >= (uint)Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             var x = ColumnStringInterop.chc_column_string_at(NativeColumn, (nuint)index);
             return x.ToString();
         }

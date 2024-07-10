@@ -25,6 +25,11 @@ public class ColumnUInt64 : Column<ulong>
         get
         {
             CheckDisposed();
+            if ((uint)index >= (uint)Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             return ColumnUInt64Interop.chc_column_uint64_at(NativeColumn, (nuint)index);
         }
     }

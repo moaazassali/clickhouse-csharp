@@ -25,6 +25,11 @@ public class ColumnInt8 : Column<sbyte>
         get
         {
             CheckDisposed();
+            if ((uint)index >= (uint)Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             return ColumnInt8Interop.chc_column_int8_at(NativeColumn, (nuint)index);
         }
     }

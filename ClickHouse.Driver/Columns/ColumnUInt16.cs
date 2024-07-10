@@ -8,7 +8,7 @@ public class ColumnUInt16 : Column<ushort>
     {
         NativeColumn = ColumnUInt16Interop.chc_column_uint16_create();
     }
-    
+
     public ColumnUInt16(nint nativeColumn)
     {
         NativeColumn = nativeColumn;
@@ -25,6 +25,11 @@ public class ColumnUInt16 : Column<ushort>
         get
         {
             CheckDisposed();
+            if ((uint)index >= (uint)Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             return ColumnUInt16Interop.chc_column_uint16_at(NativeColumn, (nuint)index);
         }
     }

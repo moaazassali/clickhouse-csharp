@@ -26,6 +26,11 @@ public class ColumnInt128 : Column<Int128>
         get
         {
             CheckDisposed();
+            if ((uint)index >= (uint)Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             var int128Interop = ColumnInt128Interop.chc_column_int128_at(NativeColumn, (nuint)index);
             return int128Interop.ToInt128();
         }
