@@ -7,7 +7,7 @@ namespace ClickHouse.Driver.Interop.Structs;
 internal struct StringViewInterop
 {
     internal nint Data;
-    internal nint Length;
+    internal nuint Length;
 
     /*
      Possible conversion loss on 64-bit platforms since the Length field actually is of type size_t
