@@ -11,7 +11,7 @@ public abstract class Column : IDisposable
         get
         {
             CheckDisposed();
-            return Interop.Columns.ColumnInterop.chc_column_type(NativeColumn);
+            return Interop.Columns.ColumnInterop.chc_column_type_code(NativeColumn);
         }
     }
 

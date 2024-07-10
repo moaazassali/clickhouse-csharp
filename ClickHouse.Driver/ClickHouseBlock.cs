@@ -34,7 +34,7 @@ public class ClickHouseBlock : IDisposable
         for (nuint i = 0; i < Interop.BlockInterop.chc_block_column_count(nativeBlock); i++)
         {
             var nativeColumn = Interop.BlockInterop.chc_block_column_at(nativeBlock, i);
-            Columns.Add(CreateColumn(ColumnInterop.chc_column_type(nativeColumn), nativeColumn));
+            Columns.Add(CreateColumn(ColumnInterop.chc_column_type_code(nativeColumn), nativeColumn));
         }
     }
 
