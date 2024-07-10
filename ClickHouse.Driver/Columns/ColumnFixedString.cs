@@ -4,11 +4,9 @@ namespace ClickHouse.Driver.Columns;
 
 public class ColumnFixedString : Column<string>
 {
-    private int _size;
-
     public ColumnFixedString(int size)
     {
-        _size = size;
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(size);
         NativeColumn = ColumnFixedStringInterop.chc_column_fixed_string_create((nuint)size);
     }
 
