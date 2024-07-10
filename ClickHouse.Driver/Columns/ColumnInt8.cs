@@ -2,7 +2,7 @@
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnInt8 : Column<sbyte>
+public class ColumnInt8 : Column<sbyte>, ISupportsNullable
 {
     public ColumnInt8()
     {

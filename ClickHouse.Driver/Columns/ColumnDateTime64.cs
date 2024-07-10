@@ -2,7 +2,7 @@ using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnDateTime64 : Column<long>
+public class ColumnDateTime64 : Column<long>, ISupportsNullable
 {
     public ColumnDateTime64(int precision)
     {

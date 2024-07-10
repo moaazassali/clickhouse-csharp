@@ -3,7 +3,7 @@ using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnUuid : Column<Guid>
+public class ColumnUuid : Column<Guid>, ISupportsNullable
 {
     public ColumnUuid()
     {

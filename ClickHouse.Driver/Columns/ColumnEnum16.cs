@@ -2,7 +2,7 @@ using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnEnum16<T> : Column<T> where T : Enum
+public class ColumnEnum16<T> : Column<T>, ISupportsNullable where T : Enum
 {
     public ColumnEnum16()
     {

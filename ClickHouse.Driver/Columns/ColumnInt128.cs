@@ -3,7 +3,7 @@ using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnInt128 : Column<Int128>
+public class ColumnInt128 : Column<Int128>, ISupportsNullable
 {
     public ColumnInt128()
     {

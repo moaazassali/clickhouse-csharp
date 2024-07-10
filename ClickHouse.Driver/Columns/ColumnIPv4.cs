@@ -4,7 +4,7 @@ using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnIPv4 : Column<IPAddress>
+public class ColumnIPv4 : Column<IPAddress>, ISupportsNullable
 {
     public ColumnIPv4()
     {
