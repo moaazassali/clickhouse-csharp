@@ -6,7 +6,7 @@ public class ColumnEnum8<T> : Column<T> where T : Enum
 {
     public ColumnEnum8()
     {
-        if (Enum.GetUnderlyingType(typeof(T)) != typeof(short))
+        if (Enum.GetUnderlyingType(typeof(T)) != typeof(sbyte))
         {
             throw new InvalidOperationException(
                 $"The enum type {typeof(T).Name} must have sbyte as its underlying type.");
