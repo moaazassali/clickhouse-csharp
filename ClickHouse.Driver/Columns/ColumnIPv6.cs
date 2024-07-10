@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
 using ClickHouse.Driver.Interop.Columns;
+using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
 
@@ -24,10 +25,10 @@ public class ColumnIPv6 : Column<IPAddress>
             throw new ArgumentException("Only IPv6 addresses are supported", nameof(value));
         }
 
-        ColumnIPv6Interop.chc_column_ipv6_append(NativeColumn, value.GetAddressBytes());
+        ColumnIPv6Interop.chc_column_ipv6_append(NativeColumn, In6AddrInterop.FromIPAddress(value));
     }
 
-    public override IPAddress this[int index]
+    public override unsafe IPAddress this[int index]
     {
         get
         {
@@ -37,7 +38,9 @@ public class ColumnIPv6 : Column<IPAddress>
                 throw new IndexOutOfRangeException();
             }
 
-            return new IPAddress(ColumnIPv6Interop.chc_column_ipv6_at(NativeColumn, (nuint)index));
+            var value = ColumnIPv6Interop.chc_column_ipv6_at(NativeColumn, (nuint)index);
+
+            return value.ToIPAddress();
         }
     }
 }
