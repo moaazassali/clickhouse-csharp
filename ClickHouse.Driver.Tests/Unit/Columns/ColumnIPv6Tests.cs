@@ -5,23 +5,29 @@ namespace ClickHouse.Driver.Tests.Unit.Columns;
 
 public class ColumnIPv6Tests
 {
+    private readonly ColumnIPv6 _column = new();
+
     [Fact]
     public void Add_SingleValue_ReturnsSameValue()
     {
-        var column = new ColumnIPv6();
         var value = IPAddress.Parse("2001:0db8:85a3:0000:0000:8a2e:0370:7334");
 
-        column.Add(value);
+        _column.Add(value);
 
-        Assert.Equal(value, column[0]);
+        Assert.Equal(value, _column[0]);
     }
 
     [Fact]
     public void Add_ThrowsException_WhenValueIsNotIPv6()
     {
-        var column = new ColumnIPv6();
         var value = IPAddress.Parse("192.168.1.1");
 
-        Assert.Throws<ArgumentException>(() => column.Add(value));
+        Assert.Throws<ArgumentException>(() => _column.Add(value));
+    }
+
+    [Fact]
+    public void Indexer_ThrowsException_WhenIndexIsOutOfRange()
+    {
+        Assert.Throws<IndexOutOfRangeException>(() => _column[0]);
     }
 }
