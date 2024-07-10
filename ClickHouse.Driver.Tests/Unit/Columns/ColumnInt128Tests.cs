@@ -16,4 +16,10 @@ public class ColumnInt128Tests
 
         Assert.Equal(value, actual);
     }
+
+    [Fact]
+    public void Indexer_ThrowsException_WhenIndexIsOutOfRange()
+    {
+        Assert.Throws<IndexOutOfRangeException>(() => _column[0]);
+    }
 }
