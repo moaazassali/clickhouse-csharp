@@ -34,7 +34,7 @@ public class ColumnIPv4 : Column<IPAddress>
         ColumnIPv4Interop.chc_column_ipv4_append(NativeColumn, BitConverter.ToUInt32(bytes, 0));
     }
 
-    public void Append(uint value)
+    public void Add(uint value)
     {
         CheckDisposed();
         ColumnIPv4Interop.chc_column_ipv4_append(NativeColumn, value);
