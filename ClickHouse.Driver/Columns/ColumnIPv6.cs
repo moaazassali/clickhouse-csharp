@@ -28,7 +28,7 @@ public class ColumnIPv6 : Column<IPAddress>
         ColumnIPv6Interop.chc_column_ipv6_append(NativeColumn, In6AddrInterop.FromIPAddress(value));
     }
 
-    public override unsafe IPAddress this[int index]
+    public override IPAddress this[int index]
     {
         get
         {
