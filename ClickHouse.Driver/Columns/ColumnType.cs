@@ -46,6 +46,14 @@ public interface IChType
 {
 }
 
+public interface IChTypeSupportsNullable : IChType
+{
+}
+
+public interface IChTypeSupportsLowCardinality : IChType
+{
+}
+
 public readonly struct ChUInt8 : IChType
 {
     private byte Value { get; init; }
