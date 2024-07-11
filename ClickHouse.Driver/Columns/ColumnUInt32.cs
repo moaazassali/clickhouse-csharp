@@ -2,7 +2,7 @@ using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnUInt32 : Column, IColumn<uint>, ISupportsNullable
+public class ColumnUInt32 : Column, IColumn<uint>
 {
     public ColumnUInt32()
     {

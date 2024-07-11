@@ -5,7 +5,7 @@ using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnIPv6 : Column, IColumn<IPAddress>, ISupportsNullable
+public class ColumnIPv6 : Column, IColumn<IPAddress>
 {
     public ColumnIPv6()
     {

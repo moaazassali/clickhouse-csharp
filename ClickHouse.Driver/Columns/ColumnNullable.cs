@@ -3,12 +3,8 @@ using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
 
-public interface ISupportsNullable
-{
-}
-
 public class ColumnNullable<TColumn, TDataType> : Column, IColumn<TDataType?>
-    where TColumn : Column, ISupportsNullable, new()
+    where TColumn : Column, new()
 {
     public ColumnNullable()
     {

@@ -2,7 +2,7 @@ using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnFloat32 : Column, IColumn<float>, ISupportsNullable
+public class ColumnFloat32 : Column, IColumn<float>
 {
     public ColumnFloat32()
     {
