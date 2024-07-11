@@ -191,6 +191,11 @@ public class Column<T> : Column where T : struct, IChType
         get
         {
             CheckDisposed();
+            if ((uint)index >= (uint)Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             T value = default;
             var indexNuint = (nuint)index;
 
