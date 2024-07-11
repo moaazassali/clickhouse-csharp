@@ -54,8 +54,12 @@ public abstract class Column : IDisposable
     }
 }
 
-public abstract class Column<T> : Column
+public interface IColumn<T>
 {
-    public abstract void Add(T value);
-    public abstract T this[int index] { get; }
+    void Add(T value);
+    T this[int index] { get; }
+}
+
+public class Column<T> : Column where T : struct, IChType
+{
 }

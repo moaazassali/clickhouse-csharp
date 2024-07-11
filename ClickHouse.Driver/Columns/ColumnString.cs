@@ -2,7 +2,7 @@ using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnString : Column<string>, ISupportsNullable
+public class ColumnString : Column, IColumn<string>, ISupportsNullable
 {
     public ColumnString()
     {
@@ -14,13 +14,13 @@ public class ColumnString : Column<string>, ISupportsNullable
         NativeColumn = nativeColumn;
     }
 
-    public override void Add(string value)
+    public void Add(string value)
     {
         CheckDisposed();
         ColumnStringInterop.chc_column_string_append(NativeColumn, value);
     }
 
-    public override string this[int index]
+    public string this[int index]
     {
         get
         {

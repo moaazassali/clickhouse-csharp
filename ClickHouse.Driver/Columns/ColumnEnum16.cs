@@ -2,7 +2,7 @@ using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnEnum16<T> : Column<T>, ISupportsNullable where T : Enum
+public class ColumnEnum16<T> : Column, IColumn<T>, ISupportsNullable where T : Enum
 {
     public ColumnEnum16()
     {
@@ -20,13 +20,13 @@ public class ColumnEnum16<T> : Column<T>, ISupportsNullable where T : Enum
         NativeColumn = nativeColumn;
     }
 
-    public override void Add(T value)
+    public void Add(T value)
     {
         CheckDisposed();
         ColumnEnum16Interop.chc_column_enum16_append(NativeColumn, (short)value.GetTypeCode());
     }
 
-    public override T this[int index]
+    public T this[int index]
     {
         get
         {

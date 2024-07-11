@@ -2,7 +2,7 @@ using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnDateTime64 : Column<long>, ISupportsNullable
+public class ColumnDateTime64 : Column, IColumn<long>, ISupportsNullable
 {
     public ColumnDateTime64(int precision)
     {
@@ -14,13 +14,13 @@ public class ColumnDateTime64 : Column<long>, ISupportsNullable
         NativeColumn = nativeColumn;
     }
 
-    public override void Add(long value)
+    public void Add(long value)
     {
         CheckDisposed();
         ColumnDateTime64Interop.chc_column_datetime64_append(NativeColumn, value);
     }
 
-    public override long this[int index]
+    public long this[int index]
     {
         get
         {

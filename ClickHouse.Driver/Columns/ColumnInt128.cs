@@ -3,7 +3,7 @@ using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnInt128 : Column<Int128>, ISupportsNullable
+public class ColumnInt128 : Column, IColumn<Int128>, ISupportsNullable
 {
     public ColumnInt128()
     {
@@ -15,13 +15,13 @@ public class ColumnInt128 : Column<Int128>, ISupportsNullable
         NativeColumn = nativeColumn;
     }
 
-    public override void Add(Int128 value)
+    public void Add(Int128 value)
     {
         CheckDisposed();
         ColumnInt128Interop.chc_column_int128_append(NativeColumn, Int128Interop.FromInt128(value));
     }
 
-    public override Int128 this[int index]
+    public Int128 this[int index]
     {
         get
         {

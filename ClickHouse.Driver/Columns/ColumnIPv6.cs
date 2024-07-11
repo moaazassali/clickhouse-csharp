@@ -5,7 +5,7 @@ using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnIPv6 : Column<IPAddress>, ISupportsNullable
+public class ColumnIPv6 : Column, IColumn<IPAddress>, ISupportsNullable
 {
     public ColumnIPv6()
     {
@@ -17,7 +17,7 @@ public class ColumnIPv6 : Column<IPAddress>, ISupportsNullable
         NativeColumn = nativeColumn;
     }
 
-    public override void Add(IPAddress value)
+    public void Add(IPAddress value)
     {
         CheckDisposed();
         if (value.AddressFamily != AddressFamily.InterNetworkV6)
@@ -28,7 +28,7 @@ public class ColumnIPv6 : Column<IPAddress>, ISupportsNullable
         ColumnIPv6Interop.chc_column_ipv6_append(NativeColumn, In6AddrInterop.FromIPAddress(value));
     }
 
-    public override IPAddress this[int index]
+    public IPAddress this[int index]
     {
         get
         {

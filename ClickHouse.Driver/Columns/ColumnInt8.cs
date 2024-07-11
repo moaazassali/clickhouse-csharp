@@ -2,7 +2,7 @@
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnInt8 : Column<sbyte>, ISupportsNullable
+public class ColumnInt8 : Column, IColumn<sbyte>, ISupportsNullable
 {
     public ColumnInt8()
     {
@@ -14,13 +14,13 @@ public class ColumnInt8 : Column<sbyte>, ISupportsNullable
         NativeColumn = nativeColumn;
     }
 
-    public override void Add(sbyte value)
+    public void Add(sbyte value)
     {
         CheckDisposed();
         ColumnInt8Interop.chc_column_int8_append(NativeColumn, value);
     }
 
-    public override sbyte this[int index]
+    public sbyte this[int index]
     {
         get
         {

@@ -3,7 +3,7 @@ using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnUuid : Column<Guid>, ISupportsNullable
+public class ColumnUuid : Column, IColumn<Guid>, ISupportsNullable
 {
     public ColumnUuid()
     {
@@ -15,7 +15,7 @@ public class ColumnUuid : Column<Guid>, ISupportsNullable
         NativeColumn = nativeColumn;
     }
 
-    public override void Add(Guid guid)
+    public void Add(Guid guid)
     {
         CheckDisposed();
         GuidToInt64(guid, out var first, out var second);
@@ -23,7 +23,7 @@ public class ColumnUuid : Column<Guid>, ISupportsNullable
             new UuidInterop { First = first, Second = second });
     }
 
-    public override Guid this[int index]
+    public Guid this[int index]
     {
         get
         {

@@ -4,7 +4,7 @@ using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnIPv4 : Column<IPAddress>, ISupportsNullable
+public class ColumnIPv4 : Column, IColumn<IPAddress>, ISupportsNullable
 {
     public ColumnIPv4()
     {
@@ -16,7 +16,7 @@ public class ColumnIPv4 : Column<IPAddress>, ISupportsNullable
         NativeColumn = nativeColumn;
     }
 
-    public override void Add(IPAddress value)
+    public void Add(IPAddress value)
     {
         CheckDisposed();
 
@@ -40,7 +40,7 @@ public class ColumnIPv4 : Column<IPAddress>, ISupportsNullable
         ColumnIPv4Interop.chc_column_ipv4_append(NativeColumn, value);
     }
 
-    public override IPAddress this[int index]
+    public IPAddress this[int index]
     {
         get
         {

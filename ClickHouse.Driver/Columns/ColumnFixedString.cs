@@ -2,7 +2,7 @@ using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnFixedString : Column<string>, ISupportsNullable
+public class ColumnFixedString : Column, IColumn<string>, ISupportsNullable
 {
     public ColumnFixedString(int size)
     {
@@ -15,7 +15,7 @@ public class ColumnFixedString : Column<string>, ISupportsNullable
         NativeColumn = nativeColumn;
     }
 
-    public override void Add(string value)
+    public void Add(string value)
     {
         CheckDisposed();
         // we could throw here if string has more bytes than size, but that would require UTF-8 encoding
@@ -30,7 +30,7 @@ public class ColumnFixedString : Column<string>, ISupportsNullable
         }
     }
 
-    public override string this[int index]
+    public string this[int index]
     {
         get
         {

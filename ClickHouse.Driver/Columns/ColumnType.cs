@@ -39,3 +39,7 @@ public enum ColumnType
     Polygon,
     MultiPolygon
 }
+
+public interface IChType
+{
+}

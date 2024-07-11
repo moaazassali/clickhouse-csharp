@@ -2,7 +2,7 @@ using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnLowCardinality<T> : Column<string> where T : Column<string>
+public class ColumnLowCardinality<T> : Column, IColumn<string> where T : Column, IColumn<string>
 {
     public ColumnLowCardinality(int? size = null)
     {
@@ -39,7 +39,7 @@ public class ColumnLowCardinality<T> : Column<string> where T : Column<string>
         NativeColumn = nativeColumn;
     }
 
-    public override void Add(string value)
+    public void Add(string value)
     {
         CheckDisposed();
         var resultStatus = ColumnLowCardinalityInterop.chc_column_low_cardinality_append(NativeColumn, value);
@@ -50,7 +50,7 @@ public class ColumnLowCardinality<T> : Column<string> where T : Column<string>
         }
     }
 
-    public override string this[int index]
+    public string this[int index]
     {
         get
         {
