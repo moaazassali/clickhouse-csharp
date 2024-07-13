@@ -231,8 +231,8 @@ public struct ChEnum16<T> : IChEnum16 where T : struct, Enum
     public static explicit operator ChEnum16<T>(short value) => new() { Value = value };
     public static explicit operator short(ChEnum16<T> value) => value.Value;
 
-    // public static explicit operator ChEnum16<T>(ChInt16 value) => new() { Value = value };
-    // public static explicit operator ChInt16(ChEnum16<T> value) => value.Value;
+    public static explicit operator ChEnum16<T>(ChInt16 value) => new() { Value = value };
+    public static explicit operator ChInt16(ChEnum16<T> value) => value.Value;
 }
 
 public readonly struct ChString : IChType
