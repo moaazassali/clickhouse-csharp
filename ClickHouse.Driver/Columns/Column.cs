@@ -64,7 +64,7 @@ public interface IColumn<T>
     T this[int index] { get; }
 }
 
-public class Column<T> : Column where T : struct, IChType
+public class Column<T> : Column where T : struct, IChTypeNotNullable
 {
     public Column()
     {

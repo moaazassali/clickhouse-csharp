@@ -3,7 +3,7 @@ using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnNullable<T> : Column where T : struct, IChType
+public class ColumnNullable<T> : Column where T : struct, IChTypeNotNullable
 {
     // We need to keep a reference to the nested column to prevent it from being garbage collected.
     // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable

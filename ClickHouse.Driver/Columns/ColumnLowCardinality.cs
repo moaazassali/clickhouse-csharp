@@ -2,24 +2,25 @@ using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnLowCardinality<T> : Column, IColumn<string> where T : Column, IColumn<string>
+public class ColumnLowCardinality<T> : Column where T : struct, IChTypeSupportsLowCardinality
 {
     public ColumnLowCardinality(int? size = null)
     {
-        T nestedColumn;
-        if (typeof(T) == typeof(ColumnString))
+        Column nestedColumn;
+
+        if (typeof(T) == typeof(ChString))
         {
             if (size.HasValue)
             {
                 throw new ArgumentException("Size is not supported for ColumnString");
             }
 
-            nestedColumn = (T)(object)new ColumnString();
+            nestedColumn = new Column<ChString>();
         }
-        else if (typeof(T) == typeof(ColumnFixedString))
+        else if (typeof(T) == typeof(ChFixedString))
         {
             ArgumentNullException.ThrowIfNull(size);
-            nestedColumn = (T)(object)new ColumnFixedString(size.Value);
+            nestedColumn = new Column<ChFixedString>();
         }
         else
         {

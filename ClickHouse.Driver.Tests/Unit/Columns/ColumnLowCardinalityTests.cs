@@ -7,7 +7,7 @@ public class ColumnLowCardinalityTests
     [Fact]
     public void Add_SingleValue_ReturnsSameValue_String()
     {
-        var column = new ColumnLowCardinality<ColumnString>();
+        var column = new ColumnLowCardinality<ChString>();
         column.Add("test");
         Assert.Equal("test", column[0]);
     }
@@ -15,7 +15,7 @@ public class ColumnLowCardinalityTests
     [Fact]
     public void Add_SingleValue_ReturnsSameValue_FixedString()
     {
-        var column = new ColumnLowCardinality<ColumnFixedString>(5);
+        var column = new ColumnLowCardinality<ChFixedString>(5);
         column.Add("hello");
         Assert.Equal("hello", column[0]);
     }
@@ -23,7 +23,7 @@ public class ColumnLowCardinalityTests
     [Fact]
     public void Add_ThrowsClickHouseException_ValueIsLongerThanFixedStringSize()
     {
-        var column = new ColumnLowCardinality<ColumnFixedString>(5);
+        var column = new ColumnLowCardinality<ChFixedString>(5);
         Assert.Throws<ClickHouseException>(() => column.Add("world!"));
     }
 }
