@@ -281,6 +281,6 @@ public readonly struct ChIPv6 : IChTypeNotNullable
     }
 }
 
-public readonly struct ChNullable<T> where T : IChTypeSupportsLowCardinality
+public readonly struct ChNullable<T> : IChTypeSupportsLowCardinality where T : IChTypeNotNullable
 {
 }

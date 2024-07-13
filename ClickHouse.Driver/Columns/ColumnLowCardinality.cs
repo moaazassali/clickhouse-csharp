@@ -1,4 +1,5 @@
 using ClickHouse.Driver.Interop.Columns;
+using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
 
@@ -22,6 +23,20 @@ public class ColumnLowCardinality<T> : Column where T : struct, IChTypeSupportsL
             ArgumentNullException.ThrowIfNull(size);
             nestedColumn = new Column<ChFixedString>();
         }
+        else if (typeof(T) == typeof(ChNullable<ChString>))
+        {
+            if (size.HasValue)
+            {
+                throw new ArgumentException("Size is not supported for ColumnString");
+            }
+
+            nestedColumn = new ColumnNullable<ChString>();
+        }
+        else if (typeof(T) == typeof(ChNullable<ChFixedString>))
+        {
+            ArgumentNullException.ThrowIfNull(size);
+            nestedColumn = new ColumnNullable<ChFixedString>(size.Value);
+        }
         else
         {
             throw new NotSupportedException();
@@ -40,9 +55,10 @@ public class ColumnLowCardinality<T> : Column where T : struct, IChTypeSupportsL
         NativeColumn = nativeColumn;
     }
 
-    public void Add(string value)
+    public void Add(string? value)
     {
         CheckDisposed();
+
         var resultStatus = ColumnLowCardinalityInterop.chc_column_low_cardinality_append(NativeColumn, value);
 
         if (resultStatus.Code != 0)
@@ -51,7 +67,7 @@ public class ColumnLowCardinality<T> : Column where T : struct, IChTypeSupportsL
         }
     }
 
-    public string this[int index]
+    public string? this[int index]
     {
         get
         {
@@ -62,7 +78,12 @@ public class ColumnLowCardinality<T> : Column where T : struct, IChTypeSupportsL
             }
 
             var optional = ColumnLowCardinalityInterop.chc_column_low_cardinality_at(NativeColumn, (nuint)index);
-            return optional.Value.StringView.ToString();
+            if (optional.Type == OptionalTypeInterop.Invalid)
+            {
+                throw new ArgumentException("Received invalid OptionalType.");
+            }
+
+            return optional.Type == OptionalTypeInterop.Null ? null : optional.Value.StringView.ToString();
         }
     }
 }

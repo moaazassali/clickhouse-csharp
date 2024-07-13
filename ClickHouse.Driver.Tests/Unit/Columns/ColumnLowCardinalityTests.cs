@@ -26,4 +26,20 @@ public class ColumnLowCardinalityTests
         var column = new ColumnLowCardinality<ChFixedString>(5);
         Assert.Throws<ClickHouseException>(() => column.Add("world!"));
     }
+
+    [Fact]
+    public void Add_NonNullValue_ReturnsSameValue_NullableString()
+    {
+        var column = new ColumnLowCardinality<ChNullable<ChString>>();
+        column.Add("test");
+        Assert.Equal("test", column[0]);
+    }
+
+    [Fact]
+    public void Add_NullValue_ReturnsSameValue_NullableString()
+    {
+        var column = new ColumnLowCardinality<ChNullable<ChString>>();
+        column.Add(null);
+        Assert.Null(column[0]);
+    }
 }
