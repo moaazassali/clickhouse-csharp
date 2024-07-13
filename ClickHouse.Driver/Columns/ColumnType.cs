@@ -46,10 +46,6 @@ public interface IChType
 {
 }
 
-public interface IChTypeSupportsNullable : IChType
-{
-}
-
 public interface IChTypeSupportsLowCardinality : IChType
 {
 }
@@ -203,18 +199,40 @@ public readonly struct ChDateTime64 : IChType
     public static implicit operator long(ChDateTime64 value) => value.Value;
 }
 
-public readonly struct ChEnum8 : IChType
+internal interface IChEnum8 : IChType
 {
-    private sbyte Value { get; init; }
-    public static implicit operator ChEnum8(sbyte value) => new() { Value = value };
-    public static implicit operator sbyte(ChEnum8 value) => value.Value;
+    internal sbyte Value { get; set; }
 }
 
-public readonly struct ChEnum16 : IChType
+public struct ChEnum8<T> : IChEnum8 where T : struct, Enum
 {
-    private short Value { get; init; }
-    public static implicit operator ChEnum16(short value) => new() { Value = value };
-    public static implicit operator short(ChEnum16 value) => value.Value;
+    public sbyte Value { get; set; }
+    public static implicit operator ChEnum8<T>(T value) => new() { Value = (sbyte)(object)value };
+    public static implicit operator T(ChEnum8<T> value) => (T)(object)value.Value;
+
+    public static explicit operator ChEnum8<T>(sbyte value) => new() { Value = value };
+    public static explicit operator sbyte(ChEnum8<T> value) => value.Value;
+
+    public static explicit operator ChEnum8<T>(ChInt8 value) => new() { Value = value };
+    public static explicit operator ChInt8(ChEnum8<T> value) => value.Value;
+}
+
+internal interface IChEnum16 : IChType
+{
+    internal short Value { get; set; }
+}
+
+public struct ChEnum16<T> : IChEnum16 where T : struct, Enum
+{
+    public short Value { get; set; }
+    public static implicit operator ChEnum16<T>(T value) => new() { Value = (short)(object)value };
+    public static implicit operator T(ChEnum16<T> value) => (T)(object)value.Value;
+
+    public static explicit operator ChEnum16<T>(short value) => new() { Value = value };
+    public static explicit operator short(ChEnum16<T> value) => value.Value;
+
+    // public static explicit operator ChEnum16<T>(ChInt16 value) => new() { Value = value };
+    // public static explicit operator ChInt16(ChEnum16<T> value) => value.Value;
 }
 
 public readonly struct ChString : IChType
@@ -244,17 +262,17 @@ public readonly struct ChIPv6 : IChType
     public static implicit operator ChIPv6(byte[] value) => new() { Value = value };
     public static implicit operator byte[](ChIPv6 value) => value.Value;
 
-    internal static unsafe ChIPv6 FromIpv6Interop(In6AddrInterop value)
+    internal static unsafe ChIPv6 FromIn6AddrInterop(In6AddrInterop value)
     {
         ReadOnlySpan<byte> bytes = new(value.Bytes, 16);
         return new ChIPv6 { Value = bytes.ToArray() };
     }
 
-    internal unsafe In6AddrInterop ToIpv6Interop()
+    internal unsafe In6AddrInterop ToIn6AddrInterop()
     {
-        fixed (byte* ptr = Value)
-        {
-            return new In6AddrInterop { Bytes = ptr };
-        }
+        ReadOnlySpan<byte> bytes = new(Value);
+        In6AddrInterop result = default;
+        bytes.CopyTo(new Span<byte>(result.Bytes, 16));
+        return result;
     }
 }

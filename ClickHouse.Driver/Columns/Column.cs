@@ -1,4 +1,5 @@
-﻿using ClickHouse.Driver.Interop.Columns;
+﻿using System.Reflection;
+using ClickHouse.Driver.Interop.Columns;
 using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
@@ -67,32 +68,31 @@ public class Column<T> : Column where T : struct, IChType
 {
     public Column()
     {
-        NativeColumn = typeof(T) switch
+        T value = default;
+        NativeColumn = value switch
         {
-            { } uint8 when uint8 == typeof(ChUInt8) => ColumnUInt8Interop.chc_column_uint8_create(),
-            { } uint16 when uint16 == typeof(ChUInt16) => ColumnUInt16Interop.chc_column_uint16_create(),
-            { } uint32 when uint32 == typeof(ChUInt32) => ColumnUInt32Interop.chc_column_uint32_create(),
-            { } uint64 when uint64 == typeof(ChUInt64) => ColumnUInt64Interop.chc_column_uint64_create(),
-            { } int8 when int8 == typeof(ChInt8) => ColumnInt8Interop.chc_column_int8_create(),
-            { } int16 when int16 == typeof(ChInt16) => ColumnInt16Interop.chc_column_int16_create(),
-            { } int32 when int32 == typeof(ChInt32) => ColumnInt32Interop.chc_column_int32_create(),
-            { } int64 when int64 == typeof(ChInt64) => ColumnInt64Interop.chc_column_int64_create(),
-            { } int128 when int128 == typeof(ChInt128) => ColumnInt128Interop.chc_column_int128_create(),
-            { } uuid when uuid == typeof(ChUuid) => ColumnUuidInterop.chc_column_uuid_create(),
-            { } float32 when float32 == typeof(ChFloat32) => ColumnFloat32Interop.chc_column_float32_create(),
-            { } float64 when float64 == typeof(ChFloat64) => ColumnFloat64Interop.chc_column_float64_create(),
-            { } date when date == typeof(ChDate) => ColumnDateInterop.chc_column_date_create(),
-            { } date32 when date32 == typeof(ChDate32) => ColumnDate32Interop.chc_column_date32_create(),
-            { } datetime when datetime == typeof(ChDateTime) => ColumnDateTimeInterop.chc_column_datetime_create(),
-            { } datetime64 when datetime64 == typeof(ChDateTime64) => ColumnDateTime64Interop
-                .chc_column_datetime64_create(3),
-            { } enum8 when enum8 == typeof(ChEnum8) => ColumnEnum8Interop.chc_column_enum8_create(),
-            { } enum16 when enum16 == typeof(ChEnum16) => ColumnEnum16Interop.chc_column_enum16_create(),
-            { } str when str == typeof(ChString) => ColumnStringInterop.chc_column_string_create(),
-            { } fixedStr when fixedStr == typeof(ChFixedString) => ColumnFixedStringInterop
-                .chc_column_fixed_string_create(5),
-            { } ipv4 when ipv4 == typeof(ChIPv4) => ColumnIPv4Interop.chc_column_ipv4_create(),
-            { } ipv6 when ipv6 == typeof(ChIPv6) => ColumnIPv6Interop.chc_column_ipv6_create(),
+            ChUInt8 => ColumnUInt8Interop.chc_column_uint8_create(),
+            ChUInt16 => ColumnUInt16Interop.chc_column_uint16_create(),
+            ChUInt32 => ColumnUInt32Interop.chc_column_uint32_create(),
+            ChUInt64 => ColumnUInt64Interop.chc_column_uint64_create(),
+            ChInt8 => ColumnInt8Interop.chc_column_int8_create(),
+            ChInt16 => ColumnInt16Interop.chc_column_int16_create(),
+            ChInt32 => ColumnInt32Interop.chc_column_int32_create(),
+            ChInt64 => ColumnInt64Interop.chc_column_int64_create(),
+            ChInt128 => ColumnInt128Interop.chc_column_int128_create(),
+            ChUuid => ColumnUuidInterop.chc_column_uuid_create(),
+            ChFloat32 => ColumnFloat32Interop.chc_column_float32_create(),
+            ChFloat64 => ColumnFloat64Interop.chc_column_float64_create(),
+            ChDate => ColumnDateInterop.chc_column_date_create(),
+            ChDate32 => ColumnDate32Interop.chc_column_date32_create(),
+            ChDateTime => ColumnDateTimeInterop.chc_column_datetime_create(),
+            ChDateTime64 => ColumnDateTime64Interop.chc_column_datetime64_create(3),
+            IChEnum8 => ColumnEnum8Interop.chc_column_enum8_create(),
+            IChEnum16 => ColumnEnum16Interop.chc_column_enum16_create(),
+            ChString => ColumnStringInterop.chc_column_string_create(),
+            ChFixedString => ColumnFixedStringInterop.chc_column_fixed_string_create(5),
+            ChIPv4 => ColumnIPv4Interop.chc_column_ipv4_create(),
+            ChIPv6 => ColumnIPv6Interop.chc_column_ipv6_create(),
         };
     }
 
@@ -160,11 +160,11 @@ public class Column<T> : Column where T : struct, IChType
             case ChDateTime64 dateTime64:
                 ColumnDateTime64Interop.chc_column_datetime64_append(NativeColumn, dateTime64);
                 break;
-            case ChEnum8 enum8:
-                ColumnEnum8Interop.chc_column_enum8_append(NativeColumn, enum8);
+            case IChEnum8 enum8:
+                ColumnEnum8Interop.chc_column_enum8_append(NativeColumn, enum8.Value);
                 break;
-            case ChEnum16 enum16:
-                ColumnEnum16Interop.chc_column_enum16_append(NativeColumn, enum16);
+            case IChEnum16 enum16:
+                ColumnEnum16Interop.chc_column_enum16_append(NativeColumn, enum16.Value);
                 break;
             case ChString str:
                 ColumnStringInterop.chc_column_string_append(NativeColumn, str);
@@ -176,7 +176,7 @@ public class Column<T> : Column where T : struct, IChType
                 ColumnIPv4Interop.chc_column_ipv4_append(NativeColumn, ipv4);
                 break;
             case ChIPv6 ipv6:
-                ColumnIPv6Interop.chc_column_ipv6_append(NativeColumn, ipv6.ToIpv6Interop());
+                ColumnIPv6Interop.chc_column_ipv6_append(NativeColumn, ipv6.ToIn6AddrInterop());
                 break;
         }
 
@@ -199,35 +199,64 @@ public class Column<T> : Column where T : struct, IChType
             T value = default;
             var indexNuint = (nuint)index;
 
-            return value switch
+            switch (value)
             {
-                ChUInt8 _ => (T)(object)ColumnUInt8Interop.chc_column_uint8_at(NativeColumn, indexNuint),
-                ChUInt16 _ => (T)(object)ColumnUInt16Interop.chc_column_uint16_at(NativeColumn, indexNuint),
-                ChUInt32 _ => (T)(object)ColumnUInt32Interop.chc_column_uint32_at(NativeColumn, indexNuint),
-                ChUInt64 _ => (T)(object)ColumnUInt64Interop.chc_column_uint64_at(NativeColumn, indexNuint),
-                ChInt8 _ => (T)(object)ColumnInt8Interop.chc_column_int8_at(NativeColumn, indexNuint),
-                ChInt16 _ => (T)(object)ColumnInt16Interop.chc_column_int16_at(NativeColumn, indexNuint),
-                ChInt32 _ => (T)(object)ColumnInt32Interop.chc_column_int32_at(NativeColumn, indexNuint),
-                ChInt64 _ => (T)(object)ColumnInt64Interop.chc_column_int64_at(NativeColumn, indexNuint),
-                ChInt128 _ => (T)(object)ColumnInt128Interop.chc_column_int128_at(NativeColumn, indexNuint).ToInt128(),
-                ChUuid _ => (T)(object)ChUuid.FromUuidInterop(
-                    ColumnUuidInterop.chc_column_uuid_at(NativeColumn, indexNuint)),
-                ChFloat32 _ => (T)(object)ColumnFloat32Interop.chc_column_float32_at(NativeColumn, indexNuint),
-                ChFloat64 _ => (T)(object)ColumnFloat64Interop.chc_column_float64_at(NativeColumn, indexNuint),
-                ChDate _ => (T)(object)ColumnDateInterop.chc_column_date_at(NativeColumn, indexNuint),
-                ChDate32 _ => (T)(object)ColumnDate32Interop.chc_column_date32_at(NativeColumn, indexNuint),
-                ChDateTime _ => (T)(object)ColumnDateTimeInterop.chc_column_datetime_at(NativeColumn, indexNuint),
-                ChDateTime64 _ => (T)(object)ColumnDateTime64Interop.chc_column_datetime64_at(NativeColumn, indexNuint),
-                ChEnum8 _ => (T)(object)ColumnEnum8Interop.chc_column_enum8_at(NativeColumn, indexNuint),
-                ChEnum16 _ => (T)(object)ColumnEnum16Interop.chc_column_enum16_at(NativeColumn, indexNuint),
-                ChString _ => (T)(object)ColumnStringInterop.chc_column_string_at(NativeColumn, indexNuint),
-                ChFixedString _ => (T)(object)ColumnFixedStringInterop.chc_column_fixed_string_at(NativeColumn,
-                    indexNuint),
-                ChIPv4 _ => (T)(object)ColumnIPv4Interop.chc_column_ipv4_at(NativeColumn, indexNuint),
-                ChIPv6 _ => (T)(object)ChIPv6.FromIpv6Interop(
-                    ColumnIPv6Interop.chc_column_ipv6_at(NativeColumn, indexNuint)),
-                _ => throw new ArgumentOutOfRangeException(Type.ToString())
-            };
+                case ChUInt8 _:
+                    return (T)(object)ColumnUInt8Interop.chc_column_uint8_at(NativeColumn, indexNuint);
+                case ChUInt16 _:
+                    return (T)(object)(ChUInt16)ColumnUInt16Interop.chc_column_uint16_at(NativeColumn, indexNuint);
+                case ChUInt32 _:
+                    return (T)(object)(ChUInt32)ColumnUInt32Interop.chc_column_uint32_at(NativeColumn, indexNuint);
+                case ChUInt64 _:
+                    return (T)(object)(ChUInt64)ColumnUInt64Interop.chc_column_uint64_at(NativeColumn, indexNuint);
+                case ChInt8 _:
+                    return (T)(object)(ChInt8)ColumnInt8Interop.chc_column_int8_at(NativeColumn, indexNuint);
+                case ChInt16 _:
+                    return (T)(object)(ChInt16)ColumnInt16Interop.chc_column_int16_at(NativeColumn, indexNuint);
+                case ChInt32 _:
+                    return (T)(object)(ChInt32)ColumnInt32Interop.chc_column_int32_at(NativeColumn, indexNuint);
+                case ChInt64 _:
+                    return (T)(object)(ChInt64)ColumnInt64Interop.chc_column_int64_at(NativeColumn, indexNuint);
+                case ChInt128 _:
+                    return (T)(object)(ChInt128)ColumnInt128Interop.chc_column_int128_at(NativeColumn, indexNuint)
+                        .ToInt128();
+                case ChUuid _:
+                    return (T)(object)ChUuid.FromUuidInterop(
+                        ColumnUuidInterop.chc_column_uuid_at(NativeColumn, indexNuint));
+                case ChFloat32 _:
+                    return (T)(object)(ChFloat32)ColumnFloat32Interop.chc_column_float32_at(NativeColumn, indexNuint);
+                case ChFloat64 _:
+                    return (T)(object)(ChFloat64)ColumnFloat64Interop.chc_column_float64_at(NativeColumn, indexNuint);
+                case ChDate _:
+                    return (T)(object)(ChDate)ColumnDateInterop.chc_column_date_at(NativeColumn, indexNuint);
+                case ChDate32 _:
+                    return (T)(object)(ChDate32)ColumnDate32Interop.chc_column_date32_at(NativeColumn, indexNuint);
+                case ChDateTime _:
+                    return (T)(object)(ChDateTime)ColumnDateTimeInterop.chc_column_datetime_at(NativeColumn,
+                        indexNuint);
+                case ChDateTime64 _:
+                    return (T)(object)(ChDateTime64)ColumnDateTime64Interop.chc_column_datetime64_at(NativeColumn,
+                        indexNuint);
+                case IChEnum8 enum8:
+                    enum8.Value = ColumnEnum8Interop.chc_column_enum8_at(NativeColumn, indexNuint);
+                    return (T)enum8;
+                case IChEnum16 enum16:
+                    enum16.Value = ColumnEnum8Interop.chc_column_enum8_at(NativeColumn, indexNuint);
+                    return (T)enum16;
+                case ChString _:
+                    return (T)(object)(ChString)ColumnStringInterop.chc_column_string_at(NativeColumn, indexNuint)
+                        .ToString();
+                case ChFixedString _:
+                    return (T)(object)(ChFixedString)ColumnFixedStringInterop.chc_column_fixed_string_at(NativeColumn,
+                        indexNuint).ToString();
+                case ChIPv4 _:
+                    return (T)(object)(ChIPv4)ColumnIPv4Interop.chc_column_ipv4_at(NativeColumn, indexNuint);
+                case ChIPv6 _:
+                    return (T)(object)ChIPv6.FromIn6AddrInterop(
+                        ColumnIPv6Interop.chc_column_ipv6_at(NativeColumn, indexNuint));
+            }
+
+            throw new ArgumentException(value.GetType().ToString());
         }
     }
 }
