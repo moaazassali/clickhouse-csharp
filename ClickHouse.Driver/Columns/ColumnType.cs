@@ -281,6 +281,51 @@ public readonly struct ChIPv6 : IChTypeNotNullable
     }
 }
 
-public readonly struct ChNullable<T> : IChTypeSupportsLowCardinality where T : IChTypeNotNullable
+// Similar to Nullable<T>
+public readonly struct ChNullable<T> : IChTypeSupportsLowCardinality where T : struct, IChTypeNotNullable
 {
+    private readonly T? _value;
+
+    private ChNullable(T? value)
+    {
+        _value = value;
+    }
+
+    public T Value
+    {
+        get
+        {
+            if (_value is null)
+            {
+                throw new InvalidOperationException("Nullable object must have a value.");
+            }
+
+            return _value.Value;
+        }
+    }
+
+    public bool HasValue => _value.HasValue;
+
+    public static implicit operator ChNullable<T>(T? value) => new(value);
+    public static implicit operator ChNullable<T>(T value) => new(value);
+    public static implicit operator T?(ChNullable<T> value) => value._value;
+
+    public static explicit operator T(ChNullable<T> value) => value._value!.Value;
+
+    public bool Equals(ChNullable<T> other)
+    {
+        if (!HasValue) return other._value == null;
+        if (other._value == null) return false;
+        return _value.Equals(other._value);
+    }
+
+    public static bool operator ==(ChNullable<T> a, ChNullable<T> b)
+    {
+        return a.Equals(b);
+    }
+
+    public static bool operator !=(ChNullable<T> a, ChNullable<T> b)
+    {
+        return !a.Equals(b);
+    }
 }

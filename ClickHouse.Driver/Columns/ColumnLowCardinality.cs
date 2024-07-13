@@ -67,7 +67,7 @@ public class ColumnLowCardinality<T> : Column where T : struct, IChTypeSupportsL
         }
     }
 
-    public string? this[int index]
+    public T this[int index]
     {
         get
         {
@@ -83,7 +83,28 @@ public class ColumnLowCardinality<T> : Column where T : struct, IChTypeSupportsL
                 throw new ArgumentException("Received invalid OptionalType.");
             }
 
-            return optional.Type == OptionalTypeInterop.Null ? null : optional.Value.StringView.ToString();
+            T value = default;
+            switch (value)
+            {
+                case ChString: return (T)(object)(ChString)optional.Value.StringView.ToString();
+                case ChFixedString: return (T)(object)(ChFixedString)optional.Value.StringView.ToString();
+                case ChNullable<ChString>:
+                    if (optional.Type == OptionalTypeInterop.Null)
+                    {
+                        return (T)(object)(ChNullable<ChString>)null;
+                    }
+
+                    return (T)(object)(ChNullable<ChString>)(ChString)optional.Value.StringView.ToString();
+                case ChNullable<ChFixedString>:
+                    if (optional.Type == OptionalTypeInterop.Null)
+                    {
+                        return (T)(object)(ChNullable<ChFixedString>)null;
+                    }
+
+                    return (T)(object)(ChNullable<ChFixedString>)(ChFixedString)optional.Value.StringView.ToString();
+            }
+
+            throw new NotSupportedException();
         }
     }
 }

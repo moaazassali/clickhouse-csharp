@@ -32,7 +32,7 @@ public class ColumnLowCardinalityTests
     {
         var column = new ColumnLowCardinality<ChNullable<ChString>>();
         column.Add("test");
-        Assert.Equal("test", column[0]);
+        Assert.Equal("test", column[0].Value);
     }
 
     [Fact]
@@ -40,6 +40,6 @@ public class ColumnLowCardinalityTests
     {
         var column = new ColumnLowCardinality<ChNullable<ChString>>();
         column.Add(null);
-        Assert.Null(column[0]);
+        Assert.True(column[0] == null);
     }
 }
