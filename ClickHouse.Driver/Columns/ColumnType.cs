@@ -46,7 +46,7 @@ public interface IChType
 {
 }
 
-public interface IChTypeNotNullable : IChType
+public interface IChBaseType : IChType
 {
 }
 
@@ -54,63 +54,63 @@ public interface IChTypeSupportsLowCardinality : IChType
 {
 }
 
-public readonly struct ChUInt8 : IChTypeNotNullable
+public readonly struct ChUInt8 : IChBaseType
 {
     private byte Value { get; init; }
     public static implicit operator ChUInt8(byte value) => new() { Value = value };
     public static implicit operator byte(ChUInt8 value) => value.Value;
 }
 
-public readonly struct ChUInt16 : IChTypeNotNullable
+public readonly struct ChUInt16 : IChBaseType
 {
     private ushort Value { get; init; }
     public static implicit operator ChUInt16(ushort value) => new() { Value = value };
     public static implicit operator ushort(ChUInt16 value) => value.Value;
 }
 
-public readonly struct ChUInt32 : IChTypeNotNullable
+public readonly struct ChUInt32 : IChBaseType
 {
     private uint Value { get; init; }
     public static implicit operator ChUInt32(uint value) => new() { Value = value };
     public static implicit operator uint(ChUInt32 value) => value.Value;
 }
 
-public readonly struct ChUInt64 : IChTypeNotNullable
+public readonly struct ChUInt64 : IChBaseType
 {
     private ulong Value { get; init; }
     public static implicit operator ChUInt64(ulong value) => new() { Value = value };
     public static implicit operator ulong(ChUInt64 value) => value.Value;
 }
 
-public readonly struct ChInt8 : IChTypeNotNullable
+public readonly struct ChInt8 : IChBaseType
 {
     private sbyte Value { get; init; }
     public static implicit operator ChInt8(sbyte value) => new() { Value = value };
     public static implicit operator sbyte(ChInt8 value) => value.Value;
 }
 
-public readonly struct ChInt16 : IChTypeNotNullable
+public readonly struct ChInt16 : IChBaseType
 {
     private short Value { get; init; }
     public static implicit operator ChInt16(short value) => new() { Value = value };
     public static implicit operator short(ChInt16 value) => value.Value;
 }
 
-public readonly struct ChInt32 : IChTypeNotNullable
+public readonly struct ChInt32 : IChBaseType
 {
     private int Value { get; init; }
     public static implicit operator ChInt32(int value) => new() { Value = value };
     public static implicit operator int(ChInt32 value) => value.Value;
 }
 
-public readonly struct ChInt64 : IChTypeNotNullable
+public readonly struct ChInt64 : IChBaseType
 {
     private long Value { get; init; }
     public static implicit operator ChInt64(long value) => new() { Value = value };
     public static implicit operator long(ChInt64 value) => value.Value;
 }
 
-public readonly struct ChInt128 : IChTypeNotNullable
+public readonly struct ChInt128 : IChBaseType
 {
     private Int128 Value { get; init; }
     public static implicit operator ChInt128(Int128 value) => new() { Value = value };
@@ -124,7 +124,7 @@ public readonly struct ChInt128 : IChTypeNotNullable
     }
 }
 
-public readonly struct ChUuid : IChTypeNotNullable
+public readonly struct ChUuid : IChBaseType
 {
     private Guid Value { get; init; }
     public static implicit operator ChUuid(Guid value) => new() { Value = value };
@@ -154,56 +154,56 @@ public readonly struct ChUuid : IChTypeNotNullable
     }
 }
 
-public readonly struct ChFloat32 : IChTypeNotNullable
+public readonly struct ChFloat32 : IChBaseType
 {
     private float Value { get; init; }
     public static implicit operator ChFloat32(float value) => new() { Value = value };
     public static implicit operator float(ChFloat32 value) => value.Value;
 }
 
-public readonly struct ChFloat64 : IChTypeNotNullable
+public readonly struct ChFloat64 : IChBaseType
 {
     private double Value { get; init; }
     public static implicit operator ChFloat64(double value) => new() { Value = value };
     public static implicit operator double(ChFloat64 value) => value.Value;
 }
 
-public readonly struct ChDecimal : IChTypeNotNullable
+public readonly struct ChDecimal : IChBaseType
 {
     private Int128 Value { get; init; }
     public static implicit operator ChDecimal(Int128 value) => new() { Value = value };
     public static implicit operator Int128(ChDecimal value) => value.Value;
 }
 
-public readonly struct ChDate : IChTypeNotNullable
+public readonly struct ChDate : IChBaseType
 {
     private ushort Value { get; init; }
     public static implicit operator ChDate(ushort value) => new() { Value = value };
     public static implicit operator ushort(ChDate value) => value.Value;
 }
 
-public readonly struct ChDate32 : IChTypeNotNullable
+public readonly struct ChDate32 : IChBaseType
 {
     private int Value { get; init; }
     public static implicit operator ChDate32(int value) => new() { Value = value };
     public static implicit operator int(ChDate32 value) => value.Value;
 }
 
-public readonly struct ChDateTime : IChTypeNotNullable
+public readonly struct ChDateTime : IChBaseType
 {
     private uint Value { get; init; }
     public static implicit operator ChDateTime(uint value) => new() { Value = value };
     public static implicit operator uint(ChDateTime value) => value.Value;
 }
 
-public readonly struct ChDateTime64 : IChTypeNotNullable
+public readonly struct ChDateTime64 : IChBaseType
 {
     private long Value { get; init; }
     public static implicit operator ChDateTime64(long value) => new() { Value = value };
     public static implicit operator long(ChDateTime64 value) => value.Value;
 }
 
-internal interface IChEnum8 : IChTypeNotNullable
+internal interface IChEnum8 : IChBaseType
 {
     internal sbyte Value { get; set; }
 }
@@ -221,7 +221,7 @@ public struct ChEnum8<T> : IChEnum8 where T : struct, Enum
     public static explicit operator ChInt8(ChEnum8<T> value) => value.Value;
 }
 
-internal interface IChEnum16 : IChTypeNotNullable
+internal interface IChEnum16 : IChBaseType
 {
     internal short Value { get; set; }
 }
@@ -239,28 +239,28 @@ public struct ChEnum16<T> : IChEnum16 where T : struct, Enum
     public static explicit operator ChInt16(ChEnum16<T> value) => value.Value;
 }
 
-public readonly struct ChString : IChTypeNotNullable, IChTypeSupportsLowCardinality
+public readonly struct ChString : IChBaseType, IChTypeSupportsLowCardinality
 {
     private string Value { get; init; }
     public static implicit operator ChString(string value) => new() { Value = value };
     public static implicit operator string(ChString value) => value.Value;
 }
 
-public readonly struct ChFixedString : IChTypeNotNullable, IChTypeSupportsLowCardinality
+public readonly struct ChFixedString : IChBaseType, IChTypeSupportsLowCardinality
 {
     private string Value { get; init; }
     public static implicit operator ChFixedString(string value) => new() { Value = value };
     public static implicit operator string(ChFixedString value) => value.Value;
 }
 
-public readonly struct ChIPv4 : IChTypeNotNullable
+public readonly struct ChIPv4 : IChBaseType
 {
     private uint Value { get; init; }
     public static implicit operator ChIPv4(uint value) => new() { Value = value };
     public static implicit operator uint(ChIPv4 value) => value.Value;
 }
 
-public readonly struct ChIPv6 : IChTypeNotNullable
+public readonly struct ChIPv6 : IChBaseType
 {
     private byte[] Value { get; init; }
     public static implicit operator ChIPv6(byte[] value) => new() { Value = value };
@@ -281,8 +281,18 @@ public readonly struct ChIPv6 : IChTypeNotNullable
     }
 }
 
-// Similar to Nullable<T>
-public readonly struct ChNullable<T> : IChTypeSupportsLowCardinality where T : struct, IChTypeNotNullable
+public interface IChNullable : IChTypeSupportsLowCardinality
+{
+    bool HasValue { get; }
+}
+
+public interface IChNullable<T> : IChNullable where T : IChBaseType
+{
+    T? Value { get; }
+}
+
+// Similar to Nullable<T> implementation
+public readonly struct ChNullable<T> : IChNullable<T> where T : struct, IChBaseType
 {
     private readonly T? _value;
 
@@ -328,4 +338,15 @@ public readonly struct ChNullable<T> : IChTypeSupportsLowCardinality where T : s
     {
         return !a.Equals(b);
     }
+}
+
+public interface IChLowCardinality : IChType
+{
+}
+
+public readonly struct ChLowCardinality<T> : IChLowCardinality where T : IChType
+{
+    public T Value { get; private init; }
+    public static implicit operator ChLowCardinality<T>(T value) => new() { Value = value };
+    public static implicit operator T(ChLowCardinality<T> value) => value.Value;
 }
