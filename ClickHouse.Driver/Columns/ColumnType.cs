@@ -350,3 +350,14 @@ public readonly struct ChLowCardinality<T> : IChLowCardinality where T : IChType
     public static implicit operator ChLowCardinality<T>(T value) => new() { Value = value };
     public static implicit operator T(ChLowCardinality<T> value) => value.Value;
 }
+
+public interface IChArray : IChType
+{
+}
+
+public readonly struct ChArray<T> : IChArray where T : IChType
+{
+    public T[] Value { get; private init; }
+    public static implicit operator ChArray<T>(T[] value) => new() { Value = value };
+    public static implicit operator T[](ChArray<T> value) => value.Value;
+}

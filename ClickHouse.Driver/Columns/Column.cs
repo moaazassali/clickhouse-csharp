@@ -1,6 +1,14 @@
 ﻿namespace ClickHouse.Driver.Columns;
 
-public abstract class Column : IDisposable
+public interface IColumn : IDisposable
+{
+    ColumnType Type { get; }
+    void Reserve(int size);
+    void Clear();
+    int Count { get; }
+}
+
+public abstract class Column : IColumn
 {
     protected internal nint NativeColumn { get; protected init; }
 
@@ -54,25 +62,43 @@ public abstract class Column : IDisposable
     }
 }
 
-public interface IColumn<T>
+public interface IColumn<T> : IColumn
 {
     void Add(T value);
     T this[int index] { get; }
 }
 
-public class Column<T> : IColumn<T> where T : struct, IChType
+public class Column<T> : Column, IColumn<T> where T : struct, IChType
 {
     private readonly IColumn<T> _column;
 
     public Column()
     {
         T value = default;
-        _column = value switch
+        switch (value)
         {
-            IChBaseType => new BaseColumn<T>(),
-            IChNullable => new NullableColumn<T>(),
-            IChLowCardinality => new LowCardinalityColumn<T>(),
-        };
+            case IChBaseType:
+                var baseCol = new BaseColumn<T>();
+                NativeColumn = baseCol.NativeColumn;
+                _column = baseCol;
+                break;
+            case IChNullable:
+                var nullCol = new NullableColumn<T>();
+                NativeColumn = nullCol.NativeColumn;
+                _column = nullCol;
+                break;
+            case IChLowCardinality:
+                var lcCol = new LowCardinalityColumn<T>();
+                NativeColumn = lcCol.NativeColumn;
+                _column = lcCol;
+                break;
+            case IChArray:
+                var arrayCol = new ArrayColumn<T>();
+                NativeColumn = arrayCol.NativeColumn;
+                _column = arrayCol;
+                break;
+            default: throw new ArgumentException(value.GetType().ToString());
+        }
     }
 
     // second argument is a dummy to distinguish from the constructor above internally within the library
