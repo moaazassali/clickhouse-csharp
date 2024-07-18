@@ -3,61 +3,55 @@ using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver.Columns;
 
-public interface IArrayColumn : IColumn
-{
-    Column BaseColumn { get; set; }
-}
-
-public class ArrayColumn<T> : Column, IArrayColumn, IColumn<T>
+public class ArrayColumn<T> : Column, IColumn<T>
 {
     private readonly Column _nestedColumn;
-    public Column BaseColumn { get; set; }
 
     internal ArrayColumn()
     {
-        T value = default;
-        if (typeof(T).IsGenericType && typeof(T).GetGenericTypeDefinition() == typeof(ChArray<>))
+        if (!typeof(T).IsGenericType || typeof(T).GetGenericTypeDefinition() != typeof(ChArray<>))
         {
-            var elementType = typeof(T).GenericTypeArguments[0]; // This gets the U in ChArray<U>
-
-            // Dynamically create the correct column type based on elementType
-            if (typeof(IChBaseType).IsAssignableFrom(elementType))
-            {
-                var columnType = typeof(BaseColumn<>).MakeGenericType(elementType);
-                _nestedColumn = (Column)Activator.CreateInstance(columnType);
-                BaseColumn = _nestedColumn;
-            }
-            else if (typeof(IChNullable).IsAssignableFrom(elementType))
-            {
-                var columnType = typeof(NullableColumn<>).MakeGenericType(elementType);
-                _nestedColumn = (Column)Activator.CreateInstance(columnType);
-                BaseColumn = _nestedColumn;
-            }
-            else if (typeof(IChLowCardinality).IsAssignableFrom(elementType))
-            {
-                var columnType = typeof(LowCardinalityColumn<>).MakeGenericType(elementType);
-                _nestedColumn = (Column)Activator.CreateInstance(columnType);
-                BaseColumn = _nestedColumn;
-            }
-            else if (typeof(IChArray).IsAssignableFrom(elementType))
-            {
-                var constructorFlags = BindingFlags.Instance | BindingFlags.NonPublic;
-                var columnType = typeof(ArrayColumn<>).MakeGenericType(elementType);
-                var nestedColumn = Activator.CreateInstance(columnType, constructorFlags, null, null, null);
-                _nestedColumn = (Column)nestedColumn;
-                BaseColumn = ((IArrayColumn)nestedColumn).BaseColumn;
-            }
-
-            var resultStatus =
-                ColumnArrayInterop.chc_column_array_create(_nestedColumn.NativeColumn, out var nativeColumn);
-
-            if (resultStatus.Code != 0)
-            {
-                throw new ClickHouseException(resultStatus);
-            }
-
-            NativeColumn = nativeColumn;
+            throw new ArgumentException("T must be ChArray<U>");
         }
+
+        var elementType = typeof(T).GenericTypeArguments[0]; // This gets the U in ChArray<U>
+
+        // Dynamically create the correct column type based on elementType
+        if (typeof(IChBaseType).IsAssignableFrom(elementType))
+        {
+            var columnType = typeof(BaseColumn<>).MakeGenericType(elementType);
+            _nestedColumn = (Column)Activator.CreateInstance(columnType)!;
+        }
+        else if (typeof(IChNullable).IsAssignableFrom(elementType))
+        {
+            var columnType = typeof(NullableColumn<>).MakeGenericType(elementType);
+            _nestedColumn = (Column)Activator.CreateInstance(columnType)!;
+        }
+        else if (typeof(IChLowCardinality).IsAssignableFrom(elementType))
+        {
+            var columnType = typeof(LowCardinalityColumn<>).MakeGenericType(elementType);
+            _nestedColumn = (Column)Activator.CreateInstance(columnType)!;
+        }
+        else if (typeof(IChArray).IsAssignableFrom(elementType))
+        {
+            const BindingFlags constructorFlags = BindingFlags.Instance | BindingFlags.NonPublic;
+            var columnType = typeof(ArrayColumn<>).MakeGenericType(elementType);
+            _nestedColumn = (Column)Activator.CreateInstance(columnType, constructorFlags, null, null, null)!;
+        }
+        else
+        {
+            throw new ArgumentException("Unsupported type");
+        }
+
+        var resultStatus =
+            ColumnArrayInterop.chc_column_array_create(_nestedColumn.NativeColumn, out var nativeColumn);
+
+        if (resultStatus.Code != 0)
+        {
+            throw new ClickHouseException(resultStatus);
+        }
+
+        NativeColumn = nativeColumn;
     }
 
     internal ArrayColumn(nint nativeColumn)
