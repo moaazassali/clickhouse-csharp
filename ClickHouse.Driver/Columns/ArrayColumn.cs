@@ -1,13 +1,14 @@
+using System.Reflection;
 using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver.Columns;
 
-internal interface IArrayColumn : IColumn
+public interface IArrayColumn : IColumn
 {
     Column BaseColumn { get; set; }
 }
 
-internal class ArrayColumn<T> : Column, IArrayColumn, IColumn<T> where T : struct, IChType
+public class ArrayColumn<T> : Column, IArrayColumn, IColumn<T>
 {
     private readonly Column _nestedColumn;
     public Column BaseColumn { get; set; }
@@ -40,8 +41,9 @@ internal class ArrayColumn<T> : Column, IArrayColumn, IColumn<T> where T : struc
             }
             else if (typeof(IChArray).IsAssignableFrom(elementType))
             {
+                var constructorFlags = BindingFlags.Instance | BindingFlags.NonPublic;
                 var columnType = typeof(ArrayColumn<>).MakeGenericType(elementType);
-                var nestedColumn = Activator.CreateInstance(columnType);
+                var nestedColumn = Activator.CreateInstance(columnType, constructorFlags, null, null, null);
                 _nestedColumn = (Column)nestedColumn;
                 BaseColumn = ((IArrayColumn)nestedColumn).BaseColumn;
             }
@@ -63,10 +65,23 @@ internal class ArrayColumn<T> : Column, IArrayColumn, IColumn<T> where T : struc
         NativeColumn = nativeColumn;
     }
 
+    internal override void Add(object value) => Add((T)value);
+
     public void Add(T value)
     {
         CheckDisposed();
+
+        if (value is not IChArray array) return;
+
+        foreach (var item in array)
+        {
+            _nestedColumn.Add(item);
+        }
+
+        ColumnArrayInterop.chc_column_array_add_offset(NativeColumn, (nuint)array.Count);
     }
+
+    public override object At(int index) => this[index]!;
 
     public T this[int index]
     {
@@ -78,7 +93,23 @@ internal class ArrayColumn<T> : Column, IArrayColumn, IColumn<T> where T : struc
                 throw new IndexOutOfRangeException();
             }
 
-            return default;
+            var offset = ColumnArrayInterop.chc_column_array_get_offset(NativeColumn, (nuint)index);
+            var size = GetArraySize(index);
+            object[] args = [_nestedColumn, (int)offset, size, false, null];
+            var value = (T)Activator.CreateInstance(typeof(T), args)!;
+            return value;
         }
+    }
+
+    private int GetArraySize(int index)
+    {
+        if (index == 0)
+        {
+            return (int)ColumnArrayInterop.chc_column_array_get_offset(NativeColumn, 1);
+        }
+
+        var offset = ColumnArrayInterop.chc_column_array_get_offset(NativeColumn, (nuint)index);
+        var prevOffset = ColumnArrayInterop.chc_column_array_get_offset(NativeColumn, (nuint)index - 1);
+        return (int)(offset - prevOffset);
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections;
 using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
@@ -344,20 +345,73 @@ public interface IChLowCardinality : IChType
 {
 }
 
-public readonly struct ChLowCardinality<T> : IChLowCardinality where T : IChType
+public readonly struct ChLowCardinality<T> : IChLowCardinality where T : IChTypeSupportsLowCardinality
 {
     public T Value { get; private init; }
     public static implicit operator ChLowCardinality<T>(T value) => new() { Value = value };
     public static implicit operator T(ChLowCardinality<T> value) => value.Value;
 }
 
-public interface IChArray : IChType
+public interface IChArray : IChType, IEnumerable
 {
+    int Count { get; }
 }
 
-public readonly struct ChArray<T> : IChArray where T : IChType
+public class ChArray<T> : IReadOnlyList<T>, IChArray where T : IChType
 {
-    public T[] Value { get; private init; }
-    public static implicit operator ChArray<T>(T[] value) => new() { Value = value };
-    public static implicit operator T[](ChArray<T> value) => value.Value;
+    private readonly Column? _nestedColumn;
+    private readonly int _offset;
+    private readonly bool _userCreated;
+    private readonly IReadOnlyList<T>? _values;
+
+    public int Count { get; }
+
+    public ChArray(Column? nestedColumn, int offset, int count, bool userCreated, IReadOnlyList<T>? values)
+    {
+        _nestedColumn = nestedColumn;
+        _offset = offset;
+        Count = count;
+        _userCreated = userCreated;
+        _values = values;
+    }
+
+    public static implicit operator ChArray<T>(List<T> value) => new(null, 0, value.Count, true, value);
+
+    public IEnumerator<T> GetEnumerator()
+    {
+        if (_userCreated)
+        {
+            foreach (var value in _values!)
+            {
+                yield return value;
+            }
+
+            yield break;
+        }
+
+        for (var i = 0; i < Count; i++)
+        {
+            yield return (T)_nestedColumn!.At(_offset + i);
+        }
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+    public T this[int index]
+    {
+        get
+        {
+            if (_userCreated) return _values![index];
+
+            if ((uint)index >= (uint)Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            return (T)_nestedColumn!.At(_offset + index);
+        }
+    }
 }

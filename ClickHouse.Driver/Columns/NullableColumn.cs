@@ -3,7 +3,7 @@ using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
 
-public class NullableColumn<T> : Column, IColumn<T> where T : struct
+public class NullableColumn<T> : Column, IColumn<T>
 {
     // We need to keep a reference to the nested column to prevent it from being garbage collected.
     // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
@@ -105,6 +105,8 @@ public class NullableColumn<T> : Column, IColumn<T> where T : struct
         NativeColumn = nativeColumn;
     }
 
+    internal override void Add(object value) => Add((T)value);
+
     public unsafe void Add(T value)
     {
         CheckDisposed();
@@ -114,105 +116,111 @@ public class NullableColumn<T> : Column, IColumn<T> where T : struct
         {
             ColumnNullableInterop.chc_column_nullable_append(NativeColumn, nint.Zero);
         }
-
-        switch (value)
+        else
         {
-            case ChNullable<ChUInt8> uint8:
-                var uint8Value = uint8.Value;
-                resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&uint8Value));
-                break;
-            case ChNullable<ChUInt16> uint16:
-                var uint16Value = uint16.Value;
-                resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&uint16Value));
-                break;
-            case ChNullable<ChUInt32> uint32:
-                var uint32Value = uint32.Value;
-                resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&uint32Value));
-                break;
-            case ChNullable<ChUInt64> uint64:
-                var uint64Value = uint64.Value;
-                resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&uint64Value));
-                break;
-            case ChNullable<ChInt8> int8:
-                var int8Value = int8.Value;
-                resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&int8Value));
-                break;
-            case ChNullable<ChInt16> int16:
-                var int16Value = int16.Value;
-                resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&int16Value));
-                break;
-            case ChNullable<ChInt32> int32:
-                var int32Value = int32.Value;
-                resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&int32Value));
-                break;
-            case ChNullable<ChInt64> int64:
-                var int64Value = int64.Value;
-                resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&int64Value));
-                break;
-            case ChNullable<ChInt128> int128:
-                var int128Value = int128.Value.ToInt128Interop();
-                resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&int128Value));
-                break;
-            case ChNullable<ChUuid> uuid:
-                var uuidInterop = uuid.Value.ToUuidInterop();
-                resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&uuidInterop));
-                break;
-            case ChNullable<ChFloat32> float32:
-                var float32Value = float32.Value;
-                resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&float32Value));
-                break;
-            case ChNullable<ChFloat64> float64:
-                var float64Value = float64.Value;
-                resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&float64Value));
-                break;
-            case ChNullable<ChDate> date:
-                var dateValue = date.Value;
-                resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&dateValue));
-                break;
-            case ChNullable<ChDate32> date32:
-                var date32Value = date32.Value;
-                resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&date32Value));
-                break;
-            case ChNullable<ChDateTime> dateTime:
-                var dateTimeValue = dateTime.Value;
-                resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&dateTimeValue));
-                break;
-            case ChNullable<ChDateTime64> dateTime64:
-                var dateTime64Value = dateTime64.Value;
-                resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&dateTime64Value));
-                break;
-            case IChNullable<IChEnum8> enum8:
-                var enum8Value = enum8.Value.Value;
-                resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&enum8Value));
-                break;
-            case IChNullable<IChEnum16> enum16:
-                var enum16Value = enum16.Value.Value;
-                resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&enum16Value));
-                break;
-            case ChNullable<ChString> str:
-                var strBytes = System.Text.Encoding.UTF8.GetBytes(str.Value);
-                fixed (byte* ptr = strBytes)
-                {
-                    resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(ptr));
-                }
+            switch (value)
+            {
+                case ChNullable<ChUInt8> uint8:
+                    var uint8Value = uint8.Value;
+                    resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&uint8Value));
+                    break;
+                case ChNullable<ChUInt16> uint16:
+                    var uint16Value = uint16.Value;
+                    resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&uint16Value));
+                    break;
+                case ChNullable<ChUInt32> uint32:
+                    var uint32Value = uint32.Value;
+                    resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&uint32Value));
+                    break;
+                case ChNullable<ChUInt64> uint64:
+                    var uint64Value = uint64.Value;
+                    resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&uint64Value));
+                    break;
+                case ChNullable<ChInt8> int8:
+                    var int8Value = int8.Value;
+                    resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&int8Value));
+                    break;
+                case ChNullable<ChInt16> int16:
+                    var int16Value = int16.Value;
+                    resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&int16Value));
+                    break;
+                case ChNullable<ChInt32> int32:
+                    var int32Value = int32.Value;
+                    resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&int32Value));
+                    break;
+                case ChNullable<ChInt64> int64:
+                    var int64Value = int64.Value;
+                    resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&int64Value));
+                    break;
+                case ChNullable<ChInt128> int128:
+                    var int128Value = int128.Value.ToInt128Interop();
+                    resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&int128Value));
+                    break;
+                case ChNullable<ChUuid> uuid:
+                    var uuidInterop = uuid.Value.ToUuidInterop();
+                    resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&uuidInterop));
+                    break;
+                case ChNullable<ChFloat32> float32:
+                    var float32Value = float32.Value;
+                    resultStatus =
+                        ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&float32Value));
+                    break;
+                case ChNullable<ChFloat64> float64:
+                    var float64Value = float64.Value;
+                    resultStatus =
+                        ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&float64Value));
+                    break;
+                case ChNullable<ChDate> date:
+                    var dateValue = date.Value;
+                    resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&dateValue));
+                    break;
+                case ChNullable<ChDate32> date32:
+                    var date32Value = date32.Value;
+                    resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&date32Value));
+                    break;
+                case ChNullable<ChDateTime> dateTime:
+                    var dateTimeValue = dateTime.Value;
+                    resultStatus =
+                        ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&dateTimeValue));
+                    break;
+                case ChNullable<ChDateTime64> dateTime64:
+                    var dateTime64Value = dateTime64.Value;
+                    resultStatus =
+                        ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&dateTime64Value));
+                    break;
+                case IChNullable<IChEnum8> enum8:
+                    var enum8Value = enum8.Value.Value;
+                    resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&enum8Value));
+                    break;
+                case IChNullable<IChEnum16> enum16:
+                    var enum16Value = enum16.Value.Value;
+                    resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&enum16Value));
+                    break;
+                case ChNullable<ChString> str:
+                    var strBytes = System.Text.Encoding.UTF8.GetBytes(str.Value);
+                    fixed (byte* ptr = strBytes)
+                    {
+                        resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(ptr));
+                    }
 
-                break;
-            case ChNullable<ChFixedString> fixedStr:
-                var fixedStrBytes = System.Text.Encoding.UTF8.GetBytes(fixedStr.Value);
-                fixed (byte* ptr = fixedStrBytes)
-                {
-                    resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(ptr));
-                }
+                    break;
+                case ChNullable<ChFixedString> fixedStr:
+                    var fixedStrBytes = System.Text.Encoding.UTF8.GetBytes(fixedStr.Value);
+                    fixed (byte* ptr = fixedStrBytes)
+                    {
+                        resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(ptr));
+                    }
 
-                break;
-            case ChNullable<ChIPv4> ipv4:
-                var ipv4Value = ipv4.Value;
-                resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&ipv4Value));
-                break;
-            case ChNullable<ChIPv6> ipv6:
-                var ipv6Interop = ipv6.Value.ToIn6AddrInterop();
-                resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&ipv6Interop));
-                break;
+                    break;
+                case ChNullable<ChIPv4> ipv4:
+                    var ipv4Value = ipv4.Value;
+                    resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&ipv4Value));
+                    break;
+                case ChNullable<ChIPv6> ipv6:
+                    var ipv6Interop = ipv6.Value.ToIn6AddrInterop();
+                    resultStatus = ColumnNullableInterop.chc_column_nullable_append(NativeColumn, (nint)(&ipv6Interop));
+                    break;
+            }
         }
 
         if (resultStatus.Code != 0)
@@ -220,6 +228,8 @@ public class NullableColumn<T> : Column, IColumn<T> where T : struct
             throw new ClickHouseException(resultStatus);
         }
     }
+
+    public override object At(int index) => this[index]!;
 
     public T this[int index]
     {

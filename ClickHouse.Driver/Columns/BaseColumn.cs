@@ -3,7 +3,7 @@ using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
 
-public class BaseColumn<T> : Column, IColumn<T> where T : struct
+public class BaseColumn<T> : Column, IColumn<T> where T : IChType
 {
     public BaseColumn()
     {
@@ -40,6 +40,8 @@ public class BaseColumn<T> : Column, IColumn<T> where T : struct
     {
         NativeColumn = nativeColumn;
     }
+
+    internal override void Add(object value) => Add((T)value);
 
     public void Add(T value)
     {
@@ -124,6 +126,8 @@ public class BaseColumn<T> : Column, IColumn<T> where T : struct
             throw new ClickHouseException(resultStatus);
         }
     }
+
+    public override object At(int index) => this[index];
 
     public T this[int index]
     {

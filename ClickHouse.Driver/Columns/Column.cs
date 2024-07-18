@@ -6,6 +6,7 @@ public interface IColumn : IDisposable
     void Reserve(int size);
     void Clear();
     int Count { get; }
+    object At(int index);
 }
 
 public abstract class Column : IColumn
@@ -44,6 +45,9 @@ public abstract class Column : IColumn
         }
     }
 
+    internal virtual void Add(object value) => throw new NotImplementedException();
+    public virtual object At(int index) => throw new NotImplementedException();
+
     public void Dispose()
     {
         Interop.Columns.ColumnInterop.chc_column_free(NativeColumn);
@@ -68,74 +72,115 @@ public interface IColumn<T> : IColumn
     T this[int index] { get; }
 }
 
-public class Column<T> : Column, IColumn<T> where T : struct, IChType
+public class Column<T> : Column, IColumn<T> where T : IChType
 {
-    private readonly IColumn<T> _column;
+    public readonly IColumn<T> _column;
 
     public Column()
     {
-        T value = default;
-        switch (value)
+        if (typeof(IChBaseType).IsAssignableFrom(typeof(T)))
         {
-            case IChBaseType:
-                var baseCol = new BaseColumn<T>();
-                NativeColumn = baseCol.NativeColumn;
-                _column = baseCol;
-                break;
-            case IChNullable:
-                var nullCol = new NullableColumn<T>();
-                NativeColumn = nullCol.NativeColumn;
-                _column = nullCol;
-                break;
-            case IChLowCardinality:
-                var lcCol = new LowCardinalityColumn<T>();
-                NativeColumn = lcCol.NativeColumn;
-                _column = lcCol;
-                break;
-            case IChArray:
-                var arrayCol = new ArrayColumn<T>();
-                NativeColumn = arrayCol.NativeColumn;
-                _column = arrayCol;
-                break;
-            default: throw new ArgumentException(value.GetType().ToString());
+            var baseCol = new BaseColumn<T>();
+            NativeColumn = baseCol.NativeColumn;
+            _column = baseCol;
+            return;
         }
+
+        if (typeof(IChNullable).IsAssignableFrom(typeof(T)))
+        {
+            var nullCol = new NullableColumn<T>();
+            NativeColumn = nullCol.NativeColumn;
+            _column = nullCol;
+            return;
+        }
+
+        if (typeof(ChLowCardinality<>).IsAssignableFrom(typeof(T)))
+        {
+            var lcCol = new LowCardinalityColumn<T>();
+            NativeColumn = lcCol.NativeColumn;
+            _column = lcCol;
+            return;
+        }
+
+        if (typeof(IChArray).IsAssignableFrom(typeof(T)))
+        {
+            var arrayCol = new ArrayColumn<T>();
+            NativeColumn = arrayCol.NativeColumn;
+            _column = arrayCol;
+            return;
+        }
+
+        throw new NotSupportedException(typeof(T).ToString());
     }
 
-    // second argument is a dummy to distinguish from the constructor above internally within the library
-    // internal Column(nint nativeColumn, bool _)
-    // {
-    //     NativeColumn = nativeColumn;
-    // }
+
+// second argument is a dummy to distinguish from the constructor above internally within the library
+// internal Column(nint nativeColumn, bool _)
+// {
+//     NativeColumn = nativeColumn;
+// }
+
+    internal override void Add(object value) => Add((T)value);
 
     public void Add(T value)
     {
-        switch (value)
+        if (typeof(IChBaseType).IsAssignableFrom(typeof(T)))
         {
-            case IChBaseType:
-                ((BaseColumn<T>)_column).Add(value);
-                break;
-            case IChNullable:
-                ((NullableColumn<T>)_column).Add(value);
-                break;
-            case IChLowCardinality:
-                ((LowCardinalityColumn<T>)_column).Add(value);
-                break;
-            default: throw new ArgumentException(value.GetType().ToString());
+            _column.Add(value);
+            return;
         }
+
+        if (typeof(IChNullable).IsAssignableFrom(typeof(T)))
+        {
+            _column.Add(value);
+            return;
+        }
+
+        if (typeof(ChLowCardinality<>).IsAssignableFrom(typeof(T)))
+        {
+            _column.Add(value);
+            return;
+        }
+
+        if (typeof(IChArray).IsAssignableFrom(typeof(T)))
+        {
+            _column.Add(value);
+            return;
+        }
+
+        throw new NotSupportedException(typeof(T).ToString());
+    }
+
+    public override object At(int index)
+    {
+        return this[index];
     }
 
     public T this[int index]
     {
         get
         {
-            T value = default;
-            return value switch
+            if (typeof(IChBaseType).IsAssignableFrom(typeof(T)))
             {
-                IChBaseType => _column[index],
-                IChNullable => _column[index],
-                IChLowCardinality => _column[index],
-                _ => throw new ArgumentException(value.GetType().ToString())
-            };
+                return _column[index];
+            }
+
+            if (typeof(IChNullable).IsAssignableFrom(typeof(T)))
+            {
+                return _column[index];
+            }
+
+            if (typeof(ChLowCardinality<>).IsAssignableFrom(typeof(T)))
+            {
+                return _column[index];
+            }
+
+            if (typeof(IChArray).IsAssignableFrom(typeof(T)))
+            {
+                return _column[index];
+            }
+
+            throw new NotSupportedException(typeof(T).ToString());
         }
     }
 }

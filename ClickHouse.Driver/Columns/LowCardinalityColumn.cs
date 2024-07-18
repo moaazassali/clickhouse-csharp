@@ -3,7 +3,7 @@ using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
 
-public class LowCardinalityColumn<T> : Column, IColumn<T> where T : struct
+public class LowCardinalityColumn<T> : Column, IColumn<T>
 {
     public LowCardinalityColumn()
     {
@@ -34,6 +34,8 @@ public class LowCardinalityColumn<T> : Column, IColumn<T> where T : struct
         NativeColumn = outColumn;
     }
 
+    internal override void Add(object value) => Add((T)value);
+
     public void Add(T value)
     {
         CheckDisposed();
@@ -57,6 +59,8 @@ public class LowCardinalityColumn<T> : Column, IColumn<T> where T : struct
             default: throw new NotSupportedException();
         }
     }
+
+    public override object At(int index) => this[index]!;
 
     public T this[int index]
     {
