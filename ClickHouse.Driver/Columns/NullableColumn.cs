@@ -112,7 +112,7 @@ public class NullableColumn<T> : Column, IColumn<T>
         CheckDisposed();
         ResultStatusInterop resultStatus = default;
 
-        if (!((IChNullable)value).HasValue)
+        if (!((IChNullable)value!).HasValue)
         {
             ColumnNullableInterop.chc_column_nullable_append(NativeColumn, nint.Zero);
         }
