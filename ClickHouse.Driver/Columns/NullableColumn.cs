@@ -93,7 +93,7 @@ public class NullableColumn<T> : Column, IColumn<T>
         NativeColumn = nativeColumn;
     }
 
-    // public ColumnNullable1(Func<Column<T>> factory)
+    // public NullableColumn(Func<Column<T>> factory)
     // {
     //     var nestedColumn = factory();
     //     ColumnNullableInterop.chc_column_nullable_create(nestedColumn.NativeColumn, out var nativeColumn);
