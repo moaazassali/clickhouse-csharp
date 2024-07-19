@@ -94,7 +94,7 @@ public class Column<T> : Column, IColumn<T> where T : IChType
             return;
         }
 
-        if (typeof(ChLowCardinality<>).IsAssignableFrom(typeof(T)))
+        if (typeof(IChLowCardinality).IsAssignableFrom(typeof(T)))
         {
             var lcCol = new LowCardinalityColumn<T>();
             NativeColumn = lcCol.NativeColumn;
@@ -136,7 +136,7 @@ public class Column<T> : Column, IColumn<T> where T : IChType
             return;
         }
 
-        if (typeof(ChLowCardinality<>).IsAssignableFrom(typeof(T)))
+        if (typeof(IChLowCardinality).IsAssignableFrom(typeof(T)))
         {
             _column.Add(value);
             return;
@@ -170,7 +170,7 @@ public class Column<T> : Column, IColumn<T> where T : IChType
                 return _column[index];
             }
 
-            if (typeof(ChLowCardinality<>).IsAssignableFrom(typeof(T)))
+            if (typeof(IChLowCardinality).IsAssignableFrom(typeof(T)))
             {
                 return _column[index];
             }
