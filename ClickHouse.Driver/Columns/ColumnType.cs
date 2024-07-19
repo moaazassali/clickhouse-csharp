@@ -44,17 +44,11 @@ public enum ColumnType
     MultiPolygon
 }
 
-public interface IChType
-{
-}
+public interface IChType;
 
-public interface IChBaseType : IChType
-{
-}
+public interface IChBaseType : IChType;
 
-public interface IChTypeSupportsLowCardinality : IChType
-{
-}
+public interface IChTypeSupportsLowCardinality : IChType;
 
 public readonly struct ChUInt8 : IChBaseType
 {
@@ -353,9 +347,7 @@ public readonly struct ChNullable<T> : IChNullable<T> where T : struct, IChBaseT
     }
 }
 
-public interface IChLowCardinality : IChType
-{
-}
+public interface IChLowCardinality : IChType;
 
 public readonly struct ChLowCardinality<T> : IChLowCardinality where T : IChTypeSupportsLowCardinality
 {
@@ -378,7 +370,7 @@ public class ChArray<T> : IReadOnlyList<T>, IChArray where T : IChType
 
     public int Count { get; }
 
-    public ChArray(Column? nestedColumn, int offset, int count, bool userCreated, IReadOnlyList<T>? values)
+    private ChArray(Column? nestedColumn, int offset, int count, bool userCreated, IReadOnlyList<T>? values)
     {
         _nestedColumn = nestedColumn;
         _offset = offset;

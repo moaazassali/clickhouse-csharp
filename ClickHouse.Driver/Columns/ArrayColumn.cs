@@ -90,7 +90,8 @@ public class ArrayColumn<T> : Column, IColumn<T>
             var offset = ColumnArrayInterop.chc_column_array_get_offset(NativeColumn, (nuint)index);
             var size = GetArraySize(index);
             object[] args = [_nestedColumn, (int)offset, size, false, null];
-            var value = (T)Activator.CreateInstance(typeof(T), args)!;
+            const BindingFlags constructorFlags = BindingFlags.Instance | BindingFlags.NonPublic;
+            var value = (T)Activator.CreateInstance(typeof(T), constructorFlags, null, args, null)!;
             return value;
         }
     }

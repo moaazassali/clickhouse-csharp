@@ -74,7 +74,7 @@ public interface IColumn<T> : IColumn
 
 public class Column<T> : Column, IColumn<T> where T : IChType
 {
-    public readonly IColumn<T> _column;
+    private readonly IColumn<T> _column;
 
     public Column()
     {
