@@ -91,8 +91,7 @@ public class ArrayColumn<T> : Column, IColumn<T>
             var size = GetArraySize(index);
             object[] args = [_nestedColumn, (int)offset, size, false, null];
             const BindingFlags constructorFlags = BindingFlags.Instance | BindingFlags.NonPublic;
-            var value = (T)Activator.CreateInstance(typeof(T), constructorFlags, null, args, null)!;
-            return value;
+            return (T)Activator.CreateInstance(typeof(T), constructorFlags, null, args, null)!;
         }
     }
 
