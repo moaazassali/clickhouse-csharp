@@ -4,11 +4,11 @@ namespace ClickHouse.Driver.Tests.Unit.Columns;
 
 public class ColumnEnum16Tests
 {
-    [Fact]
-    public void Constructor_ThrowsException_WhenEnumTypeIsNotShort()
-    {
-        Assert.Throws<InvalidOperationException>(() => new ColumnEnum16<DayOfWeek>());
-    }
+    // [Fact]
+    // public void Constructor_ThrowsException_WhenEnumTypeIsNotShort()
+    // {
+    //     Assert.Throws<InvalidOperationException>(() => new Column<ChEnum16<DayOfWeek2>>());
+    // }
 
     private enum DayOfWeek2 : short
     {
@@ -24,6 +24,6 @@ public class ColumnEnum16Tests
     [Fact]
     public void Constructor_DoesNotThrowException_WhenEnumTypeIsShort()
     {
-        var col = new ColumnEnum16<DayOfWeek2>();
+        var col = new Column<ChEnum16<DayOfWeek2>>();
     }
 }

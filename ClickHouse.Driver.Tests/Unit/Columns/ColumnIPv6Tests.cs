@@ -5,7 +5,7 @@ namespace ClickHouse.Driver.Tests.Unit.Columns;
 
 public class ColumnIPv6Tests
 {
-    private readonly ColumnIPv6 _column = new();
+    private readonly Column<ChIPv6> _column = new();
 
     [Fact]
     public void Add_SingleValue_ReturnsSameValue()
@@ -13,8 +13,9 @@ public class ColumnIPv6Tests
         var value = IPAddress.Parse("2001:0db8:85a3:0000:0000:8a2e:0370:7334");
 
         _column.Add(value);
+        var actual = _column[0];
 
-        Assert.Equal(value, _column[0]);
+        Assert.Equal(value, (IPAddress)actual);
     }
 
     [Fact]

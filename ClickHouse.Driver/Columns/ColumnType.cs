@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Net;
 using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
@@ -266,6 +267,17 @@ public readonly struct ChIPv6 : IChBaseType
     private byte[] Value { get; init; }
     public static implicit operator ChIPv6(byte[] value) => new() { Value = value };
     public static implicit operator byte[](ChIPv6 value) => value.Value;
+    public static implicit operator IPAddress(ChIPv6 value) => new(value.Value);
+
+    public static implicit operator ChIPv6(IPAddress value)
+    {
+        if (value.AddressFamily != System.Net.Sockets.AddressFamily.InterNetworkV6)
+        {
+            throw new ArgumentException("Value is not an IPv6 address.", nameof(value));
+        }
+
+        return new ChIPv6 { Value = value.GetAddressBytes() };
+    }
 
     internal static unsafe ChIPv6 FromIn6AddrInterop(In6AddrInterop value)
     {

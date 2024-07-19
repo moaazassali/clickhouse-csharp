@@ -4,7 +4,7 @@ namespace ClickHouse.Driver.Tests.Unit.Columns;
 
 public class ColumnInt128Tests
 {
-    private readonly ColumnInt128 _column = new();
+    private readonly Column<ChInt128> _column = new();
 
     [Fact]
     public void Add_SingleValue_ReturnsSameValue()
@@ -14,7 +14,7 @@ public class ColumnInt128Tests
         _column.Add(value);
         var actual = _column[0];
 
-        Assert.Equal(value, actual);
+        Assert.Equal(value, (Int128)actual);
     }
 
     [Fact]

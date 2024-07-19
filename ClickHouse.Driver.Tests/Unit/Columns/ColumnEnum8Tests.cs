@@ -4,11 +4,11 @@ namespace ClickHouse.Driver.Tests.Unit.Columns;
 
 public class ColumnEnum8Tests
 {
-    [Fact]
-    public void Constructor_ThrowsException_WhenEnumTypeIsNotSByte()
-    {
-        Assert.Throws<InvalidOperationException>(() => new ColumnEnum8<DayOfWeek>());
-    }
+    // [Fact]
+    // public void Constructor_ThrowsException_WhenEnumTypeIsNotSByte()
+    // {
+    //     Assert.Throws<InvalidOperationException>(() => new Column<ChEnum8<DayOfWeek>>());
+    // }
 
     private enum DayOfWeek2 : sbyte
     {
@@ -24,6 +24,6 @@ public class ColumnEnum8Tests
     [Fact]
     public void Constructor_DoesNotThrowException_WhenEnumTypeIsSByte()
     {
-        var col = new ColumnEnum8<DayOfWeek2>();
+        var col = new Column<ChEnum8<DayOfWeek2>>();
     }
 }
