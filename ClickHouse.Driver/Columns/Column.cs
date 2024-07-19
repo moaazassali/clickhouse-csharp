@@ -80,37 +80,29 @@ public class Column<T> : Column, IColumn<T> where T : IChType
     {
         if (typeof(IChBaseType).IsAssignableFrom(typeof(T)))
         {
-            var baseCol = new BaseColumn<T>();
-            NativeColumn = baseCol.NativeColumn;
-            _column = baseCol;
-            return;
+            var col = new BaseColumn<T>();
+            NativeColumn = col.NativeColumn;
+            _column = col;
         }
-
-        if (typeof(IChNullable).IsAssignableFrom(typeof(T)))
+        else if (typeof(IChNullable).IsAssignableFrom(typeof(T)))
         {
-            var nullCol = new NullableColumn<T>();
-            NativeColumn = nullCol.NativeColumn;
-            _column = nullCol;
-            return;
+            var col = new NullableColumn<T>();
+            NativeColumn = col.NativeColumn;
+            _column = col;
         }
-
-        if (typeof(IChLowCardinality).IsAssignableFrom(typeof(T)))
+        else if (typeof(IChLowCardinality).IsAssignableFrom(typeof(T)))
         {
-            var lcCol = new LowCardinalityColumn<T>();
-            NativeColumn = lcCol.NativeColumn;
-            _column = lcCol;
-            return;
+            var col = new LowCardinalityColumn<T>();
+            NativeColumn = col.NativeColumn;
+            _column = col;
         }
-
-        if (typeof(IChArray).IsAssignableFrom(typeof(T)))
+        else if (typeof(IChArray).IsAssignableFrom(typeof(T)))
         {
-            var arrayCol = new ArrayColumn<T>();
-            NativeColumn = arrayCol.NativeColumn;
-            _column = arrayCol;
-            return;
+            var col = new ArrayColumn<T>();
+            NativeColumn = col.NativeColumn;
+            _column = col;
         }
-
-        throw new NotSupportedException(typeof(T).ToString());
+        else throw new NotSupportedException(typeof(T).ToString());
     }
 
 
