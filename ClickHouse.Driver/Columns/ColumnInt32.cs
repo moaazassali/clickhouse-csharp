@@ -14,11 +14,15 @@ public class ColumnInt32 : Column, IColumn<int>
         NativeColumn = nativeColumn;
     }
 
+    internal override void Add(object value) => Add((int)value);
+
     public void Add(int value)
     {
         CheckDisposed();
         ColumnInt32Interop.chc_column_int32_append(NativeColumn, value);
     }
+
+    public override object At(int index) => this[index];
 
     public int this[int index]
     {

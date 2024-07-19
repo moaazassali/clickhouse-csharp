@@ -45,8 +45,8 @@ public abstract class Column : IColumn
         }
     }
 
-    internal virtual void Add(object value) => throw new NotImplementedException();
-    public virtual object At(int index) => throw new NotImplementedException();
+    internal abstract void Add(object value);
+    public abstract object At(int index);
 
     public void Dispose()
     {

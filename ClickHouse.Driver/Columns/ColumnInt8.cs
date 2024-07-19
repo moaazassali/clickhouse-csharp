@@ -14,11 +14,15 @@ public class ColumnInt8 : Column, IColumn<sbyte>
         NativeColumn = nativeColumn;
     }
 
+    internal override void Add(object value) => Add((sbyte)value);
+
     public void Add(sbyte value)
     {
         CheckDisposed();
         ColumnInt8Interop.chc_column_int8_append(NativeColumn, value);
     }
+
+    public override object At(int index) => this[index];
 
     public sbyte this[int index]
     {
