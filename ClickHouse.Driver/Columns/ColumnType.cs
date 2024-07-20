@@ -435,7 +435,8 @@ public readonly struct ChNullable<T> : IChNullable<T> where T : struct, IChBaseT
         {
             if (_value is null)
             {
-                throw new InvalidOperationException("Nullable object must have a value.");
+                throw new InvalidOperationException(
+                    "Tried accessing the Value property of a null ChNullable<T> instance.");
             }
 
             return _value.Value;
