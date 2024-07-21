@@ -7,6 +7,8 @@ public class ClickHouseBlock : IDisposable
 {
     internal nint NativeBlock { get; }
     private bool _disposed;
+    // we have to keep references to the columns to prevent them from being collected by GC
+    // which frees the native columns through Dispose() and causes a crash
     public List<Column> Columns { get; } = [];
 
     // again, possible conversion loss from nuint to int
