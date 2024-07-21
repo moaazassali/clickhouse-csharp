@@ -1,8 +1,9 @@
 using ClickHouse.Driver.Interop.Columns;
+using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnInt32 : Column, IColumn<int>
+public class ColumnInt32 : Column, IColumn<ChInt32>
 {
     public ColumnInt32()
     {
@@ -14,17 +15,22 @@ public class ColumnInt32 : Column, IColumn<int>
         NativeColumn = nativeColumn;
     }
 
-    internal override void Add(object value) => Add((int)value);
+    internal override void Add(object value) => Add((ChInt32)value);
 
-    public void Add(int value)
+    public void Add(ChInt32 value)
     {
         CheckDisposed();
+        ResultStatusInterop resultStatus = default;
         ColumnInt32Interop.chc_column_int32_append(NativeColumn, value);
+        if (resultStatus.Code != 0)
+        {
+            throw new ClickHouseException(resultStatus);
+        }
     }
 
     public override object At(int index) => this[index];
 
-    public int this[int index]
+    public ChInt32 this[int index]
     {
         get
         {
