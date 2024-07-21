@@ -1,5 +1,4 @@
 using ClickHouse.Driver.Interop.Columns;
-using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
 
@@ -46,85 +45,7 @@ public class BaseColumn<T> : Column, IColumn<T> where T : IChType
     public void Add(T value)
     {
         CheckDisposed();
-        ResultStatusInterop resultStatus = default;
-
-        switch (value)
-        {
-            case ChUInt8 uint8:
-                ColumnUInt8Interop.chc_column_uint8_append(NativeColumn, uint8);
-                break;
-            case ChUInt16 uint16:
-                ColumnUInt16Interop.chc_column_uint16_append(NativeColumn, uint16);
-                break;
-            case ChUInt32 uint32:
-                ColumnUInt32Interop.chc_column_uint32_append(NativeColumn, uint32);
-                break;
-            case ChUInt64 uint64:
-                ColumnUInt64Interop.chc_column_uint64_append(NativeColumn, uint64);
-                break;
-            case ChInt8 int8:
-                ColumnInt8Interop.chc_column_int8_append(NativeColumn, int8);
-                break;
-            case ChInt16 int16:
-                ColumnInt16Interop.chc_column_int16_append(NativeColumn, int16);
-                break;
-            case ChInt32 int32:
-                ColumnInt32Interop.chc_column_int32_append(NativeColumn, int32);
-                break;
-            case ChInt64 int64:
-                ColumnInt64Interop.chc_column_int64_append(NativeColumn, int64);
-                break;
-            case ChInt128 int128:
-                ColumnInt128Interop.chc_column_int128_append(NativeColumn, int128.ToInt128Interop());
-                break;
-            case ChUuid uuid:
-                ColumnUuidInterop.chc_column_uuid_append(NativeColumn, uuid.ToUuidInterop());
-                break;
-            case ChFloat32 float32:
-                ColumnFloat32Interop.chc_column_float32_append(NativeColumn, float32);
-                break;
-            case ChFloat64 float64:
-                ColumnFloat64Interop.chc_column_float64_append(NativeColumn, float64);
-                break;
-            // case ChDecimal dec:
-            //     ColumnDecimalInterop.chc_column_decimal_append(NativeColumn, dec);
-            //     break;
-            case ChDate date:
-                ColumnDateInterop.chc_column_date_append(NativeColumn, date);
-                break;
-            case ChDate32 date32:
-                ColumnDate32Interop.chc_column_date32_append(NativeColumn, date32);
-                break;
-            case ChDateTime dateTime:
-                ColumnDateTimeInterop.chc_column_datetime_append(NativeColumn, dateTime);
-                break;
-            case ChDateTime64 dateTime64:
-                ColumnDateTime64Interop.chc_column_datetime64_append(NativeColumn, dateTime64);
-                break;
-            case IChEnum8 enum8:
-                ColumnEnum8Interop.chc_column_enum8_append(NativeColumn, enum8.Value);
-                break;
-            case IChEnum16 enum16:
-                ColumnEnum16Interop.chc_column_enum16_append(NativeColumn, enum16.Value);
-                break;
-            case ChString str:
-                ColumnStringInterop.chc_column_string_append(NativeColumn, str);
-                break;
-            case ChFixedString fixedStr:
-                resultStatus = ColumnFixedStringInterop.chc_column_fixed_string_append(NativeColumn, fixedStr);
-                break;
-            case ChIPv4 ipv4:
-                ColumnIPv4Interop.chc_column_ipv4_append(NativeColumn, ipv4);
-                break;
-            case ChIPv6 ipv6:
-                ColumnIPv6Interop.chc_column_ipv6_append(NativeColumn, ipv6.ToIn6AddrInterop());
-                break;
-        }
-
-        if (resultStatus.Code != 0)
-        {
-            throw new ClickHouseException(resultStatus);
-        }
+        ((IChTypeAddable)value).AddToColumn(NativeColumn);
     }
 
     public override object At(int index) => this[index];
