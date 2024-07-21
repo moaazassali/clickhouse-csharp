@@ -12,6 +12,7 @@
       <PackageReference Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.13.12" />
       <PackageReference Include="ClickHouse.Ado" Version="2.0.5" />
       <PackageReference Include="ClickHouse.Client" Version="7.6.0" />
+      <PackageReference Include="Dapper" Version="2.1.35" />
     </ItemGroup>
 
     <ItemGroup>
