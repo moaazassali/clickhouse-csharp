@@ -66,21 +66,21 @@ public class ClickHouseConnection : IDisposable
 
     public delegate void SelectCallback(ClickHouseBlock block);
 
-    public void Select(string query, SelectCallback selectCallback)
-    {
-        CheckDisposed();
-        using var clickHouseQuery = new ClickHouseQuery(query);
-        var nativeResultStatus = QueryInterop.chc_query_on_data(clickHouseQuery.NativeQuery, (nativeBlock) =>
-        {
-            var block = new ClickHouseBlock(nativeBlock);
-            selectCallback(block);
-        });
-
-        if (nativeResultStatus.Code != 0)
-        {
-            throw new ClickHouseException(nativeResultStatus);
-        }
-    }
+    // public void Select(string query, SelectCallback selectCallback)
+    // {
+    //     CheckDisposed();
+    //     using var clickHouseQuery = new ClickHouseQuery(query);
+    //     var nativeResultStatus = QueryInterop.chc_query_on_data(clickHouseQuery.NativeQuery, (nativeBlock) =>
+    //     {
+    //         var block = new ClickHouseBlock(nativeBlock);
+    //         selectCallback(block);
+    //     });
+    //
+    //     if (nativeResultStatus.Code != 0)
+    //     {
+    //         throw new ClickHouseException(nativeResultStatus);
+    //     }
+    // }
 
     public void Insert(string tableName, ClickHouseBlock block)
     {

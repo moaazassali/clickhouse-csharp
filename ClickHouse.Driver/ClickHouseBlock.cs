@@ -6,7 +6,9 @@ namespace ClickHouse.Driver;
 public class ClickHouseBlock : IDisposable
 {
     internal nint NativeBlock { get; }
+
     private bool _disposed;
+
     // we have to keep references to the columns to prevent them from being collected by GC
     // which frees the native columns through Dispose() and causes a crash
     public List<Column> Columns { get; } = [];
@@ -27,16 +29,16 @@ public class ClickHouseBlock : IDisposable
         NativeBlock = Interop.BlockInterop.chc_block_create();
     }
 
-    public ClickHouseBlock(nint nativeBlock)
-    {
-        NativeBlock = nativeBlock;
-
-        for (nuint i = 0; i < Interop.BlockInterop.chc_block_column_count(nativeBlock); i++)
-        {
-            var nativeColumn = Interop.BlockInterop.chc_block_column_at(nativeBlock, i);
-            Columns.Add(CreateColumn(ColumnInterop.chc_column_type_code(nativeColumn), nativeColumn));
-        }
-    }
+    // public ClickHouseBlock(nint nativeBlock)
+    // {
+    //     NativeBlock = nativeBlock;
+    //
+    //     for (nuint i = 0; i < Interop.BlockInterop.chc_block_column_count(nativeBlock); i++)
+    //     {
+    //         var nativeColumn = Interop.BlockInterop.chc_block_column_at(nativeBlock, i);
+    //         Columns.Add(CreateColumn(ColumnInterop.chc_column_type_code(nativeColumn), nativeColumn));
+    //     }
+    // }
 
     public void Dispose()
     {
@@ -73,7 +75,7 @@ public class ClickHouseBlock : IDisposable
     {
         CheckDisposed();
         Columns.Add(column);
-        Interop.BlockInterop.chc_block_append_column(NativeBlock, columnName, column.NativeColumn);
+        Interop.BlockInterop.chc_block_append_column(NativeBlock, columnName, column.NativeColumnWrapper.NativeColumn);
     }
 
     public nuint RefreshRowCount()
