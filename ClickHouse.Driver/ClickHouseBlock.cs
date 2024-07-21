@@ -29,16 +29,16 @@ public class ClickHouseBlock : IDisposable
         NativeBlock = Interop.BlockInterop.chc_block_create();
     }
 
-    // public ClickHouseBlock(nint nativeBlock)
-    // {
-    //     NativeBlock = nativeBlock;
-    //
-    //     for (nuint i = 0; i < Interop.BlockInterop.chc_block_column_count(nativeBlock); i++)
-    //     {
-    //         var nativeColumn = Interop.BlockInterop.chc_block_column_at(nativeBlock, i);
-    //         Columns.Add(CreateColumn(ColumnInterop.chc_column_type_code(nativeColumn), nativeColumn));
-    //     }
-    // }
+    public ClickHouseBlock(nint nativeBlock)
+    {
+        NativeBlock = nativeBlock;
+
+        for (nuint i = 0; i < Interop.BlockInterop.chc_block_column_count(nativeBlock); i++)
+        {
+            var nativeColumn = Interop.BlockInterop.chc_block_column_at(nativeBlock, i);
+            Columns.Add(CreateColumn(ColumnInterop.chc_column_type_code(nativeColumn), nativeColumn));
+        }
+    }
 
     public void Dispose()
     {
@@ -46,7 +46,7 @@ public class ClickHouseBlock : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    protected virtual void Dispose(bool disposing)
+    protected void Dispose(bool disposing)
     {
         if (_disposed)
         {
@@ -94,14 +94,14 @@ public class ClickHouseBlock : IDisposable
     {
         return type switch
         {
-            // ColumnType.Int8 => new ColumnInt8(nativeColumn),
-            // ColumnType.Int16 => new ColumnInt16(nativeColumn),
-            // ColumnType.Int32 => new ColumnInt32(nativeColumn),
-            // ColumnType.Int64 => new ColumnInt64(nativeColumn),
-            // ColumnType.UInt8 => new ColumnUInt8(nativeColumn),
-            // ColumnType.UInt16 => new ColumnUInt16(nativeColumn),
-            // ColumnType.UInt32 => new ColumnUInt32(nativeColumn),
-            // ColumnType.UInt64 => new ColumnUInt64(nativeColumn),
+            ColumnType.UInt8 => new Column<ChUInt8>(nativeColumn),
+            ColumnType.UInt16 => new Column<ChUInt16>(nativeColumn),
+            ColumnType.UInt32 => new Column<ChUInt32>(nativeColumn),
+            ColumnType.UInt64 => new Column<ChUInt64>(nativeColumn),
+            ColumnType.Int8 => new Column<ChInt8>(nativeColumn),
+            ColumnType.Int16 => new Column<ChInt16>(nativeColumn),
+            ColumnType.Int32 => new Column<ChInt32>(nativeColumn),
+            ColumnType.Int64 => new Column<ChInt64>(nativeColumn),
             // ColumnType.Float32 => new ColumnFloat32(nativeColumn),
             // ColumnType.Float64 => new ColumnFloat64(nativeColumn),
             // ColumnType.String => new ColumnString(nativeColumn),

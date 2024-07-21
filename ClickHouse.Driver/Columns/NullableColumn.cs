@@ -13,7 +13,7 @@ internal class NullableColumn<T> : NativeColumnWrapper<T>
     {
     }
 
-    internal NullableColumn()
+    internal NullableColumn(uint? a = null, uint? b = null) : base(a, b)
     {
         T value = default;
 
@@ -93,9 +93,8 @@ internal class NullableColumn<T> : NativeColumnWrapper<T>
         NativeColumn = nativeColumn;
     }
 
-    internal NullableColumn(nint nativeColumn)
+    internal NullableColumn(nint nativeColumn, bool _) : base(nativeColumn, default)
     {
-        NativeColumn = nativeColumn;
     }
 
     internal override unsafe void Add(T value)

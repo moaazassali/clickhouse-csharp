@@ -4,9 +4,18 @@ namespace ClickHouse.Driver.Columns;
 
 public abstract class NativeColumnWrapper : IDisposable
 {
+    private bool _disposed;
     protected internal nint NativeColumn { get; protected init; }
 
-    private bool _disposed;
+    internal NativeColumnWrapper(uint? a, uint? b)
+    {
+    }
+
+    // useless bool parameter to distinguish from the public constructor
+    internal NativeColumnWrapper(nint nativeColumn, bool _)
+    {
+        NativeColumn = nativeColumn;
+    }
 
     public ColumnType Type
     {
@@ -85,4 +94,12 @@ internal abstract class NativeColumnWrapper<T> : NativeColumnWrapper
     internal override object At(int index) => this[index]!;
 
     internal abstract T this[int index] { get; }
+
+    internal NativeColumnWrapper(uint? a, uint? b) : base(a, b)
+    {
+    }
+
+    internal NativeColumnWrapper(nint nativeColumn, bool _) : base(nativeColumn, default)
+    {
+    }
 }

@@ -57,6 +57,31 @@ public sealed class Column<T> : Column where T : IChType
         else throw new NotSupportedException(typeof(T).ToString());
     }
 
+    public Column(nint nativeColumn)
+    {
+        if (typeof(IChBaseType).IsAssignableFrom(typeof(T)))
+        {
+            var col = new BaseColumn<T>(nativeColumn, default);
+            _nativeColumnWrapper = col;
+        }
+        else if (typeof(IChNullable).IsAssignableFrom(typeof(T)))
+        {
+            var col = new NullableColumn<T>(nativeColumn, default);
+            _nativeColumnWrapper = col;
+        }
+        else if (typeof(IChLowCardinality).IsAssignableFrom(typeof(T)))
+        {
+            var col = new LowCardinalityColumn<T>(nativeColumn, default);
+            _nativeColumnWrapper = col;
+        }
+        else if (typeof(IChArray).IsAssignableFrom(typeof(T)))
+        {
+            var col = new ArrayColumn<T>(nativeColumn, default);
+            _nativeColumnWrapper = col;
+        }
+        else throw new NotSupportedException(typeof(T).ToString());
+    }
+
     public void Add(T value)
     {
         // Calling _column.Add(value) directly is much slow than the code below, around 2x slower

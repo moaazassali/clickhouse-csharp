@@ -7,7 +7,7 @@ internal class ArrayColumn<T> : NativeColumnWrapper<T>
 {
     private readonly NativeColumnWrapper _nestedColumn;
 
-    internal ArrayColumn()
+    internal ArrayColumn(uint? a = null, uint? b = null) : base(a, b)
     {
         if (!typeof(T).IsGenericType || typeof(T).GetGenericTypeDefinition() != typeof(ChArray<>))
         {
@@ -52,9 +52,8 @@ internal class ArrayColumn<T> : NativeColumnWrapper<T>
         NativeColumn = nativeColumn;
     }
 
-    internal ArrayColumn(nint nativeColumn)
+    internal ArrayColumn(nint nativeColumn, bool _) : base(nativeColumn, default)
     {
-        NativeColumn = nativeColumn;
     }
 
     internal override void Add(T value)

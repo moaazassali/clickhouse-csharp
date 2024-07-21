@@ -5,7 +5,7 @@ namespace ClickHouse.Driver.Columns;
 
 internal class LowCardinalityColumn<T> : NativeColumnWrapper<T>
 {
-    internal LowCardinalityColumn()
+    internal LowCardinalityColumn(uint? a = null, uint? b = null) : base(a, b)
     {
         T value = default;
         NativeColumnWrapper nestedColumn;
@@ -32,6 +32,10 @@ internal class LowCardinalityColumn<T> : NativeColumnWrapper<T>
         // this is because the interop method will use it to create a copy of the column. we have no further use for it.
         nestedColumn.Dispose();
         NativeColumn = outColumn;
+    }
+
+    internal LowCardinalityColumn(nint nativeColumn, bool _) : base(nativeColumn, default)
+    {
     }
 
     internal override void Add(T value)
