@@ -7,7 +7,7 @@ public class ColumnTests
     [Fact]
     public void Count_ThrowsException_WhenColumnIsDisposed()
     {
-        var column = new ColumnInt8();
+        var column = new Column<ChInt8>();
 
         column.Dispose();
 
