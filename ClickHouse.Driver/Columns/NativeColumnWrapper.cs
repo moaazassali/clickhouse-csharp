@@ -12,7 +12,7 @@ public abstract class NativeColumnWrapper : IDisposable
     }
 
     // useless bool parameter to distinguish from the public constructor
-    internal NativeColumnWrapper(nint nativeColumn, bool _)
+    internal NativeColumnWrapper(nint nativeColumn)
     {
         NativeColumn = nativeColumn;
     }
@@ -60,7 +60,6 @@ public abstract class NativeColumnWrapper : IDisposable
     {
         if (Disposed)
         {
-            Console.WriteLine("Already disposed");
             return;
         }
 
@@ -99,7 +98,7 @@ internal abstract class NativeColumnWrapper<T> : NativeColumnWrapper
     {
     }
 
-    internal NativeColumnWrapper(nint nativeColumn, bool _) : base(nativeColumn, default)
+    internal NativeColumnWrapper(nint nativeColumn) : base(nativeColumn)
     {
     }
 }

@@ -7,7 +7,7 @@ internal class ArrayColumn<T> : NativeColumnWrapper<T>
 {
     private readonly NativeColumnWrapper _nestedColumn;
 
-    internal ArrayColumn(uint? a = null, uint? b = null) : base(a, b)
+    internal ArrayColumn(uint? a, uint? b) : base(a, b)
     {
         if (!typeof(T).IsGenericType || typeof(T).GetGenericTypeDefinition() != typeof(ChArray<>))
         {
@@ -40,7 +40,7 @@ internal class ArrayColumn<T> : NativeColumnWrapper<T>
             throw new ArgumentException("Unsupported type");
         }
 
-        _nestedColumn = (NativeColumnWrapper)Activator.CreateInstance(columnType, constructorFlags, null, null, null)!;
+        _nestedColumn = (NativeColumnWrapper)Activator.CreateInstance(columnType, constructorFlags, null, [a, b], null)!;
 
         var resultStatus = ColumnArrayInterop.chc_column_array_create(_nestedColumn.NativeColumn, out var nativeColumn);
 
@@ -52,7 +52,7 @@ internal class ArrayColumn<T> : NativeColumnWrapper<T>
         NativeColumn = nativeColumn;
     }
 
-    internal ArrayColumn(nint nativeColumn, bool _) : base(nativeColumn, default)
+    internal ArrayColumn(nint nativeColumn) : base(nativeColumn)
     {
     }
 

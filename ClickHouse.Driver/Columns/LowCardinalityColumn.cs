@@ -5,7 +5,7 @@ namespace ClickHouse.Driver.Columns;
 
 internal class LowCardinalityColumn<T> : NativeColumnWrapper<T>
 {
-    internal LowCardinalityColumn(uint? a = null, uint? b = null) : base(a, b)
+    internal LowCardinalityColumn(uint? a, uint? b) : base(a, b)
     {
         T value = default;
         NativeColumnWrapper nestedColumn;
@@ -13,16 +13,16 @@ internal class LowCardinalityColumn<T> : NativeColumnWrapper<T>
         switch (value)
         {
             case ChLowCardinality<ChString>:
-                nestedColumn = new BaseColumn<ChString>();
+                nestedColumn = new BaseColumn<ChString>(null, null);
                 break;
             case ChLowCardinality<ChFixedString>:
-                nestedColumn = new BaseColumn<ChFixedString>();
+                nestedColumn = new BaseColumn<ChFixedString>(null, null);
                 break;
             case ChLowCardinality<ChNullable<ChString>>:
-                nestedColumn = new NullableColumn<ChNullable<ChString>>();
+                nestedColumn = new NullableColumn<ChNullable<ChString>>(null, null);
                 break;
             case ChLowCardinality<ChNullable<ChFixedString>>:
-                nestedColumn = new NullableColumn<ChNullable<ChFixedString>>();
+                nestedColumn = new NullableColumn<ChNullable<ChFixedString>>(null, null);
                 break;
             default: throw new NotSupportedException();
         }
@@ -34,7 +34,7 @@ internal class LowCardinalityColumn<T> : NativeColumnWrapper<T>
         NativeColumn = outColumn;
     }
 
-    internal LowCardinalityColumn(nint nativeColumn, bool _) : base(nativeColumn, default)
+    internal LowCardinalityColumn(nint nativeColumn) : base(nativeColumn)
     {
     }
 

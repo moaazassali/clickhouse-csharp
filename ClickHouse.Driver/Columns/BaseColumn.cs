@@ -4,7 +4,7 @@ namespace ClickHouse.Driver.Columns;
 
 internal class BaseColumn<T> : NativeColumnWrapper<T> where T : IChType
 {
-    internal BaseColumn(uint? a = null, uint? b = null) : base(a, b)
+    internal BaseColumn(uint? a, uint? b) : base(a, b)
     {
         T value = default;
         NativeColumn = value switch
@@ -34,7 +34,7 @@ internal class BaseColumn<T> : NativeColumnWrapper<T> where T : IChType
         };
     }
 
-    internal BaseColumn(nint nativeColumn, bool _) : base(nativeColumn, default)
+    internal BaseColumn(nint nativeColumn) : base(nativeColumn)
     {
     }
 

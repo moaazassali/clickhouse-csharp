@@ -62,22 +62,22 @@ public sealed class Column<T> : Column where T : IChType
     {
         if (typeof(IChBaseType).IsAssignableFrom(typeof(T)))
         {
-            var col = new BaseColumn<T>(nativeColumn, default);
+            var col = new BaseColumn<T>(nativeColumn);
             _nativeColumnWrapper = col;
         }
         else if (typeof(IChNullable).IsAssignableFrom(typeof(T)))
         {
-            var col = new NullableColumn<T>(nativeColumn, default);
+            var col = new NullableColumn<T>(nativeColumn);
             _nativeColumnWrapper = col;
         }
         else if (typeof(IChLowCardinality).IsAssignableFrom(typeof(T)))
         {
-            var col = new LowCardinalityColumn<T>(nativeColumn, default);
+            var col = new LowCardinalityColumn<T>(nativeColumn);
             _nativeColumnWrapper = col;
         }
         else if (typeof(IChArray).IsAssignableFrom(typeof(T)))
         {
-            var col = new ArrayColumn<T>(nativeColumn, default);
+            var col = new ArrayColumn<T>(nativeColumn);
             _nativeColumnWrapper = col;
         }
         else throw new NotSupportedException(typeof(T).ToString());

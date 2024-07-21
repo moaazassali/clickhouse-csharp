@@ -31,77 +31,77 @@ internal class NullableColumn<T> : NativeColumnWrapper<T>
     {
     }
 
-    internal NullableColumn(uint? a = null, uint? b = null) : base(a, b)
+    internal NullableColumn(uint? a, uint? b) : base(a, b)
     {
         T value = default;
 
         switch (value)
         {
             case ChNullable<ChUInt8>:
-                _nestedColumn = new BaseColumn<ChUInt8>();
+                _nestedColumn = new BaseColumn<ChUInt8>(null, null);
                 break;
             case ChNullable<ChUInt16>:
-                _nestedColumn = new BaseColumn<ChUInt16>();
+                _nestedColumn = new BaseColumn<ChUInt16>(null, null);
                 break;
             case ChNullable<ChUInt32>:
-                _nestedColumn = new BaseColumn<ChUInt32>();
+                _nestedColumn = new BaseColumn<ChUInt32>(null, null);
                 break;
             case ChNullable<ChUInt64>:
-                _nestedColumn = new BaseColumn<ChUInt64>();
+                _nestedColumn = new BaseColumn<ChUInt64>(null, null);
                 break;
             case ChNullable<ChInt8>:
-                _nestedColumn = new BaseColumn<ChInt8>();
+                _nestedColumn = new BaseColumn<ChInt8>(null, null);
                 break;
             case ChNullable<ChInt16>:
-                _nestedColumn = new BaseColumn<ChInt16>();
+                _nestedColumn = new BaseColumn<ChInt16>(null, null);
                 break;
             case ChNullable<ChInt32>:
-                _nestedColumn = new BaseColumn<ChInt32>();
+                _nestedColumn = new BaseColumn<ChInt32>(null, null);
                 break;
             case ChNullable<ChInt64>:
-                _nestedColumn = new BaseColumn<ChInt64>();
+                _nestedColumn = new BaseColumn<ChInt64>(null, null);
                 break;
             case ChNullable<ChInt128>:
-                _nestedColumn = new BaseColumn<ChInt128>();
+                _nestedColumn = new BaseColumn<ChInt128>(null, null);
                 break;
             case ChNullable<ChUuid>:
-                _nestedColumn = new BaseColumn<ChUuid>();
+                _nestedColumn = new BaseColumn<ChUuid>(null, null);
                 break;
             case ChNullable<ChFloat32>:
-                _nestedColumn = new BaseColumn<ChFloat32>();
+                _nestedColumn = new BaseColumn<ChFloat32>(null, null);
                 break;
             case ChNullable<ChFloat64>:
-                _nestedColumn = new BaseColumn<ChFloat64>();
+                _nestedColumn = new BaseColumn<ChFloat64>(null, null);
                 break;
             case ChNullable<ChDate>:
-                _nestedColumn = new BaseColumn<ChDate>();
+                _nestedColumn = new BaseColumn<ChDate>(null, null);
                 break;
             case ChNullable<ChDate32>:
-                _nestedColumn = new BaseColumn<ChDate32>();
+                _nestedColumn = new BaseColumn<ChDate32>(null, null);
                 break;
             case ChNullable<ChDateTime>:
-                _nestedColumn = new BaseColumn<ChDateTime>();
+                _nestedColumn = new BaseColumn<ChDateTime>(null, null);
                 break;
             case ChNullable<ChDateTime64>:
-                _nestedColumn = new BaseColumn<ChDateTime64>();
+                _nestedColumn = new BaseColumn<ChDateTime64>(null, null);
                 break;
             case IChNullable<IChEnum8>:
-                _nestedColumn = new BaseColumn<ChEnum8<DummyEnum>>();
+                _nestedColumn = new BaseColumn<ChEnum8<DummyEnum>>(null, null);
                 break;
             case IChNullable<IChEnum16>:
-                _nestedColumn = new BaseColumn<ChEnum16<DummyEnum>>();
+                _nestedColumn = new BaseColumn<ChEnum16<DummyEnum>>(null, null);
                 break;
             case ChNullable<ChString>:
-                _nestedColumn = new BaseColumn<ChString>();
+                _nestedColumn = new BaseColumn<ChString>(null, null);
                 break;
             case ChNullable<ChFixedString>:
-                _nestedColumn = new BaseColumn<ChFixedString>();
+                _nestedColumn = new BaseColumn<ChFixedString>(null, null);
                 break;
             case ChNullable<ChIPv4>:
-                _nestedColumn = new BaseColumn<ChIPv4>();
+                _nestedColumn = new BaseColumn<ChIPv4>(null, null);
                 break;
             case ChNullable<ChIPv6>:
-                _nestedColumn = new BaseColumn<ChIPv6>();
+                _nestedColumn = new BaseColumn<ChIPv6>(null, null);
                 break;
             default:
                 throw new ArgumentException(value.GetType().ToString());
@@ -111,7 +111,7 @@ internal class NullableColumn<T> : NativeColumnWrapper<T>
         NativeColumn = nativeColumn;
     }
 
-    internal NullableColumn(nint nativeColumn, bool _) : base(nativeColumn, default)
+    internal NullableColumn(nint nativeColumn) : base(nativeColumn)
     {
     }
 
