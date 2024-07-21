@@ -31,22 +31,12 @@ public class InsertBenchmark
         ChClientConnection.Open();
     }
 
-    [IterationSetup]
-    public void IterationSetup()
+    [Benchmark(Description = "ClickHouse.Driver: Insert 100M", Baseline = true)]
+    public void ChDriverInsert100M()
     {
-        ChDriverConnection.Execute("CREATE DATABASE IF NOT EXISTS test");
-        ChDriverConnection.Execute("DROP TABLE IF EXISTS test.test");
-        ChDriverConnection.Execute(
-            "CREATE TABLE test.test (ts DateTime64(3), id UInt32, pressure Float64) ENGINE=MergeTree ORDER BY ts");
-    }
-
-    private ClickHouseBlock Block;
-    [IterationSetup(Target = nameof(ChDriverInsert100M))]
-    public void IterationSetupChDriverInsert100M()
-    {
-        var ts = new Column<ChDateTime64>();
-        var id = new Column<ChUInt32>();
-        var pressure = new Column<ChFloat64>();
+        using var ts = new Column<ChDateTime64>();
+        using var id = new Column<ChUInt32>();
+        using var pressure = new Column<ChFloat64>();
 
         for (var i = 0; i < 100_000; i++)
         {
@@ -55,88 +45,43 @@ public class InsertBenchmark
             pressure.Add(1000.0 + i);
         }
 
-        Block = new ClickHouseBlock();
-        Block.AppendColumn("ts", ts);
-        Block.AppendColumn("id", id);
-        Block.AppendColumn("pressure", pressure);
+        using var block = new ClickHouseBlock();
+        block.AppendColumn("ts", ts);
+        block.AppendColumn("id", id);
+        block.AppendColumn("pressure", pressure);
+        ChDriverConnection.Insert("test.test", block);
     }
 
-    [Benchmark(Description = "ClickHouse.Driver: Insert 100M")]
-    public void ChDriverInsert100M()
+    [Benchmark(Description = "ClickHouse.Ado: Insert 100M")]
+    public void ChAdoInsert100M()
     {
-        ChDriverConnection.Insert("test.test", Block);
-    }
+        var values = Enumerable.Range(0, 100_000)
+            .Select(i => new object[] { DateTime.Now, (uint)i, 1000.0 + i });
 
-    [IterationCleanup(Target = nameof(ChDriverInsert100M))]
-    public void IterationCleanupChDriverInsert100M()
-    {
-        Console.WriteLine("Cleanup: " + Block.Columns.Count);
-        foreach (var column in Block.Columns)
+        var cmd = ChAdoConnection.CreateCommand();
+        cmd.CommandText = "INSERT INTO test.test (ts, id, pressure) VALUES @bulk";
+        cmd.Parameters.Add(new ChAdo.ClickHouseParameter
         {
-            column.Dispose();
-        }
-        // Block.Dispose();
+            ParameterName = "bulk",
+            Value = values
+        });
+        cmd.ExecuteNonQuery();
     }
 
-    // [Benchmark(Description = "ClickHouse.Ado: Insert 100M")]
-    // public void ChAdoInsert100M()
-    // {
-    //     var list = new ChAdoList
-    //     {
-    //         ts = [],
-    //         id = [],
-    //         pressure = []
-    //     };
-    //
-    //     for (var i = 0; i < 1_000_000; i++)
-    //     {
-    //         list.ts.Add(DateTime.Now);
-    //         list.id.Add((uint)i);
-    //         list.pressure.Add(1000.0 + i);
-    //     }
-    //
-    //     var cmd = ChAdoConnection.CreateCommand();
-    //     cmd.CommandText = "INSERT INTO test.test (ts, id, pressure) VALUES @bulk";
-    //     cmd.Parameters.Add(new ChAdo.ClickHouseParameter
-    //     {
-    //         ParameterName = "bulk",
-    //         Value = list
-    //     });
-    //     cmd.ExecuteNonQuery();
-    // }
-
-    private class ChAdoList : ChAdo.IBulkInsertEnumerable
+    [Benchmark(Description = "ClickHouse.Client: Insert 100M")]
+    public void ChClientInsert100M()
     {
-        public List<DateTime> ts;
-        public List<uint> id;
-        public List<double> pressure;
 
-        public IEnumerable<object> GetColumnData(int colNumber, string columnName, string schemaType)
+        var bulkCopy = new ChClient.Copy.ClickHouseBulkCopy(ChClientConnection)
         {
-            return colNumber switch
-            {
-                0 => ts.Cast<object>(),
-                1 => id.Cast<object>(),
-                2 => pressure.Cast<object>(),
-                _ => throw new ArgumentOutOfRangeException(nameof(colNumber))
-            };
-        }
-    }
+            DestinationTableName = "test.test",
+            ColumnNames = new[] { "ts", "id", "pressure" },
+            BatchSize = 100_000
+        };
 
-    // [Benchmark(Description = "ClickHouse.Client: Insert 100M")]
-    // public void ChClientInsert100M()
-    // {
-    //     var x = 1;
-    //     var bulkCopy = new ChClient.Copy.ClickHouseBulkCopy(ChClientConnection)
-    //     {
-    //         DestinationTableName = "test.test",
-    //         ColumnNames = new[] { "ts", "id", "pressure" },
-    //         BatchSize = 100_000
-    //     };
-    //
-    //     Task.Run(() => bulkCopy.InitAsync()).GetAwaiter().GetResult();
-    //     var values = Enumerable.Range(0, 100_000)
-    //         .Select(i => new object[] { DateTime.Now, (uint)i, 1000.0 + i }); // Example generated data
-    //     Task.Run(() => bulkCopy.WriteToServerAsync(values)).GetAwaiter().GetResult();
-    // }
+        Task.Run(() => bulkCopy.InitAsync()).GetAwaiter().GetResult();
+        var values = Enumerable.Range(0, 100_000)
+            .Select(i => new object[] { DateTime.Now, (uint)i, 1000.0 + i });
+        Task.Run(() => bulkCopy.WriteToServerAsync(values)).GetAwaiter().GetResult();
+    }
 }
