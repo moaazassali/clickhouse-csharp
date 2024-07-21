@@ -76,7 +76,7 @@ public abstract class NativeColumnWrapper : IDisposable
     }
 }
 
-public abstract class NativeColumnWrapper<T> : NativeColumnWrapper
+internal abstract class NativeColumnWrapper<T> : NativeColumnWrapper
 {
     internal override void Add(object value) => Add((T)value);
 
