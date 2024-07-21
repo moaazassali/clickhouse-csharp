@@ -15,7 +15,7 @@ internal static partial class QueryInterop
     public delegate void NativeSelectCallback(nint block);
 
     [LibraryImport("clickhouse-cpp-c-bridge")]
-    public static partial ResultStatusInterop chc_query_on_data(nint query,
+    public static partial void chc_query_on_data(nint query,
         [MarshalAs(UnmanagedType.FunctionPtr)] NativeSelectCallback selectCallback);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
