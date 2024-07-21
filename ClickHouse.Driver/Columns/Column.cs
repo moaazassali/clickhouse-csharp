@@ -1,4 +1,7 @@
-﻿namespace ClickHouse.Driver.Columns;
+﻿using System.Runtime.CompilerServices;
+using ClickHouse.Driver.Interop.Columns;
+
+namespace ClickHouse.Driver.Columns;
 
 public interface IColumn : IDisposable
 {
@@ -13,27 +16,27 @@ public abstract class Column : IColumn
 {
     protected internal nint NativeColumn { get; protected init; }
 
-    private bool _disposed;
+    protected bool _disposed;
 
     public ColumnType Type
     {
         get
         {
             CheckDisposed();
-            return Interop.Columns.ColumnInterop.chc_column_type_code(NativeColumn);
+            return ColumnInterop.chc_column_type_code(NativeColumn);
         }
     }
 
     public void Reserve(int size)
     {
         CheckDisposed();
-        Interop.Columns.ColumnInterop.chc_column_reserve(NativeColumn, (nuint)size);
+        ColumnInterop.chc_column_reserve(NativeColumn, (nuint)size);
     }
 
     public void Clear()
     {
         CheckDisposed();
-        Interop.Columns.ColumnInterop.chc_column_clear(NativeColumn);
+        ColumnInterop.chc_column_clear(NativeColumn);
     }
 
     public int Count
@@ -41,7 +44,7 @@ public abstract class Column : IColumn
         get
         {
             CheckDisposed();
-            return (int)Interop.Columns.ColumnInterop.chc_column_size(NativeColumn);
+            return (int)ColumnInterop.chc_column_size(NativeColumn);
         }
     }
 
@@ -50,14 +53,31 @@ public abstract class Column : IColumn
 
     public void Dispose()
     {
-        Interop.Columns.ColumnInterop.chc_column_free(NativeColumn);
-        _disposed = true;
+        Dispose(true);
         GC.SuppressFinalize(this);
+    }
+
+    private void Dispose(bool disposing)
+    {
+        if (_disposed)
+        {
+            Console.WriteLine("Already disposed");
+            return;
+        }
+
+        if (disposing)
+        {
+            // TODO: dispose managed state (managed objects).
+        }
+
+        ColumnInterop.chc_column_free(NativeColumn);
+
+        _disposed = true;
     }
 
     ~Column()
     {
-        Dispose();
+        Dispose(false);
     }
 
     protected void CheckDisposed()
@@ -72,7 +92,7 @@ public interface IColumn<T> : IColumn
     T this[int index] { get; }
 }
 
-public class Column<T> : Column, IColumn<T> where T : IChType
+public sealed class Column<T> : Column, IColumn<T> where T : IChType
 {
     private readonly IColumn<T> _column;
 
@@ -112,35 +132,57 @@ public class Column<T> : Column, IColumn<T> where T : IChType
 //     NativeColumn = nativeColumn;
 // }
 
-    internal override void Add(object value) => Add((T)value);
-
-    public void Add(T value)
+    private Action<T> GetAddFunc()
     {
         if (typeof(IChBaseType).IsAssignableFrom(typeof(T)))
         {
-            _column.Add(value);
-            return;
+            return ((BaseColumn<T>)_column).Add;
         }
 
         if (typeof(IChNullable).IsAssignableFrom(typeof(T)))
         {
-            _column.Add(value);
-            return;
+            return ((NullableColumn<T>)_column).Add;
         }
 
         if (typeof(IChLowCardinality).IsAssignableFrom(typeof(T)))
         {
-            _column.Add(value);
-            return;
+            return ((LowCardinalityColumn<T>)_column).Add;
         }
 
         if (typeof(IChArray).IsAssignableFrom(typeof(T)))
         {
-            _column.Add(value);
-            return;
+            return ((ArrayColumn<T>)_column).Add;
         }
 
         throw new NotSupportedException(typeof(T).ToString());
+    }
+
+    internal override void Add(object value) => Add((T)value);
+
+    public void Add(T value)
+    {
+        CheckDisposed();
+
+        // Calling _column.Add(value) directly is much slow than the code below, around 2x slower
+        if (typeof(IChBaseType).IsAssignableFrom(typeof(T)))
+        {
+            ((BaseColumn<T>)_column).Add(value);
+        }
+
+        else if (typeof(IChNullable).IsAssignableFrom(typeof(T)))
+        {
+            ((NullableColumn<T>)_column).Add(value);
+        }
+
+        else if (typeof(IChLowCardinality).IsAssignableFrom(typeof(T)))
+        {
+            ((LowCardinalityColumn<T>)_column).Add(value);
+        }
+
+        else if (typeof(IChArray).IsAssignableFrom(typeof(T)))
+        {
+            ((ArrayColumn<T>)_column).Add(value);
+        }
     }
 
     public override object At(int index)
@@ -174,5 +216,16 @@ public class Column<T> : Column, IColumn<T> where T : IChType
 
             throw new NotSupportedException(typeof(T).ToString());
         }
+    }
+
+    public new void Dispose()
+    {
+        if (_disposed)
+        {
+            return;
+        }
+        _column.Dispose();
+        _disposed = true;
+        GC.SuppressFinalize(this);
     }
 }
