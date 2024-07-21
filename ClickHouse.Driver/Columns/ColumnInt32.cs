@@ -3,7 +3,7 @@ using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ColumnInt32 : Column, IColumn<ChInt32>
+public class ColumnInt32 : OldColumn, IOldColumn<ChInt32>
 {
     public ColumnInt32()
     {
