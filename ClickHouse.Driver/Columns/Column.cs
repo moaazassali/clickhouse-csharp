@@ -32,32 +32,33 @@ public sealed class Column<T> : Column where T : IChType
 
     internal override NativeColumnWrapper NativeColumnWrapper => _nativeColumnWrapper;
 
-    public Column()
+    public Column(uint? a = null, uint? b = null)
     {
         if (typeof(IChBaseType).IsAssignableFrom(typeof(T)))
         {
-            var col = new BaseColumn<T>();
+            var col = new BaseColumn<T>(a, b);
             _nativeColumnWrapper = col;
         }
         else if (typeof(IChNullable).IsAssignableFrom(typeof(T)))
         {
-            var col = new NullableColumn<T>();
+            var col = new NullableColumn<T>(a, b);
             _nativeColumnWrapper = col;
         }
         else if (typeof(IChLowCardinality).IsAssignableFrom(typeof(T)))
         {
-            var col = new LowCardinalityColumn<T>();
+            var col = new LowCardinalityColumn<T>(a, b);
             _nativeColumnWrapper = col;
         }
         else if (typeof(IChArray).IsAssignableFrom(typeof(T)))
         {
-            var col = new ArrayColumn<T>();
+            var col = new ArrayColumn<T>(a, b);
             _nativeColumnWrapper = col;
         }
         else throw new NotSupportedException(typeof(T).ToString());
     }
 
-    public Column(nint nativeColumn)
+    // useless bool parameter to distinguish from the public constructor
+    internal Column(nint nativeColumn, bool _)
     {
         if (typeof(IChBaseType).IsAssignableFrom(typeof(T)))
         {
