@@ -4,7 +4,7 @@ namespace ClickHouse.Driver.Columns;
 
 public abstract class NativeColumnWrapper : IDisposable
 {
-    private bool _disposed;
+    protected bool Disposed;
     protected internal nint NativeColumn { get; protected init; }
 
     internal NativeColumnWrapper(uint? a, uint? b)
@@ -58,7 +58,7 @@ public abstract class NativeColumnWrapper : IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
-        if (_disposed)
+        if (Disposed)
         {
             Console.WriteLine("Already disposed");
             return;
@@ -71,7 +71,7 @@ public abstract class NativeColumnWrapper : IDisposable
 
         ColumnInterop.chc_column_free(NativeColumn);
 
-        _disposed = true;
+        Disposed = true;
     }
 
     ~NativeColumnWrapper()
@@ -81,7 +81,7 @@ public abstract class NativeColumnWrapper : IDisposable
 
     protected void CheckDisposed()
     {
-        ObjectDisposedException.ThrowIf(_disposed, this);
+        ObjectDisposedException.ThrowIf(Disposed, this);
     }
 }
 

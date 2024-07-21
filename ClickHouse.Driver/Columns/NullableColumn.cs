@@ -6,8 +6,26 @@ namespace ClickHouse.Driver.Columns;
 internal class NullableColumn<T> : NativeColumnWrapper<T>
 {
     // We need to keep a reference to the nested column to prevent it from being garbage collected.
-    // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
-    private readonly NativeColumnWrapper _nestedColumn;
+    private readonly NativeColumnWrapper? _nestedColumn;
+
+    protected override void Dispose(bool disposing)
+    {
+        if (Disposed)
+        {
+            Console.WriteLine("Already disposed");
+            return;
+        }
+
+        // no managed resources to free
+        if (disposing && _nestedColumn is not null)
+        {
+            _nestedColumn.Dispose();
+        }
+
+        ColumnInterop.chc_column_free(NativeColumn);
+
+        Disposed = true;
+    }
 
     private enum DummyEnum
     {
