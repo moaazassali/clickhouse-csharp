@@ -94,7 +94,7 @@ public interface IColumn<T> : IColumn
 
 public sealed class Column<T> : Column, IColumn<T> where T : IChType
 {
-    private readonly IColumn<T> _column;
+    private readonly NativeColumnWrapper<T> _column;
 
     public Column()
     {

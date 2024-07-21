@@ -39,7 +39,7 @@ public abstract class NativeColumnWrapper : IDisposable
     }
 
     internal abstract void Add(object value);
-    public abstract object At(int index);
+    internal abstract object At(int index);
 
     public void Dispose()
     {
@@ -74,4 +74,13 @@ public abstract class NativeColumnWrapper : IDisposable
     {
         ObjectDisposedException.ThrowIf(_disposed, this);
     }
+}
+
+public abstract class NativeColumnWrapper<T> : NativeColumnWrapper
+{
+    internal override void Add(object value) => Add((T)value);
+
+    internal abstract void Add(T value);
+
+    internal abstract T this[int index] { get; }
 }

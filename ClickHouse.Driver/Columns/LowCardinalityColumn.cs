@@ -3,9 +3,9 @@ using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
 
-public class LowCardinalityColumn<T> : NativeColumnWrapper, IColumn<T>
+internal class LowCardinalityColumn<T> : NativeColumnWrapper<T>
 {
-    public LowCardinalityColumn()
+    internal LowCardinalityColumn()
     {
         T value = default;
         NativeColumnWrapper nestedColumn;
@@ -34,9 +34,7 @@ public class LowCardinalityColumn<T> : NativeColumnWrapper, IColumn<T>
         NativeColumn = outColumn;
     }
 
-    internal override void Add(object value) => Add((T)value);
-
-    public void Add(T value)
+    internal override void Add(T value)
     {
         CheckDisposed();
 
@@ -60,9 +58,9 @@ public class LowCardinalityColumn<T> : NativeColumnWrapper, IColumn<T>
         }
     }
 
-    public override object At(int index) => this[index]!;
+    internal override object At(int index) => this[index]!;
 
-    public T this[int index]
+    internal override T this[int index]
     {
         get
         {

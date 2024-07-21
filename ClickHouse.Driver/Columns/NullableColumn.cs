@@ -3,7 +3,7 @@ using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
 
-public class NullableColumn<T> : NativeColumnWrapper, IColumn<T>
+internal class NullableColumn<T> : NativeColumnWrapper<T>
 {
     // We need to keep a reference to the nested column to prevent it from being garbage collected.
     // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
@@ -13,7 +13,7 @@ public class NullableColumn<T> : NativeColumnWrapper, IColumn<T>
     {
     }
 
-    public NullableColumn()
+    internal NullableColumn()
     {
         T value = default;
 
@@ -105,9 +105,7 @@ public class NullableColumn<T> : NativeColumnWrapper, IColumn<T>
         NativeColumn = nativeColumn;
     }
 
-    internal override void Add(object value) => Add((T)value);
-
-    public unsafe void Add(T value)
+    internal override unsafe void Add(T value)
     {
         CheckDisposed();
         ResultStatusInterop resultStatus = default;
@@ -229,9 +227,9 @@ public class NullableColumn<T> : NativeColumnWrapper, IColumn<T>
         }
     }
 
-    public override object At(int index) => this[index]!;
+    internal override object At(int index) => this[index]!;
 
-    public T this[int index]
+    internal override T this[int index]
     {
         get
         {

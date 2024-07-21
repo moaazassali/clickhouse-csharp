@@ -3,7 +3,7 @@ using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ArrayColumn<T> : NativeColumnWrapper, IColumn<T>
+internal class ArrayColumn<T> : NativeColumnWrapper<T>
 {
     private readonly NativeColumnWrapper _nestedColumn;
 
@@ -15,36 +15,34 @@ public class ArrayColumn<T> : NativeColumnWrapper, IColumn<T>
         }
 
         var elementType = typeof(T).GenericTypeArguments[0]; // This gets the U in ChArray<U>
+        const BindingFlags constructorFlags = BindingFlags.Instance | BindingFlags.NonPublic; // internal constructors
+        Type columnType;
 
         // Dynamically create the correct column type based on elementType
         if (typeof(IChBaseType).IsAssignableFrom(elementType))
         {
-            var columnType = typeof(BaseColumn<>).MakeGenericType(elementType);
-            _nestedColumn = (NativeColumnWrapper)Activator.CreateInstance(columnType)!;
+            columnType = typeof(BaseColumn<>).MakeGenericType(elementType);
         }
         else if (typeof(IChNullable).IsAssignableFrom(elementType))
         {
-            var columnType = typeof(NullableColumn<>).MakeGenericType(elementType);
-            _nestedColumn = (NativeColumnWrapper)Activator.CreateInstance(columnType)!;
+            columnType = typeof(NullableColumn<>).MakeGenericType(elementType);
         }
         else if (typeof(IChLowCardinality).IsAssignableFrom(elementType))
         {
-            var columnType = typeof(LowCardinalityColumn<>).MakeGenericType(elementType);
-            _nestedColumn = (NativeColumnWrapper)Activator.CreateInstance(columnType)!;
+            columnType = typeof(LowCardinalityColumn<>).MakeGenericType(elementType);
         }
         else if (typeof(IChArray).IsAssignableFrom(elementType))
         {
-            const BindingFlags constructorFlags = BindingFlags.Instance | BindingFlags.NonPublic;
-            var columnType = typeof(ArrayColumn<>).MakeGenericType(elementType);
-            _nestedColumn = (NativeColumnWrapper)Activator.CreateInstance(columnType, constructorFlags, null, null, null)!;
+            columnType = typeof(ArrayColumn<>).MakeGenericType(elementType);
         }
         else
         {
             throw new ArgumentException("Unsupported type");
         }
 
-        var resultStatus =
-            ColumnArrayInterop.chc_column_array_create(_nestedColumn.NativeColumn, out var nativeColumn);
+        _nestedColumn = (NativeColumnWrapper)Activator.CreateInstance(columnType, constructorFlags, null, null, null)!;
+
+        var resultStatus = ColumnArrayInterop.chc_column_array_create(_nestedColumn.NativeColumn, out var nativeColumn);
 
         if (resultStatus.Code != 0)
         {
@@ -59,9 +57,7 @@ public class ArrayColumn<T> : NativeColumnWrapper, IColumn<T>
         NativeColumn = nativeColumn;
     }
 
-    internal override void Add(object value) => Add((T)value);
-
-    public void Add(T value)
+    internal override void Add(T value)
     {
         CheckDisposed();
 
@@ -75,9 +71,9 @@ public class ArrayColumn<T> : NativeColumnWrapper, IColumn<T>
         ColumnArrayInterop.chc_column_array_add_offset(NativeColumn, (nuint)array.Count);
     }
 
-    public override object At(int index) => this[index]!;
+    internal override object At(int index) => this[index]!;
 
-    public T this[int index]
+    internal override T this[int index]
     {
         get
         {

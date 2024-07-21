@@ -2,9 +2,9 @@ using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver.Columns;
 
-public class BaseColumn<T> : NativeColumnWrapper, IColumn<T> where T : IChType
+internal class BaseColumn<T> : NativeColumnWrapper<T> where T : IChType
 {
-    public BaseColumn()
+    internal BaseColumn()
     {
         T value = default;
         NativeColumn = value switch
@@ -42,15 +42,15 @@ public class BaseColumn<T> : NativeColumnWrapper, IColumn<T> where T : IChType
 
     internal override void Add(object value) => Add((T)value);
 
-    public void Add(T value)
+    internal override void Add(T value)
     {
         CheckDisposed();
         ((IChTypeAddable)value).AddToColumn(NativeColumn);
     }
 
-    public override object At(int index) => this[index];
+    internal override object At(int index) => this[index];
 
-    public T this[int index]
+    internal override T this[int index]
     {
         get
         {
