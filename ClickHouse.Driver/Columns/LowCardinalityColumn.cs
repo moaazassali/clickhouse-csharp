@@ -5,7 +5,7 @@ namespace ClickHouse.Driver.Columns;
 
 internal class LowCardinalityColumn<T> : NativeColumnWrapper<T>
 {
-    internal LowCardinalityColumn(uint? a, uint? b) : base(a, b)
+    internal LowCardinalityColumn(uint? a, uint? b)
     {
         T value = default;
         NativeColumnWrapper nestedColumn;

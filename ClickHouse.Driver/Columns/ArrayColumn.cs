@@ -7,7 +7,7 @@ internal class ArrayColumn<T> : NativeColumnWrapper<T>
 {
     private readonly NativeColumnWrapper _nestedColumn;
 
-    internal ArrayColumn(uint? a, uint? b) : base(a, b)
+    internal ArrayColumn(uint? a, uint? b)
     {
         if (!typeof(T).IsGenericType || typeof(T).GetGenericTypeDefinition() != typeof(ChArray<>))
         {

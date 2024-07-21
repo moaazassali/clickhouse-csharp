@@ -31,7 +31,7 @@ internal class NullableColumn<T> : NativeColumnWrapper<T>
     {
     }
 
-    internal NullableColumn(uint? a, uint? b) : base(a, b)
+    internal NullableColumn(uint? a, uint? b)
     {
         T value = default;
 

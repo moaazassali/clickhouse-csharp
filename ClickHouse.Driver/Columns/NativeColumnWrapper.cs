@@ -6,8 +6,9 @@ public abstract class NativeColumnWrapper : IDisposable
 {
     protected bool Disposed;
     protected internal nint NativeColumn { get; protected init; }
+    private readonly bool _isOwnedByBlock;
 
-    internal NativeColumnWrapper(uint? a, uint? b)
+    internal NativeColumnWrapper()
     {
     }
 
@@ -15,6 +16,7 @@ public abstract class NativeColumnWrapper : IDisposable
     internal NativeColumnWrapper(nint nativeColumn)
     {
         NativeColumn = nativeColumn;
+        _isOwnedByBlock = true;
     }
 
     public ColumnType Type
@@ -58,6 +60,11 @@ public abstract class NativeColumnWrapper : IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
+        if (_isOwnedByBlock)
+        {
+            return;
+        }
+
         if (Disposed)
         {
             return;
@@ -94,7 +101,7 @@ internal abstract class NativeColumnWrapper<T> : NativeColumnWrapper
 
     internal abstract T this[int index] { get; }
 
-    internal NativeColumnWrapper(uint? a, uint? b) : base(a, b)
+    internal NativeColumnWrapper()
     {
     }
 
