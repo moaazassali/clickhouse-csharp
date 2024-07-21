@@ -8,6 +8,7 @@ public class ClickHouseBlock : IDisposable
     internal nint NativeBlock { get; }
 
     private bool _disposed;
+    private readonly bool _isOwnedByUnmanagedCode;
 
     // we have to keep references to the columns to prevent them from being collected by GC
     // which frees the native columns through Dispose() and causes a crash
@@ -32,6 +33,7 @@ public class ClickHouseBlock : IDisposable
     public ClickHouseBlock(nint nativeBlock)
     {
         NativeBlock = nativeBlock;
+        _isOwnedByUnmanagedCode = true;
 
         for (nuint i = 0; i < Interop.BlockInterop.chc_block_column_count(nativeBlock); i++)
         {
@@ -48,6 +50,11 @@ public class ClickHouseBlock : IDisposable
 
     protected void Dispose(bool disposing)
     {
+        if (_isOwnedByUnmanagedCode)
+        {
+            return;
+        }
+
         if (_disposed)
         {
             return;
