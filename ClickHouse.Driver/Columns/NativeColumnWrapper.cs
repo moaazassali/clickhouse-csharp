@@ -82,5 +82,7 @@ public abstract class NativeColumnWrapper<T> : NativeColumnWrapper
 
     internal abstract void Add(T value);
 
+    internal override object At(int index) => this[index]!;
+
     internal abstract T this[int index] { get; }
 }

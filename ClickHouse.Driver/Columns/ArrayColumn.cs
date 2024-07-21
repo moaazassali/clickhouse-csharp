@@ -71,8 +71,6 @@ internal class ArrayColumn<T> : NativeColumnWrapper<T>
         ColumnArrayInterop.chc_column_array_add_offset(NativeColumn, (nuint)array.Count);
     }
 
-    internal override object At(int index) => this[index]!;
-
     internal override T this[int index]
     {
         get

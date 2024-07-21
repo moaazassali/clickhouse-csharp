@@ -48,8 +48,6 @@ internal class BaseColumn<T> : NativeColumnWrapper<T> where T : IChType
         ((IChTypeAddable)value).AddToColumn(NativeColumn);
     }
 
-    internal override object At(int index) => this[index];
-
     internal override T this[int index]
     {
         get

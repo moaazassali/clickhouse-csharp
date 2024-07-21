@@ -227,8 +227,6 @@ internal class NullableColumn<T> : NativeColumnWrapper<T>
         }
     }
 
-    internal override object At(int index) => this[index]!;
-
     internal override T this[int index]
     {
         get
