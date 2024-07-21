@@ -93,13 +93,6 @@ internal class NullableColumn<T> : NativeColumnWrapper<T>
         NativeColumn = nativeColumn;
     }
 
-    // public NullableColumn(Func<Column<T>> factory)
-    // {
-    //     var nestedColumn = factory();
-    //     ColumnNullableInterop.chc_column_nullable_create(nestedColumn.NativeColumn, out var nativeColumn);
-    //     NativeColumn = nativeColumn;
-    // }
-
     internal NullableColumn(nint nativeColumn)
     {
         NativeColumn = nativeColumn;
