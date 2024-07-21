@@ -2,7 +2,7 @@ using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver.Columns;
 
-public class BaseColumn<T> : Column, IColumn<T> where T : IChType
+public class BaseColumn<T> : NativeColumnWrapper, IColumn<T> where T : IChType
 {
     public BaseColumn()
     {

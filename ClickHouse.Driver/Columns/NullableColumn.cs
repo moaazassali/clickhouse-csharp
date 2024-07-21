@@ -3,11 +3,11 @@ using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
 
-public class NullableColumn<T> : Column, IColumn<T>
+public class NullableColumn<T> : NativeColumnWrapper, IColumn<T>
 {
     // We need to keep a reference to the nested column to prevent it from being garbage collected.
     // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
-    private readonly Column _nestedColumn;
+    private readonly NativeColumnWrapper _nestedColumn;
 
     private enum DummyEnum
     {

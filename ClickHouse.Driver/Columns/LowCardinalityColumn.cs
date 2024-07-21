@@ -3,12 +3,12 @@ using ClickHouse.Driver.Interop.Structs;
 
 namespace ClickHouse.Driver.Columns;
 
-public class LowCardinalityColumn<T> : Column, IColumn<T>
+public class LowCardinalityColumn<T> : NativeColumnWrapper, IColumn<T>
 {
     public LowCardinalityColumn()
     {
         T value = default;
-        Column nestedColumn;
+        NativeColumnWrapper nestedColumn;
 
         switch (value)
         {

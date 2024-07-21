@@ -3,9 +3,9 @@ using ClickHouse.Driver.Interop.Columns;
 
 namespace ClickHouse.Driver.Columns;
 
-public class ArrayColumn<T> : Column, IColumn<T>
+public class ArrayColumn<T> : NativeColumnWrapper, IColumn<T>
 {
-    private readonly Column _nestedColumn;
+    private readonly NativeColumnWrapper _nestedColumn;
 
     internal ArrayColumn()
     {
@@ -20,23 +20,23 @@ public class ArrayColumn<T> : Column, IColumn<T>
         if (typeof(IChBaseType).IsAssignableFrom(elementType))
         {
             var columnType = typeof(BaseColumn<>).MakeGenericType(elementType);
-            _nestedColumn = (Column)Activator.CreateInstance(columnType)!;
+            _nestedColumn = (NativeColumnWrapper)Activator.CreateInstance(columnType)!;
         }
         else if (typeof(IChNullable).IsAssignableFrom(elementType))
         {
             var columnType = typeof(NullableColumn<>).MakeGenericType(elementType);
-            _nestedColumn = (Column)Activator.CreateInstance(columnType)!;
+            _nestedColumn = (NativeColumnWrapper)Activator.CreateInstance(columnType)!;
         }
         else if (typeof(IChLowCardinality).IsAssignableFrom(elementType))
         {
             var columnType = typeof(LowCardinalityColumn<>).MakeGenericType(elementType);
-            _nestedColumn = (Column)Activator.CreateInstance(columnType)!;
+            _nestedColumn = (NativeColumnWrapper)Activator.CreateInstance(columnType)!;
         }
         else if (typeof(IChArray).IsAssignableFrom(elementType))
         {
             const BindingFlags constructorFlags = BindingFlags.Instance | BindingFlags.NonPublic;
             var columnType = typeof(ArrayColumn<>).MakeGenericType(elementType);
-            _nestedColumn = (Column)Activator.CreateInstance(columnType, constructorFlags, null, null, null)!;
+            _nestedColumn = (NativeColumnWrapper)Activator.CreateInstance(columnType, constructorFlags, null, null, null)!;
         }
         else
         {

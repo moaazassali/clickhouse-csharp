@@ -485,14 +485,14 @@ public interface IChArray : IChType, IEnumerable
 
 public class ChArray<T> : IReadOnlyList<T>, IChArray where T : IChType
 {
-    private readonly Column? _nestedColumn;
+    private readonly NativeColumnWrapper? _nestedColumn;
     private readonly int _offset;
     private readonly bool _userCreated;
     private readonly IReadOnlyList<T>? _values;
 
     public int Count { get; }
 
-    private ChArray(Column? nestedColumn, int offset, int count, bool userCreated, IReadOnlyList<T>? values)
+    private ChArray(NativeColumnWrapper? nestedColumn, int offset, int count, bool userCreated, IReadOnlyList<T>? values)
     {
         _nestedColumn = nestedColumn;
         _offset = offset;
