@@ -23,13 +23,11 @@ public class ClickHouseBlock : IDisposable
     public ClickHouseBlock()
     {
         NativeBlock = Interop.BlockInterop.chc_block_create();
-        _disposed = false;
     }
 
     public ClickHouseBlock(nint nativeBlock)
     {
         NativeBlock = nativeBlock;
-        _disposed = false;
 
         for (nuint i = 0; i < Interop.BlockInterop.chc_block_column_count(nativeBlock); i++)
         {
@@ -40,15 +38,28 @@ public class ClickHouseBlock : IDisposable
 
     public void Dispose()
     {
-        Interop.BlockInterop.chc_block_free(NativeBlock);
-        // should columns be disposed here as well?
-        _disposed = true;
+        Dispose(true);
         GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        if (disposing)
+        {
+        }
+
+        Interop.BlockInterop.chc_block_free(NativeBlock);
+        _disposed = true;
     }
 
     ~ClickHouseBlock()
     {
-        Dispose();
+        Dispose(false);
     }
 
     private void CheckDisposed()
