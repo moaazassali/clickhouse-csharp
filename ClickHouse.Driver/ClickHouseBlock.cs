@@ -94,14 +94,14 @@ public class ClickHouseBlock : IDisposable
     {
         return type switch
         {
-            ColumnType.UInt8 => new Column<ChUInt8>(nativeColumn),
-            ColumnType.UInt16 => new Column<ChUInt16>(nativeColumn),
-            ColumnType.UInt32 => new Column<ChUInt32>(nativeColumn),
-            ColumnType.UInt64 => new Column<ChUInt64>(nativeColumn),
-            ColumnType.Int8 => new Column<ChInt8>(nativeColumn),
-            ColumnType.Int16 => new Column<ChInt16>(nativeColumn),
-            ColumnType.Int32 => new Column<ChInt32>(nativeColumn),
-            ColumnType.Int64 => new Column<ChInt64>(nativeColumn),
+            ColumnType.UInt8 => new Column<ChUInt8>(nativeColumn, default),
+            ColumnType.UInt16 => new Column<ChUInt16>(nativeColumn, default),
+            ColumnType.UInt32 => new Column<ChUInt32>(nativeColumn, default),
+            ColumnType.UInt64 => new Column<ChUInt64>(nativeColumn, default),
+            ColumnType.Int8 => new Column<ChInt8>(nativeColumn, default),
+            ColumnType.Int16 => new Column<ChInt16>(nativeColumn, default),
+            ColumnType.Int32 => new Column<ChInt32>(nativeColumn, default),
+            ColumnType.Int64 => new Column<ChInt64>(nativeColumn, default),
             // ColumnType.Float32 => new ColumnFloat32(nativeColumn),
             // ColumnType.Float64 => new ColumnFloat64(nativeColumn),
             // ColumnType.String => new ColumnString(nativeColumn),
