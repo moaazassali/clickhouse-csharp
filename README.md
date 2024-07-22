@@ -8,6 +8,5 @@ Here are the results of the benchmark (`ClickHouse.Driver.Benchmarks`) running o
 
 PC specs: AMD Ryzen 5 2400G, 8GB DDR4 RAM, 512GB HDD 7200RPM
 
-<img src="https://github.com/user-attachments/assets/4d27498d-bae4-4f36-9788-93591518b6de" alt="Image 1" style="width: 49%;">
-<img src="https://github.com/user-attachments/assets/fc21067d-9926-4216-b929-3d7b6ee32bbd" alt="Image 2" style="width: 49%;;">
-
+<img src="https://github.com/user-attachments/assets/1450d1c7-a091-4593-8173-fde4053702ed" alt="Image 1" style="width: 49%; ">
+<img src="https://github.com/user-attachments/assets/487fd499-df28-4fef-963a-84d4a1baa041" alt="Image 1" style="width: 49%;">
