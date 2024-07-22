@@ -4,11 +4,12 @@ using ClickHouse.Driver.Columns;
 using ChDriver = ClickHouse.Driver;
 using ChAdo = ClickHouse.Ado;
 using ChClient = ClickHouse.Client;
+using ChOcto = Octonica.ClickHouseClient;
 
 namespace ClickHouse.Driver.Benchmarks;
 
 [MemoryDiagnoser]
-[NativeMemoryProfiler]
+// [NativeMemoryProfiler]
 [WarmupCount(2)]
 [IterationCount(10)]
 public class InsertBenchmark
@@ -16,6 +17,7 @@ public class InsertBenchmark
     private ChDriver.ClickHouseConnection ChDriverConnection;
     private ChAdo.ClickHouseConnection ChAdoConnection;
     private ChClient.ADO.ClickHouseConnection ChClientConnection;
+    private ChOcto.ClickHouseConnection ChOctoConnection;
 
     private const int Count = 100;
 
@@ -30,8 +32,11 @@ public class InsertBenchmark
         ChAdoConnection = new ChAdo.ClickHouseConnection("Host=localhost;Port=9000;User=default;Password=");
         ChAdoConnection.Open();
 
-        ChClientConnection = new ChClient.ADO.ClickHouseConnection();
+        ChClientConnection = new ChClient.ADO.ClickHouseConnection("Compression=false");
         ChClientConnection.Open();
+
+        ChOctoConnection = new ChOcto.ClickHouseConnection("Host=localhost");
+        ChOctoConnection.Open();
     }
 
     [IterationSetup]
@@ -94,6 +99,24 @@ public class InsertBenchmark
         var values = Enumerable.Range(0, Count)
             .Select(i => new object[] { DateTime.Now, (uint)i, 1000.0 + i });
         Task.Run(() => bulkCopy.WriteToServerAsync(values)).GetAwaiter().GetResult();
+    }
+
+    [Benchmark(Description = "Octonica.ClickHouseClient: Insert")]
+    public void ChOctoInsert()
+    {
+        var ts = new List<DateTime>();
+        var id = new List<uint>();
+        var pressure = new List<double>();
+
+        for (var i = 0; i < Count; i++)
+        {
+            ts.Add(DateTime.Now);
+            id.Add((uint)i);
+            pressure.Add(1000.0 + i);
+        }
+
+        using var writer = ChOctoConnection.CreateColumnWriter("insert into test.test(ts, id, pressure) values");
+        writer.WriteTable(new object[] { ts, id, pressure }, id.Count, default);
     }
 
     // private ClickHouseBlock Block;
