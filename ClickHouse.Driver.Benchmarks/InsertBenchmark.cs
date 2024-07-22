@@ -10,12 +10,14 @@ namespace ClickHouse.Driver.Benchmarks;
 [MemoryDiagnoser]
 [NativeMemoryProfiler]
 [WarmupCount(2)]
-[IterationCount(5)]
+[IterationCount(10)]
 public class InsertBenchmark
 {
     private ChDriver.ClickHouseConnection ChDriverConnection;
     private ChAdo.ClickHouseConnection ChAdoConnection;
     private ChClient.ADO.ClickHouseConnection ChClientConnection;
+
+    private const int Count = 100;
 
 
     [GlobalSetup]
@@ -38,17 +40,17 @@ public class InsertBenchmark
         ChDriverConnection.Execute("CREATE DATABASE IF NOT EXISTS test");
         ChDriverConnection.Execute("DROP TABLE IF EXISTS test.test");
         ChDriverConnection.Execute(
-            "CREATE TABLE test.test (ts DateTime64(3), pressure Array(Array(Array(Float64)))) ENGINE = Memory");
+            "CREATE TABLE test.test (ts DateTime64(3), id UInt32, pressure Float64) ENGINE = Memory");
     }
 
-    [Benchmark(Description = "ClickHouse.Driver: Insert 100M", Baseline = true)]
-    public void ChDriverInsert100M()
+    [Benchmark(Description = "ClickHouse.Driver: Insert", Baseline = true)]
+    public void ChDriverInsert()
     {
         using var ts = new Column<ChDateTime64>();
         using var id = new Column<ChUInt32>();
         using var pressure = new Column<ChFloat64>();
 
-        for (var i = 0; i < 1_000_000; i++)
+        for (var i = 0; i < Count; i++)
         {
             ts.Add(DateTime.Now.Ticks);
             id.Add((uint)i);
@@ -62,10 +64,10 @@ public class InsertBenchmark
         ChDriverConnection.Insert("test.test", block);
     }
 
-    [Benchmark(Description = "ClickHouse.Ado: Insert 100M")]
-    public void ChAdoInsert100M()
+    [Benchmark(Description = "ClickHouse.Ado: Insert")]
+    public void ChAdoInsert()
     {
-        var values = Enumerable.Range(0, 100_000)
+        var values = Enumerable.Range(0, Count)
             .Select(i => new object[] { DateTime.Now, (uint)i, 1000.0 + i });
 
         var cmd = ChAdoConnection.CreateCommand();
@@ -78,18 +80,18 @@ public class InsertBenchmark
         cmd.ExecuteNonQuery();
     }
 
-    [Benchmark(Description = "ClickHouse.Client: Insert 100M")]
-    public void ChClientInsert100M()
+    [Benchmark(Description = "ClickHouse.Client: Insert")]
+    public void ChClientInsert()
     {
         var bulkCopy = new ChClient.Copy.ClickHouseBulkCopy(ChClientConnection)
         {
             DestinationTableName = "test.test",
             ColumnNames = new[] { "ts", "id", "pressure" },
-            BatchSize = 1_000_000,
+            BatchSize = Count,
         };
 
         Task.Run(() => bulkCopy.InitAsync()).GetAwaiter().GetResult();
-        var values = Enumerable.Range(0, 1_000_000)
+        var values = Enumerable.Range(0, Count)
             .Select(i => new object[] { DateTime.Now, (uint)i, 1000.0 + i });
         Task.Run(() => bulkCopy.WriteToServerAsync(values)).GetAwaiter().GetResult();
     }
