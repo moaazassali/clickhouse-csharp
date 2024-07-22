@@ -1,6 +1,6 @@
 ClickHouse C# Client Driver
 =
-A fast, low-latency, memory-efficient c# driver for ClickHouse database with native protocol support and strong static typing.
+A fast, low-latency, memory-efficient C# driver for ClickHouse database with native protocol support and strong static typing.
 
 
 ## Benchmarks
