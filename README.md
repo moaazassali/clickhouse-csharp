@@ -53,4 +53,4 @@ For 1M rows inserted, `ClickHouse.Driver` is 5x faster than the second-fastest l
 | ClickHouse.Driver (this)   | 1x                    | 1x            |
 | ClickHouse.Client          | 5.09x                 | 3.33x         |
 | Octonica.ClickHouseClient  | 6.21x                 | 0.71x         |
-| ClickHouse.Ado             | 63.35                 | 4.56x         |
+| ClickHouse.Ado             | 63.35x                | 4.56x         |
